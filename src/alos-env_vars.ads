@@ -1,0 +1,16 @@
+-- Basic dealling with environment variable
+-- it's here while Ada.Environment_Variable package don't become part of
+-- gnat-gcc on gentoo linux distribution
+--
+-- author Marcelo C. de Freitas
+-- createdAt 2007-01-26
+
+
+
+package ALOS.Env_Vars is
+
+   function Value( V: in String ) return String;
+   -- return the value of the Environment Variable called V;
+
+
+end ALOS.Env_Vars;
