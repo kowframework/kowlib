@@ -1,5 +1,5 @@
 
-
+with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;
 
 
@@ -35,5 +35,10 @@ package body ALOS.Env_Vars is
       return R;
    end;
 
+   function Value( V: in String ) return Unbounded_String is
+      -- return the value of the Environment Variable called V;
+   begin
+      return To_Unbounded_String( Value( V ) );
+   end Value;
 
 end ALOS.Env_Vars;

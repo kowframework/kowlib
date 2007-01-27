@@ -7,9 +7,14 @@
 
 
 
+with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
+
 package ALOS.Env_Vars is
 
    function Value( V: in String ) return String;
+   -- return the value of the Environment Variable called V;
+
+   function Value( V: in String ) return Unbounded_String;
    -- return the value of the Environment Variable called V;
 
 
