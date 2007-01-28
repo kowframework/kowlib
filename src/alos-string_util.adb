@@ -89,5 +89,14 @@ package body ALOS.String_Util is
    end explode;
 
 
+   procedure Str_Replace( From, To: in Character; Str: in out String ) is
+   -- replace all the ocurences of the character From by To.
+   begin
+	   for i in Str'Range loop
+		   if Str(i) = From then
+			   Str(i) := To;
+		   end if;
+	   end loop;
+   end Str_Replace;
 
 end ALOS.String_Util;

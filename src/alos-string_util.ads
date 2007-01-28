@@ -15,18 +15,23 @@ with ALOS.UString_Vectors;
 
 package ALOS.String_Util is
 
+
    function implode( Sep: Character; Vect: ALOS.UString_Vectors.Vector ) return String;
    -- join all parts of the Vector into a String of value element1[SEP]element2[SEP]ele...
 
    function implode( Sep: Character; Vect: ALOS.UString_Vectors.Vector ) return Unbounded_String;
    -- join all parts of the Vector into a Unbounded_String of value element1[SEP]element2[SEP]ele...
 
-
    function explode( Sep: Character; Str: String ) return ALOS.UString_Vectors.Vector;
    -- split the string Str by Sep and return a vector containing it.
 
    function explode( Sep: Character; Str: Unbounded_String ) return ALOS.UString_Vectors.Vector;
    -- split the string Str by Sep and return a vector containing it.
+
+
+
+   procedure Str_Replace( From, To: in Character; Str: in out String );
+   -- replace all the ocurences of the character From by To.
 
 
 end ALOS.String_Util;

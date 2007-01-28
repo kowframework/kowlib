@@ -49,6 +49,12 @@ begin
 
    New_Line;
 
+   Put_Line( "Replacing '';'' by ''!'' on the sample string" );
+   Str_Replace( ';', '!', Str );
+   Put_Line( Str );
+
+   New_Line;
+
 
 
 end String_Util_Test;
