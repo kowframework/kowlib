@@ -14,6 +14,17 @@ package ALOS.File_System is
    function Get_Home return String;
    -- return the location of user's home dir/my documents folder
 
+   function Get_Config_Dir( App: in String ) return String;
+   -- return a hidden folder where the user can store settings for the
+   -- application called Application.
+
+
+   function Get_Global_Config_Dir( App: in String := "" ) return String;
+   -- return a directory where all the configuration global to all users
+   -- of the application App (when set) should be stored.
+   -- if App is not set, return the global configuration folder of the system
+
+
    function Get_Working_Dir return String;
    -- return the local working directory
 

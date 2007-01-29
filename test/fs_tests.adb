@@ -59,4 +59,9 @@ begin
 
    New_Line;
 
+   Put_Line( "A local configuration file for FS_Tests: " & Get_Config_Dir( "FS_Tests" ) );
+   Put_Line( "A global configuration file for FS_Tests: " & Get_Global_Config_Dir( "FS_Tests" ) );
+
+   New_Line;
+
 end FS_Tests;

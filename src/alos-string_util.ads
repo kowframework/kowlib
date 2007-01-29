@@ -33,5 +33,7 @@ package ALOS.String_Util is
    procedure Str_Replace( From, To: in Character; Str: in out String );
    -- replace all the ocurences of the character From by To.
 
+   function Str_Replace( From, To: in Character; Str: in String ) return String;
+   -- replace all the ocurences of the character From by To returning the new Value.
 
 end ALOS.String_Util;

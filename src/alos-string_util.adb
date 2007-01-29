@@ -99,4 +99,12 @@ package body ALOS.String_Util is
 	   end loop;
    end Str_Replace;
 
+   function Str_Replace( From, To: in Character; Str: in String ) return String is
+	   -- replace all the ocurences of the character From by To returning the new Value.
+	   R: String := Str;
+   begin
+	   Str_Replace( From, To, R );
+	   return R;
+   end Str_Replace;
+
 end ALOS.String_Util;

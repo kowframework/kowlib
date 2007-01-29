@@ -19,6 +19,26 @@ package body ALOS.File_System is
       return Value( "HOME" );
    end Get_Home;
 
+   function Get_Config_Dir( App: in String ) return String is
+	   -- return a hidden folder where the user can store settings for the
+	   -- application called Application.
+
+	   use ALOS.String_Util;
+   begin
+	   return  Get_Home & "/." & Str_Replace( '/', '-', App );
+   end Get_Config_Dir;
+
+   function Get_Global_Config_Dir( App: in String := "" ) return String is
+	   -- return a directory where all the configuration global to all users
+	   -- of the application App (when set) should be stored.
+	   -- if App is not set, return the global configuration folder of the system
+	   use ALOS.String_Util;
+   begin
+	   return "/etc/" & Str_Replace( '/', '-', App );
+   end Get_Global_Config_Dir;
+
+
+
 
    function Get_Working_Dir return String is
       -- return the local working directory
