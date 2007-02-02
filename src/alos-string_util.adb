@@ -9,23 +9,23 @@
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
 
-with ALOS.UString_Vectors;
+with Alos.UString_Vectors;
 
 
 
-package body ALOS.String_Util is
+package body Alos.String_Util is
 
-   function implode( Sep: Character; Vect: ALOS.UString_Vectors.Vector ) return String is
+   function implode( Sep: Character; Vect: Alos.UString_Vectors.Vector ) return String is
       -- join all parts of the Vector into a String of value element1[SEP]element2[SEP]ele...
    begin
       return To_String( implode( Sep, Vect ) );
    end implode;
 
 
-   function implode( Sep: Character; Vect: ALOS.UString_Vectors.Vector ) return Unbounded_String is
+   function implode( Sep: Character; Vect: Alos.UString_Vectors.Vector ) return Unbounded_String is
       -- join all parts of the Vector into a Unbounded_String of value element1[SEP]element2[SEP]ele...
 
-      use ALOS.UString_Vectors;
+      use Alos.UString_Vectors;
 
       function implode_int ( c: Cursor ) return Unbounded_String is
          -- recursive function to implode string
@@ -46,16 +46,16 @@ package body ALOS.String_Util is
    end implode;
 
 
-   function explode( Sep: Character; Str: String ) return ALOS.UString_Vectors.Vector is
+   function explode( Sep: Character; Str: String ) return Alos.UString_Vectors.Vector is
       -- split the string Str by Sep and return a vector containing it.
    begin
       return explode( Sep, To_Unbounded_String( Str ) );
    end explode;
 
 
-   function explode( Sep: Character; Str: Unbounded_String ) return ALOS.UString_Vectors.Vector is
+   function explode( Sep: Character; Str: Unbounded_String ) return Alos.UString_Vectors.Vector is
       -- split the string Str by Sep and return a vector containing it.
-      use ALOS.UString_Vectors;
+      use Alos.UString_Vectors;
       Vect: Vector;
       ini, fim: Natural := 1;
    begin
@@ -107,4 +107,5 @@ package body ALOS.String_Util is
 	   return R;
    end Str_Replace;
 
-end ALOS.String_Util;
+end Alos.String_Util;
+

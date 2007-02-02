@@ -1,9 +1,9 @@
--- Main ALOS package.
+-- Main Alos package.
 --
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
 -- createdAt 2007-01-26
 
 
-package ALOS is
+package Alos is
 	Pragma Pure;
-end ALOS;
+end Alos;

@@ -9,23 +9,23 @@
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
 
-with ALOS.UString_Vectors;
+with Alos.UString_Vectors;
 
 
 
-package ALOS.String_Util is
+package Alos.String_Util is
 
 
-   function implode( Sep: Character; Vect: ALOS.UString_Vectors.Vector ) return String;
+   function implode( Sep: Character; Vect: Alos.UString_Vectors.Vector ) return String;
    -- join all parts of the Vector into a String of value element1[SEP]element2[SEP]ele...
 
-   function implode( Sep: Character; Vect: ALOS.UString_Vectors.Vector ) return Unbounded_String;
+   function implode( Sep: Character; Vect: Alos.UString_Vectors.Vector ) return Unbounded_String;
    -- join all parts of the Vector into a Unbounded_String of value element1[SEP]element2[SEP]ele...
 
-   function explode( Sep: Character; Str: String ) return ALOS.UString_Vectors.Vector;
+   function explode( Sep: Character; Str: String ) return Alos.UString_Vectors.Vector;
    -- split the string Str by Sep and return a vector containing it.
 
-   function explode( Sep: Character; Str: Unbounded_String ) return ALOS.UString_Vectors.Vector;
+   function explode( Sep: Character; Str: Unbounded_String ) return Alos.UString_Vectors.Vector;
    -- split the string Str by Sep and return a vector containing it.
 
 
@@ -36,4 +36,4 @@ package ALOS.String_Util is
    function Str_Replace( From, To: in Character; Str: in String ) return String;
    -- replace all the ocurences of the character From by To returning the new Value.
 
-end ALOS.String_Util;
+end Alos.String_Util;

@@ -1,4 +1,4 @@
--- test procedure for String utilities in ALOS
+-- test procedure for String utilities in Alos
 --
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
 -- createdAt 2007-01-26
@@ -7,8 +7,9 @@
 with Ada.Text_IO;		use Ada.Text_IO;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
-with ALOS.String_Util;		use ALOS.String_Util;
-with ALOS.UString_Vectors;	use ALOS.UString_Vectors;
+with Alos.String_Util;		use Alos.String_Util;
+with Alos.UString_Vectors;	use Alos.UString_Vectors;
+with Alos.UString_Ordered_Maps;	use Alos.UString_Ordered_Maps;
 
 
 procedure String_Util_Test is
@@ -17,11 +18,17 @@ procedure String_Util_Test is
 
 
 
-   procedure Vector_Iterator( c: in Cursor ) is
+   procedure Vector_Iterator( c: in Alos.UString_Vectors.Cursor ) is
       -- print the element at position c
    begin
       Put_Line( "   " & To_String( Element( c ) ) );
    end Vector_Iterator;
+
+
+   procedure Map_Iterator( c: in Alos.UString_Ordered_Maps.Cursor ) is
+   begin
+	   Put_Line( "   " & To_String( Key( C ) ) & " => " & To_String( Element( C ) ) );
+   end Map_Iterator;
 
 
 
@@ -29,6 +36,7 @@ procedure String_Util_Test is
    Str: String := ";this;;is;a;string;for;testing;explode;and;implode;functions;;;";
    Vect: Vector;
 
+   Ma: Map;
 
 begin
    New_Line;
@@ -54,6 +62,21 @@ begin
    Put_Line( Str );
 
    New_Line;
+
+   Put_Line( "Adding some data do the Map" );
+   Insert( Ma, To_Unbounded_String( "test2" ) , To_Unbounded_String( "doioi" ) );
+   Insert( Ma, To_Unbounded_String( "test3" ) , To_Unbounded_String( "doioi" ) );
+   Insert( Ma, To_Unbounded_String( "test4" ) , To_Unbounded_String( "doioi" ) );
+   Insert( Ma, To_Unbounded_String( "test12" ) , To_Unbounded_String( "doioi" ) );
+   Insert( Ma, To_Unbounded_String( "test1" ) , To_Unbounded_String( "doioi" ) );
+
+   Put_Line( "Iterating... " );
+   Iterate( Ma, Map_Iterator'Access );
+
+
+   New_Line;
+
+
 
 
 
