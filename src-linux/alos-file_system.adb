@@ -6,6 +6,7 @@
 
 
 with Ada.Strings.Unbounded;
+with Ada.Text_IO;
 
 with ALOS.Env_Vars; use ALOS.Env_Vars;
 with ALOS.String_Util;
@@ -146,6 +147,29 @@ package body ALOS.File_System is
 
       return Vect;
    end To_Vector;
+
+
+
+
+   function Is_File( File_Name: in String ) return Boolean is
+	   -- return true if file called File_Name exists
+
+	   -- NOTE: this isn't the best implementation this could have
+	   -- maybe using a C function for file handling which
+	   -- actualy use a syscall or something.
+	   use Ada.Text_IO;
+	   F: File_Type;	
+   begin
+	   Open( F, In_File, File_Name );
+	   Close( F );
+	   return true;
+   exception
+	   when OTHERS =>
+		   return false;
+   end Is_File;
+
+
+
 end ALOS.File_System;
 
 

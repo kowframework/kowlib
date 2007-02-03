@@ -37,4 +37,8 @@ package Alos.File_System is
    -- returning an array with the absolute path of each directory.
    -- also add the current directory to the path
 
+
+   function Is_File( File_Name: in String ) return Boolean;
+   -- return true if file called File_Name exists
+
 end Alos.File_System;

@@ -64,4 +64,14 @@ begin
 
    New_Line;
 
+   Put( "Does the file ''oopsy'' exist? " );
+   if Is_File( "oopsy" ) then
+	   Put_Line( "YES!" );
+   else
+	   Put_Line( "NO!" );
+   end if;
+
+   New_Line;
+
+
 end FS_Tests;
