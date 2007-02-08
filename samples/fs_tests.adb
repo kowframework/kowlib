@@ -1,4 +1,4 @@
--- test of the ALOS.File_System package.
+-- test of the Aw_Lib.File_System package.
 -- it's ment to be running on a unix environment!
 --
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
@@ -8,9 +8,9 @@ with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;		use Ada.Text_IO;
 
 
-with ALOS.Env_Vars;
-with ALOS.File_System;		use ALOS.File_System;
-with ALOS.UString_Vectors;	use ALOS.UString_Vectors;
+with Aw_Lib.Env_Vars;
+with Aw_Lib.File_System;	use Aw_Lib.File_System;
+with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
 
 
 
@@ -23,7 +23,7 @@ procedure FS_Tests is
                                                                 );
 
 
-   Path: String := ALOS.Env_Vars.Value( "PATH" );
+   Path: String := Aw_Lib.Env_Vars.Value( "PATH" );
 
 
 

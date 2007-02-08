@@ -1,4 +1,4 @@
--- this is the linux implementation of system-dependent functions for alos
+-- this is the linux implementation of system-dependent functions for Aw_Lib
 --
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
 -- createdAt 2007-01-25
@@ -8,11 +8,11 @@
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
-with ALOS.Env_Vars; use ALOS.Env_Vars;
-with ALOS.String_Util;
-with ALOS.UString_Vectors;
+with Aw_Lib.Env_Vars; use Aw_Lib.Env_Vars;
+with Aw_Lib.String_Util;
+with Aw_Lib.UString_Vectors;
 
-package body ALOS.File_System is
+package body Aw_Lib.File_System is
 
    function Get_Home return String is
    -- return the location of user's home dir/my documents folder
@@ -24,7 +24,7 @@ package body ALOS.File_System is
 	   -- return a hidden folder where the user can store settings for the
 	   -- application called Application.
 
-	   use ALOS.String_Util;
+	   use Aw_Lib.String_Util;
    begin
 	   return  Get_Home & "/." & Str_Replace( '/', '-', App );
    end Get_Config_Dir;
@@ -33,7 +33,7 @@ package body ALOS.File_System is
 	   -- return a directory where all the configuration global to all users
 	   -- of the application App (when set) should be stored.
 	   -- if App is not set, return the global configuration folder of the system
-	   use ALOS.String_Util;
+	   use Aw_Lib.String_Util;
    begin
 	   return "/etc/" & Str_Replace( '/', '-', App );
    end Get_Global_Config_Dir;
@@ -88,8 +88,8 @@ package body ALOS.File_System is
       function Process_Dots (O : in String) return String is
          -- process '..' signs removing one level from the directory hierarchy
 
-         use ALOS.UString_Vectors;
-         use ALOS.String_Util;
+         use Aw_Lib.UString_Vectors;
+         use Aw_Lib.String_Util;
          use Ada.Strings.Unbounded;
 
          Vect: Vector := explode( '/', O );
@@ -137,11 +137,11 @@ package body ALOS.File_System is
       return Process_Dots (Process_Working_Dir( Process_Home( Original ) ) );
    end Get_Absolute_Path;
 
-   function To_Vector (SPath : in String) return ALOS.UString_Vectors.Vector is
+   function To_Vector (SPath : in String) return Aw_Lib.UString_Vectors.Vector is
 
       -- explode the String SPath using ":"
-      use ALOS.UString_Vectors;
-      Vect : Vector := ALOS.String_Util.explode (':', SPath);
+      use Aw_Lib.UString_Vectors;
+      Vect : Vector := Aw_Lib.String_Util.explode (':', SPath);
    begin
       Append (Vect, Value ("PWD"));
 
@@ -170,6 +170,6 @@ package body ALOS.File_System is
 
 
 
-end ALOS.File_System;
+end Aw_Lib.File_System;
 
 

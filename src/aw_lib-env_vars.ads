@@ -9,7 +9,7 @@
 
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
-package Alos.Env_Vars is
+package Aw_Lib.Env_Vars is
 
    function Value( V: in String ) return String;
    -- return the value of the Environment Variable called V;
@@ -18,4 +18,4 @@ package Alos.Env_Vars is
    -- return the value of the Environment Variable called V;
 
 
-end Alos.Env_Vars;
+end Aw_Lib.Env_Vars;

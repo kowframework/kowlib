@@ -1,4 +1,4 @@
--- test of the ALOS.Env_Vars package.
+-- test of the Aw_Lib.Env_Vars package.
 -- it's ment to be running on a unix environment!
 --
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
@@ -6,7 +6,7 @@
 
 with Ada.Text_IO;	use Ada.Text_IO;
 
-with ALOS.Env_Vars;	use ALOS.Env_Vars;
+with Aw_Lib.Env_Vars;	use Aw_Lib.Env_Vars;
 
 
 procedure Env_Vars_Test is

@@ -12,4 +12,4 @@ rm src-os
 
 ln -s src-linux src-os
 
-gnatmake -gnat05 -P alos.gpr
+gnatmake -gnat05 -P awlib.gpr

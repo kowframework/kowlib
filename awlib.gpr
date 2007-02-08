@@ -1,6 +1,6 @@
-project Alos is
+project Awlib is
 
-   for Source_Dirs use ("src", "test", "src-os");
+   for Source_Dirs use ("src", "samples", "src-os");
    for Object_Dir use "lib";
    for Exec_Dir use "bin";
    for Main use ("fs_tests", "string_util_test.adb", "env_vars_test.adb");
@@ -14,5 +14,5 @@ project Alos is
       for Executable ("env_vars_test.adb") use "";
    end Builder;
 
-end Alos;
+end Awlib;
 

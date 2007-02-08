@@ -3,7 +3,7 @@ with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;
 
 
-package body ALOS.Env_Vars is
+package body Aw_Lib.Env_Vars is
 
    function Value( V: in String ) return String is
       -- return the value of the Environment Variable called V;
@@ -41,4 +41,4 @@ package body ALOS.Env_Vars is
       return To_Unbounded_String( Value( V ) );
    end Value;
 
-end ALOS.Env_Vars;
+end Aw_Lib.Env_Vars;

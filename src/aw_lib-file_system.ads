@@ -6,10 +6,10 @@
 
 
 
-with Alos.UString_Vectors;
+with Aw_Lib.UString_Vectors;
 
 
-package Alos.File_System is
+package Aw_Lib.File_System is
 
    function Get_Home return String;
    -- return the location of user's home dir/my documents folder
@@ -32,7 +32,7 @@ package Alos.File_System is
    -- return the absolute path of the URL.
    -- system dependent implementation
 
-   function To_Vector( SPath: in String ) return Alos.UString_Vectors.Vector;
+   function To_Vector( SPath: in String ) return Aw_Lib.UString_Vectors.Vector;
    -- explode the String SPath using ":" or ";" or the specific system separator
    -- returning an array with the absolute path of each directory.
    -- also add the current directory to the path
@@ -41,4 +41,4 @@ package Alos.File_System is
    function Is_File( File_Name: in String ) return Boolean;
    -- return true if file called File_Name exists
 
-end Alos.File_System;
+end Aw_Lib.File_System;

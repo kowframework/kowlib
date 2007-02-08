@@ -1,4 +1,4 @@
--- test procedure for String utilities in Alos
+-- test procedure for String utilities in Aw_Lib
 --
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
 -- createdAt 2007-01-26
@@ -7,9 +7,9 @@
 with Ada.Text_IO;		use Ada.Text_IO;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
-with Alos.String_Util;		use Alos.String_Util;
-with Alos.UString_Vectors;	use Alos.UString_Vectors;
-with Alos.UString_Ordered_Maps;	use Alos.UString_Ordered_Maps;
+with Aw_Lib.String_Util;		use Aw_Lib.String_Util;
+with Aw_Lib.UString_Vectors;		use Aw_Lib.UString_Vectors;
+with Aw_Lib.UString_Ordered_Maps;	use Aw_Lib.UString_Ordered_Maps;
 
 
 procedure String_Util_Test is
@@ -18,14 +18,14 @@ procedure String_Util_Test is
 
 
 
-   procedure Vector_Iterator( c: in Alos.UString_Vectors.Cursor ) is
+   procedure Vector_Iterator( c: in Aw_Lib.UString_Vectors.Cursor ) is
       -- print the element at position c
    begin
       Put_Line( "   " & To_String( Element( c ) ) );
    end Vector_Iterator;
 
 
-   procedure Map_Iterator( c: in Alos.UString_Ordered_Maps.Cursor ) is
+   procedure Map_Iterator( c: in Aw_Lib.UString_Ordered_Maps.Cursor ) is
    begin
 	   Put_Line( "   " & To_String( Key( C ) ) & " => " & To_String( Element( C ) ) );
    end Map_Iterator;
