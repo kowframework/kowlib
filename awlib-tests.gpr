@@ -1,0 +1,22 @@
+with "awlib.gpr";
+
+
+project Awlib.Tests is
+
+   for Source_Dirs use ( "samples" );
+
+   -- LIBRARY
+   for Object_Dir use "obj";
+
+   -- TESTES:
+   for Exec_Dir use "bin";
+   for Main use ("fs_tests", "string_util_test", "env_vars_test");
+
+
+   package Compiler is
+      for Default_Switches ("ada") use ("-O2", "-gnat05");
+   end Compiler;
+
+
+end Awlib.Tests;
+
