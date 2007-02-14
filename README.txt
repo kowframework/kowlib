@@ -1,8 +1,9 @@
 
-
-Ada Library for OS Dependent Tasks
-
-
+#################################################################################
+#				AdaWorks :: Lib					#
+#################################################################################
+#										#
+#	This is a library for general tasks
 
     This library contains some packages that are meant to easy the develop-
 ment of cross-platform softwares in Ada.
