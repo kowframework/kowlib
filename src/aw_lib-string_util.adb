@@ -1,4 +1,4 @@
--- Library to perform actions over Wide_Strings
+-- Library to perform actions over Strings
 --
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
 -- createdAt 2007-01-26
@@ -6,28 +6,28 @@
 
 
 
-with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
+with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
 
-with Aw_Lib.UWide_String_Vectors;
+with Aw_Lib.UString_Vectors;
 
 
 
-package body Aw_Lib.Wide_String_Util is
+package body Aw_Lib.String_Util is
 
-   function implode( Sep: Wide_Character; Vect: Aw_Lib.UWide_String_Vectors.Vector ) return Wide_String is
-      -- join all parts of the Vector into a Wide_String of value element1[SEP]element2[SEP]ele...
+   function implode( Sep: Character; Vect: Aw_Lib.UString_Vectors.Vector ) return String is
+      -- join all parts of the Vector into a String of value element1[SEP]element2[SEP]ele...
    begin
-      return To_Wide_String( implode( Sep, Vect ) );
+      return To_String( implode( Sep, Vect ) );
    end implode;
 
 
-   function implode( Sep: Wide_Character; Vect: Aw_Lib.UWide_String_Vectors.Vector ) return Unbounded_Wide_String is
-      -- join all parts of the Vector into a Unbounded_Wide_String of value element1[SEP]element2[SEP]ele...
+   function implode( Sep: Character; Vect: Aw_Lib.UString_Vectors.Vector ) return Unbounded_String is
+      -- join all parts of the Vector into a Unbounded_String of value element1[SEP]element2[SEP]ele...
 
-      use Aw_Lib.UWide_String_Vectors;
+      use Aw_Lib.UString_Vectors;
 
-      function implode_int ( c: Cursor ) return Unbounded_Wide_String is
+      function implode_int ( c: Cursor ) return Unbounded_String is
          -- recursive function to implode string
       begin
          return Element( c ) & Sep & implode_int( Next( c ) );
@@ -42,20 +42,20 @@ package body Aw_Lib.Wide_String_Util is
    exception
       when CONSTRAINT_ERROR =>
          --there is nothing on this vector! :O
-         return To_Unbounded_Wide_String( "" );
+         return To_Unbounded_String( "" );
    end implode;
 
 
-   function explode( Sep: Wide_Character; Str: Wide_String ) return Aw_Lib.UWide_String_Vectors.Vector is
+   function explode( Sep: Character; Str: String ) return Aw_Lib.UString_Vectors.Vector is
       -- split the string Str by Sep and return a vector containing it.
    begin
-      return explode( Sep, To_Unbounded_Wide_String( Str ) );
+      return explode( Sep, To_Unbounded_String( Str ) );
    end explode;
 
 
-   function explode( Sep: Wide_Character; Str: Unbounded_Wide_String ) return Aw_Lib.UWide_String_Vectors.Vector is
+   function explode( Sep: Character; Str: Unbounded_String ) return Aw_Lib.UString_Vectors.Vector is
       -- split the string Str by Sep and return a vector containing it.
-      use Aw_Lib.UWide_String_Vectors;
+      use Aw_Lib.UString_Vectors;
       Vect: Vector;
       ini, fim: Natural := 1;
    begin
@@ -66,7 +66,7 @@ package body Aw_Lib.Wide_String_Util is
 
          if Element( Str, fim ) = Sep  then
             if ini = fim then
-               Append( Vect, To_Unbounded_Wide_String( "" ) );
+               Append( Vect, To_Unbounded_String( "" ) );
             else
                Append( Vect, Unbounded_Slice( Str, ini, fim - 1 ) );
             end if;
@@ -79,7 +79,7 @@ package body Aw_Lib.Wide_String_Util is
       -- now we add the last element, it doesn't matter if it's null or not:
       if ini = fim then
          -- it's a null element
-         Append( Vect, To_Unbounded_Wide_String( "" ) );
+         Append( Vect, To_Unbounded_String( "" ) );
       else
          Append( Vect, Unbounded_Slice( Str, ini, fim - 1 ) );
       end if;
@@ -89,7 +89,7 @@ package body Aw_Lib.Wide_String_Util is
    end explode;
 
 
-   procedure Str_Replace( From, To: in Wide_Character; Str: in out Wide_String ) is
+   procedure Str_Replace( From, To: in Character; Str: in out String ) is
    -- replace all the ocurences of the character From by To.
    begin
 	   for i in Str'Range loop
@@ -99,13 +99,13 @@ package body Aw_Lib.Wide_String_Util is
 	   end loop;
    end Str_Replace;
 
-   function Str_Replace( From, To: in Wide_Character; Str: in Wide_String ) return Wide_String is
+   function Str_Replace( From, To: in Character; Str: in String ) return String is
 	   -- replace all the ocurences of the character From by To returning the new Value.
-	   R: Wide_String := Str;
+	   R: String := Str;
    begin
 	   Str_Replace( From, To, R );
 	   return R;
    end Str_Replace;
 
-end Aw_Lib.Wide_String_Util;
+end Aw_Lib.String_Util;
 
