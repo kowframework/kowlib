@@ -7,14 +7,14 @@
 
 
 
-with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
+with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 
 package Aw_Lib.Env_Vars is
 
-   function Value( V: in String ) return String;
+   function Value( V: in Wide_String ) return Wide_String;
    -- return the value of the Environment Variable called V;
 
-   function Value( V: in String ) return Unbounded_String;
+   function Value( V: in Wide_String ) return Unbounded_Wide_String;
    -- return the value of the Environment Variable called V;
 
 
