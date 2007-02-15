@@ -18,7 +18,7 @@ package body Aw_Lib.Env_Vars is
          if S = Null_Ptr then
             raise CONSTRAINT_ERROR;
          else
-            return Value( S );
+            return To_Wide_String( Value( To_String( S ) ) );
          end if;
       end To_String;
       pragma Inline( To_String );
@@ -26,9 +26,9 @@ package body Aw_Lib.Env_Vars is
 
       -- now our own variables
 
-      C_V: chars_ptr := New_String( V );
+      C_V: chars_ptr := New_String( To_String( V ) );
       C_R: chars_ptr := getenv( C_V );
-      R: Wide_String := To_String( C_R );
+      R: Wide_String := To_Wide_String( C_R );
 
    begin
       Free( C_V );

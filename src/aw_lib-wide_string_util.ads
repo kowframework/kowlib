@@ -13,7 +13,7 @@ with Aw_Lib.UWide_String_Vectors;
 
 
 
-package Aw_Lib.String_Util is
+package Aw_Lib.Wide_String_Util is
 
 
    function implode( Sep: Wide_Character; Vect: Aw_Lib.UWide_String_Vectors.Vector ) return Wide_String;
@@ -36,4 +36,4 @@ package Aw_Lib.String_Util is
    function Str_Replace( From, To: in Wide_Character; Str: in Wide_String ) return Wide_String;
    -- replace all the ocurences of the character From by To returning the new Value.
 
-end Aw_Lib.String_Util;
+end Aw_Lib.Wide_String_Util;

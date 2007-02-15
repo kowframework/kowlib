@@ -107,5 +107,5 @@ package body Aw_Lib.Wide_String_Util is
 	   return R;
    end Str_Replace;
 
-end Aw_Lib.String_Util;
+end Aw_Lib.Wide_String_Util;
 
