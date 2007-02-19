@@ -5,7 +5,7 @@
 
 libs:
 	gnatmake -P awlib.gpr
-tests:
+tests: libs
 	gnatmake -P awlib-tests.gpr
 
 all: libs
