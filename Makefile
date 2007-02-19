@@ -12,11 +12,8 @@ all: libs
 
 
 
-clean-libs:
-	gnatclean -P awlib.gpr
-clean-tests:
-	gnatclean -P awlib-tests.gpr
-clean: clean-tests clean-libs
+clean:
+	@rm {bin,lib,obj}/*
 	@echo "All clean"
 
 
