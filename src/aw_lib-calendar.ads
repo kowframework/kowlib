@@ -2,6 +2,11 @@
 --
 -- author Willian Gigliotti <wgigliotti@gmail.com>
 -- created at 2007-02-21
+--
+-- Repository information
+-- $Date$
+-- $Revision$
+-- $Author$
 
 with Ada.Calendar; use Ada.Calendar; 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;

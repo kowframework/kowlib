@@ -1,3 +1,7 @@
+-- Repository information
+-- $Date$
+-- $Revision$
+-- $Author$
 
 with Aw_Lib.Calendar; use Aw_Lib.Calendar;
 with Ada.Text_IO; use Ada.Text_IO;
