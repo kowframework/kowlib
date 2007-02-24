@@ -1,3 +1,12 @@
+-- Package for handling environment variables in POSIX systems
+--
+-- author Marcelo Coraça de Freitas <marcelo.batera@gmail.com> 
+--
+-- Repository information:
+-- $Date$
+-- $Revision$
+-- $Author$
+
 
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;

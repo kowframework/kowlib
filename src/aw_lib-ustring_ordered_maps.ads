@@ -1,7 +1,11 @@
 -- Vector of Natural index and String values
 --
 -- autor Marcelo C. de Freitas <marcelo.batera@gmail.com>
--- createdAt 2007-01-26
+--
+-- Repository information:
+-- $Date$
+-- $Revision$
+-- $Author$
 
 
 

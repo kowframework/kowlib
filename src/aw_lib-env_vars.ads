@@ -4,6 +4,11 @@
 --
 -- author Marcelo C. de Freitas
 -- createdAt 2007-01-26
+--
+-- Repository information:
+-- $Date$
+-- $Revision$
+-- $Author$
 
 
 

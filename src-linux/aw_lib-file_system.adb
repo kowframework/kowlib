@@ -3,6 +3,12 @@
 -- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
 -- createdAt 2007-01-25
 -- lastUpdate
+--
+-- Repository information:
+-- $Date$
+-- $Revision$
+-- $Author$
+
 
 
 with Ada.Strings.Unbounded;
