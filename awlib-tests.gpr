@@ -21,7 +21,7 @@ project Awlib.Tests is
 
    -- TESTES:
    for Exec_Dir use "bin";
-   for Main use ("fs_tests", "string_util_test", "env_vars_test");
+   for Main use ("fs_tests", "string_util_test", "env_vars_test", "calendar_test");
 
 
    package Compiler is
