@@ -11,10 +11,10 @@
 
 
 
-with Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
-with Aw_Lib.Env_Vars; use Aw_Lib.Env_Vars;
+with Ada.Environment_Variables;	use Ada.Environment_Variables;
 with Aw_Lib.String_Util;
 with Aw_Lib.UString_Vectors;
 
@@ -149,7 +149,7 @@ package body Aw_Lib.File_System is
       use Aw_Lib.UString_Vectors;
       Vect : Vector := Aw_Lib.String_Util.explode (':', SPath);
    begin
-      Append (Vect, Value ("PWD"));
+      Append (Vect, To_Unbounded_String(Value ("PWD")));
 
       return Vect;
    end To_Vector;

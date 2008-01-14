@@ -13,8 +13,8 @@
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;		use Ada.Text_IO;
 
+with Ada.Environment_Variables;
 
-with Aw_Lib.Env_Vars;
 with Aw_Lib.File_System;	use Aw_Lib.File_System;
 with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
 
@@ -29,7 +29,7 @@ procedure FS_Tests is
                                                                 );
 
 
-   Path: String := Aw_Lib.Env_Vars.Value( "PATH" );
+   Path: String := Ada.Environment_Variables.Value( "PATH" );
 
 
 

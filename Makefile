@@ -13,7 +13,7 @@ all: libs
 
 
 clean:
-	@rm {bin,lib,obj}/*
+	@rm {bin,lib,obj{,-samples}}/*
 	@echo "All clean"
 
 
