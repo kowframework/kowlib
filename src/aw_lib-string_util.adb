@@ -18,6 +18,9 @@ with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Aw_Lib.UString_Vectors;
 
 
+-- Used for string replacement
+with GNAT.Spitbol.Patterns;
+
 
 package body Aw_Lib.String_Util is
 
@@ -111,6 +114,34 @@ package body Aw_Lib.String_Util is
    begin
 	   Str_Replace( From, To, R );
 	   return R;
+   end Str_Replace;
+
+
+   procedure Str_Replace( From, To: in Unbounded_String; Str: in out Unbounded_String ) is
+      use GNAT.Spitbol.Patterns;
+      From2 : constant Pattern := Span( From );
+   begin
+      Match( Str, From2, To );
+   end Str_Replace;
+
+   procedure Str_Replace( From, To: in String; Str: in out Unbounded_String ) is
+   begin
+      Str_Replace( To_Unbounded_String( From ), To_Unbounded_String( To ), Str );
+   end Str_Replace;
+
+   function Str_Replace( From, To: in Unbounded_String; Str: in Unbounded_String ) return Unbounded_String is
+      use GNAT.Spitbol.Patterns;
+      Replaced : Unbounded_String;
+      From2 : constant Pattern := Span( From );
+   begin
+      Replaced := Str;
+      Match( Replaced, From2, To );
+      return Replaced;
+   end Str_Replace;
+
+   function Str_Replace( From, To: in String; Str: in out Unbounded_String ) is
+   begin
+      return Str_Replace( To_Unbounded_String( From ), To_Unbounded_String( To ), Str );
    end Str_Replace;
 
 end Aw_Lib.String_Util;

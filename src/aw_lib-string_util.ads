@@ -10,7 +10,7 @@
 
 
 
-
+with Ada.Strings;           use Ada.Strings;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
 
@@ -41,4 +41,18 @@ package Aw_Lib.String_Util is
    function Str_Replace( From, To: in Character; Str: in String ) return String;
    -- replace all the ocurences of the character From by To returning the new Value.
 
+
+   procedure Str_Replace( From, To: in Unbounded_String; Str: in out Unbounded_String );
+   -- replace all the ocurences of the character From by To.
+
+   function Str_Replace( From, To: in Unbounded_String; Str: in Unbounded_String ) return Unbounded_String;
+   -- replace all the ocurences of the character From by To returning the new Value.
+
+   procedure Str_Replace( From, To: in String; Str: in out Unbounded_String );
+   -- replace all the ocurences of the character From by To.
+
+   function Str_Replace( From, To: in String; Str: in Unbounded_String ) return Unbounded_String;
+   -- replace all the ocurences of the character From by To returning the new Value.
+
 end Aw_Lib.String_Util;
+
