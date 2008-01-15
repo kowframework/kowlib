@@ -139,7 +139,7 @@ package body Aw_Lib.String_Util is
       return Replaced;
    end Str_Replace;
 
-   function Str_Replace( From, To: in String; Str: in out Unbounded_String ) is
+   function Str_Replace( From, To: in String; Str: in Unbounded_String ) return Unbounded_String is
    begin
       return Str_Replace( To_Unbounded_String( From ), To_Unbounded_String( To ), Str );
    end Str_Replace;
