@@ -119,7 +119,7 @@ package body Aw_Lib.String_Util is
 
    procedure Str_Replace( From, To: in Unbounded_String; Str: in out Unbounded_String ) is
       use GNAT.Spitbol.Patterns;
-      From2 : constant Pattern := Span( From );
+      From2 : constant PString := To_String( From );
    begin
       Match( Str, From2, To );
    end Str_Replace;
@@ -132,7 +132,7 @@ package body Aw_Lib.String_Util is
    function Str_Replace( From, To: in Unbounded_String; Str: in Unbounded_String ) return Unbounded_String is
       use GNAT.Spitbol.Patterns;
       Replaced : Unbounded_String;
-      From2 : constant Pattern := Span( From );
+      From2 : constant PString := To_String( From );
    begin
       Replaced := Str;
       Match( Replaced, From2, To );
