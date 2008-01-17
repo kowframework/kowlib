@@ -2,21 +2,18 @@
 #
 # @author Marcelo Coraça de Freitas <marcelo.batera@gmail.com> 
 
+projectFile="awlib.gpr"
+
 
 libs:
-	gnatmake -P awlib.gpr
-tests: libs
-	gnatmake -P awlib-tests.gpr
+	gnatmake -P ${projectFile}
 
 all: libs
 
 
-
 clean:
-	@rm {bin,lib,obj{,-samples}}/*
+	@gnatclean -P ${projectFile}
 	@echo "All clean"
-
-
 
 docs:
 	@-./gendoc.sh
