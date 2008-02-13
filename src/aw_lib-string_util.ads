@@ -34,7 +34,6 @@ package Aw_Lib.String_Util is
    -- split the string Str by Sep and return a vector containing it.
 
 
-
    procedure Str_Replace( From, To: in Character; Str: in out String );
    -- replace all the ocurences of the character From by To.
 

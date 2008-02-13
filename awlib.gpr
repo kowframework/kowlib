@@ -29,5 +29,9 @@ project Awlib is
       for Default_Switches ("ada") use ("-O2", "-gnat05");
    end Compiler;
 
+   package Linker is
+      for Default_Switches ("ada") use ("-ldl");
+   end Linker;
+
 end Awlib;
 
