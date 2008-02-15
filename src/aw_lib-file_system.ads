@@ -35,6 +35,12 @@ package Aw_Lib.File_System is
    function Get_Absolute_Path( Original: in String ) return String;
    -- return the absolute path of the URL.
    -- system dependent implementation
+   
+   function Get_File_Name( Path: in String ) return String;
+   -- given the path, return the file name without the directory
+
+   function Get_Dir_Name( Path: in String ) return String;
+   -- given the complete path, return the path for the directory
 
    function To_Vector( SPath: in String ) return Aw_Lib.UString_Vectors.Vector;
    -- explode the String SPath using ":" or ";" or the specific system separator
