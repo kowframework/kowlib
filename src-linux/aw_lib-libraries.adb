@@ -18,6 +18,7 @@ with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
 
 
 with Ada.Environment_Variables;
+with Ada.Exceptions;		use Ada.Exceptions;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
 
@@ -59,7 +60,7 @@ package body Aw_Lib.Libraries is
 		Interfaces.C.Strings.Free(C_Str);
 		
 		if H.OS_Handler = System.Null_Address then
-			raise Library_Exception;
+			Raise_Exception(Library_Exception'Identity, "Can't Load Library " & Path);
 		end if;
 		return H;
 	end Load;
@@ -70,7 +71,7 @@ package body Aw_Lib.Libraries is
 		Addr: System.Address := Dlsym(H.OS_Handler, C_Str);
 	begin
 		if Addr = System.Null_Address then
-			raise Library_Exception;
+			Raise_Exception(Library_Exception'Identity, "Can't call symbol " & symbol);
 		end if;
 	end Call;
 
@@ -79,7 +80,7 @@ package body Aw_Lib.Libraries is
 		i: Interfaces.C.int := Dlclose(H.OS_Handler);
 	begin
 		if i /= 0 then
-			raise Library_Exception;
+			Raise_Exception(Library_Exception'Identity, "Unable to unload the library");
 		end if;
 	end Unload;
 
