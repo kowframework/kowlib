@@ -84,7 +84,7 @@ package body Aw_Lib.Libraries is
 
 
 		type Proc_Type is access procedure;
-		function Conv is new Ada.Unchecked_Conversion(System.Address, Proc_Type);
+		function Conv is new Ada.Unchecked_Conversion(Source => System.Address, Target => Proc_Type);
 
 		Proc: Proc_Type;
 	begin
