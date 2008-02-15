@@ -20,7 +20,7 @@ with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
 with Ada.Environment_Variables;
 with Ada.Exceptions;		use Ada.Exceptions;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-
+with Ada.Unchecked_Conversion;
 
 with Interfaces.C;		use Interfaces.C;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;
@@ -49,6 +49,18 @@ package body Aw_Lib.Libraries is
 	pragma Import (C, Dlerror, "dlerror");
 
 
+	function Error return String is
+		C_Str: Chars_Ptr := Dlerror;
+	begin
+		if C_Str = Interfaces.C.Strings.Null_Ptr then
+			return "";
+		end if;
+
+		return Interfaces.C.Strings.Value(C_Str);
+	end Error;
+
+
+
 	function Load(Path: in string) return Handler is
 		-- load a library, returning it.
 		C_Str		: Chars_Ptr := Interfaces.C.Strings.New_String(Path);
@@ -60,7 +72,7 @@ package body Aw_Lib.Libraries is
 		Interfaces.C.Strings.Free(C_Str);
 		
 		if H.OS_Handler = System.Null_Address then
-			Raise_Exception(Library_Exception'Identity, "Can't Load Library " & Path);
+			Raise_Exception(Library_Exception'Identity, "Can't Load Library " & Path & " [ " & Error & " ] ");
 		end if;
 		return H;
 	end Load;
@@ -69,10 +81,21 @@ package body Aw_Lib.Libraries is
 		-- call a symbol in the library.i
 		C_Str: Chars_Ptr := Interfaces.C.Strings.New_String(Symbol);
 		Addr: System.Address := Dlsym(H.OS_Handler, C_Str);
+
+
+		type Proc_Type is access procedure;
+		function Conv is new Ada.Unchecked_Conversion(System.Address, Proc_Type);
+
+		Proc: Proc_Type;
 	begin
 		if Addr = System.Null_Address then
-			Raise_Exception(Library_Exception'Identity, "Can't call symbol " & symbol);
+			Raise_Exception(Library_Exception'Identity, "Can't call symbol " & symbol & " [ " & Error & " ] ");
 		end if;
+
+
+		Proc := Conv(Addr);
+
+		Proc.all;
 	end Call;
 
 	procedure Unload(H: in out Handler) is
@@ -80,7 +103,7 @@ package body Aw_Lib.Libraries is
 		i: Interfaces.C.int := Dlclose(H.OS_Handler);
 	begin
 		if i /= 0 then
-			Raise_Exception(Library_Exception'Identity, "Unable to unload the library");
+			Raise_Exception(Library_Exception'Identity, "Unable to unload the library [ " & Error & " ] ");
 		end if;
 	end Unload;
 

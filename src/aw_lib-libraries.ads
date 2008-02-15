@@ -33,7 +33,7 @@ package Aw_Lib.Libraries is
 	-- load a library, returning it.
 	
 	procedure Call(H: in out Handler; Symbol: in String);
-	-- call a symbol in the library.
+	-- call a procedure with no parameters in the library.
 
 	procedure Unload(H: in out Handler);
 	-- unload the library.
