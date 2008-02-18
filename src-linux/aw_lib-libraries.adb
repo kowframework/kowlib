@@ -12,7 +12,7 @@
 -- $Author: $
 
 
-
+with Aw_Lib.File_System;
 with Aw_Lib.String_Util;	use Aw_Lib.String_Util;
 with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
 
@@ -139,8 +139,9 @@ package body Aw_Lib.Libraries is
 			P := Explode(':', Value(aos));
 		end if;
 
-		Append(P, To_Unbounded_String("/usr/lib"));
-		Append(P, To_Unbounded_String("/usr/local/lib"));
+		Append( P, To_Unbounded_String( "/usr/lib" ) );
+		Append( P, To_Unbounded_String( "/usr/local/lib" ) );
+		Append( P, To_Unbounded_String( Aw_Lib.File_System.Get_Working_Dir ) ); 
 
 		return P;
 	end Library_Path;
