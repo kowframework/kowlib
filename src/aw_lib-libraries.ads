@@ -38,7 +38,9 @@ package Aw_Lib.Libraries is
 
 	procedure Unload(H: in out Handler);
 	-- unload the library.
-
+	
+	function Is_Loaded(H: in Handler) return Boolean;
+	-- Check if this handler is in use
 
 	----------------------------------------------------
 	-- NOW SOME FUNCTIONS FOR HANDLING DEFAULT VALUES --

@@ -107,6 +107,11 @@ package body Aw_Lib.Libraries is
 		end if;
 	end Unload;
 
+
+	function Is_Loaded(H: in Handler) return Boolean is
+	begin
+		return H.OS_Handler /= System.Null_Address;
+	end Is_Loaded;
 	----------------------------------------------------
 	-- NOW SOME FUNCTIONS FOR HANDLING DEFAULT VALUES --
 	----------------------------------------------------
