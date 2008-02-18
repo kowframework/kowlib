@@ -73,7 +73,7 @@ package Aw_Lib.Libraries is
 	private
 
 	type Handler is record
-		Os_Handler : System.Address;
+		Os_Handler : System.Address := System.Null_Address;
 	end record;
 	-- used to handle the library in the memory
 	--

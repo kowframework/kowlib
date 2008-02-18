@@ -105,6 +105,9 @@ package body Aw_Lib.Libraries is
 		if i /= 0 then
 			Raise_Exception(Library_Exception'Identity, "Unable to unload the library [ " & Error & " ] ");
 		end if;
+
+		H.OS_Handler := System.Null_Address;
+
 	end Unload;
 
 
