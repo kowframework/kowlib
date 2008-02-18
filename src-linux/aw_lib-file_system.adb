@@ -20,6 +20,13 @@ with Aw_Lib.UString_Vectors;
 
 package body Aw_Lib.File_System is
 
+
+	function Separator return Character is
+		Pragma Inline( Separator );
+	begin
+		return '/';
+	end Separator;
+
 	function Get_Home return String is
 	-- return the location of user's home dir/my documents folder
 	begin

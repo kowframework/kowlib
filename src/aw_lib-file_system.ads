@@ -15,6 +15,10 @@ with Aw_Lib.UString_Vectors;
 
 package Aw_Lib.File_System is
 
+
+   function Separator return Character;
+   -- return the directory separator used in this system
+   
    function Get_Home return String;
    -- return the location of user's home dir/my documents folder
 
