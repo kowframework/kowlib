@@ -31,7 +31,23 @@ package Aw_Lib.Libraries is
 
 
 	function Load(Path: in string) return Handler;
-	-- load a library, returning it.
+	-- load a library, returning a handler for it.
+	-- the library is always loaded in RTLD_NOW mode if it's available.
+	--
+	-- this mode means (from man dlopen in gentoo linux)
+	-- 	"If  this  value  is  specified,  or  the  environment
+	-- 	variable LD_BIND_NOW is set to a non-empty string, all 
+	-- 	undefined symbols in the library are resolved before 
+	-- 	dlopen() returns.  If this cannot be done, an error is 
+	-- 	returned."
+	--
+	-- this is, AFAIK, the only mode Microsoft Windows(TM) loads dll's.
+	--
+	-- Even though other systems support lazy bindings, we do not provide
+	-- mechanisms to handle it.
+	--
+	-- One wanting to do that will have to extend this package (hence the
+	-- opensource glory!)
 
 	generic 
 		type Symbol_Type is private;

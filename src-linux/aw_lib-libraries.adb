@@ -67,7 +67,7 @@ package body Aw_Lib.Libraries is
 	begin
 		H.Os_Handler := Dlopen(
 			Lib_Name => C_Str,
-			Mode     => Interfaces.C.Int(0));
+			Mode     => Interfaces.C.Int(2)); -- RTDL_NOW mode for loading library
 		Interfaces.C.Strings.Free(C_Str);
 		
 		if H.OS_Handler = System.Null_Address then
