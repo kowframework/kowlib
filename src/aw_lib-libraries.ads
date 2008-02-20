@@ -15,6 +15,7 @@
 with Aw_Lib.UString_Vectors;
 
 
+with Ada.Unchecked_Conversion;
 with System;
 
 package Aw_Lib.Libraries is
@@ -32,6 +33,11 @@ package Aw_Lib.Libraries is
 	function Load(Path: in string) return Handler;
 	-- load a library, returning it.
 
+	generic 
+		type Symbol_Type is private;
+		with function Convert( Addr: System.Address ) return Symbol_Type;
+	function Get_Symbol(H: in Handler; Symbol: in String) return Symbol_Type;
+	-- get a symbol that shall be returned.
 
 	procedure Call(H: in out Handler; Symbol: in String);
 	-- call a procedure with no parameters in the library.

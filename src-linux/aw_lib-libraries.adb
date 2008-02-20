@@ -20,7 +20,6 @@ with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
 with Ada.Environment_Variables;
 with Ada.Exceptions;		use Ada.Exceptions;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-with Ada.Unchecked_Conversion;
 
 with Interfaces.C;		use Interfaces.C;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;
@@ -77,24 +76,26 @@ package body Aw_Lib.Libraries is
 		return H;
 	end Load;
 			
-	procedure Call(H: in out Handler; Symbol: in String) is
-		-- call a symbol in the library.i
+	function Get_Symbol(H: in Handler; Symbol: in String) return Symbol_Type is
 		C_Str: Chars_Ptr := Interfaces.C.Strings.New_String(Symbol);
 		Addr: System.Address := Dlsym(H.OS_Handler, C_Str);
-
-
-		type Proc_Type is access procedure;
-		function Conv is new Ada.Unchecked_Conversion(Source => System.Address, Target => Proc_Type);
-
-		Proc: Proc_Type;
+		S: Symbol_Type;
 	begin
 		if Addr = System.Null_Address then
-			Raise_Exception(Library_Exception'Identity, "Can't call symbol " & symbol & " [ " & Error & " ] ");
+			Raise_Exception(Library_Exception'Identity, "Can't get symbol " & symbol & " [ " & Error & " ] ");
 		end if;
+		S := Convert( Addr );
+		return S;
+	end Get_Symbol;
 
+	procedure Call(H: in out Handler; Symbol: in String) is
 
-		Proc := Conv(Addr);
+		type Proc_Type is access procedure;
+		function Convert is new Ada.Unchecked_Conversion(Source => System.Address, Target => Proc_Type);
+		function Get_Proc is new Get_Symbol( Symbol_Type => Proc_Type, Convert => Convert );
 
+		Proc: Proc_Type := Get_Proc(H, Symbol);
+	begin
 		Proc.all;
 	end Call;
 
