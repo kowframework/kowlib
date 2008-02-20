@@ -146,8 +146,13 @@ package body Aw_Lib.File_System is
 			return implode( '/', Vect );
 		end Process_Dots;
 
+		Str: String := Process_Dots (Process_Working_Dir( Process_Home( Original ) ) );
 	begin
-		return Process_Dots (Process_Working_Dir( Process_Home( Original ) ) );
+		if Str'Length = 0  OR Str(Str'First) = '/' then
+			return Str;
+		end if;
+
+		return Get_Working_Dir & '/' & Str;
 	end Get_Absolute_Path;
 
 
