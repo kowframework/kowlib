@@ -1,38 +1,65 @@
--- this is the linux implementation of system-dependent functions for Aw_Lib
+-- this is the windows implementation of system-dependent functions for Aw_Lib
 --
--- author Marcelo C. de Freitas <marcelo.batera@gmail.com>
--- createdAt 2007-01-25
--- lastUpdate
+-- author Adele Helena Ribeiro <adele,helena@gmail.com>
+-- createdAt 2008-02-17
 --
 -- Repository information:
--- $Date: 2008-02-15 11:27:31 -0300 (sex, 15 fev 2008) $
--- $Revision: 199 $
--- $Author: ogro $
+-- $Date: $
+-- $Revision: $
+-- $Author: $
 
-
-
+with System; use System;
+with Ada.unchecked_conversion;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-with Ada.Text_IO;
-
+with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Environment_Variables;	use Ada.Environment_Variables;
 with Aw_Lib.String_Util;	
 with Aw_Lib.UString_Vectors;
+with Interfaces.C;		use Interfaces.C;
+with Interfaces.C.Strings;	use Interfaces.C.Strings;
 
 package body Aw_Lib.File_System is
 
-	function Get_Home return String is
-	-- return the location of user's home dir/my documents folder
+	--------------
+	-- TYPES --
+	--------------
+	
+	type CharPtr is access constant Interfaces.C.Char;
+	
+	---------------------
+	-- BINDINGS --
+	---------------------
+	
+	function GetCurrentDirectory(nBufferLength: Interfaces.C.Unsigned_Long;
+					lpBuffer : Interfaces.C.Strings.Chars_Ptr)
+                                        return Interfaces.C.Unsigned_Long;
+	pragma Import(Stdcall, GetCurrentDirectory, "GetCurrentDirectoryA");
+	
+	---------------------------------
+	-- IMPLEMENTATIONS--
+	----------------------------------	
+	
+	function Separator return Character is
+		Pragma Inline( Separator );
 	begin
-		return Value( "HOME" );
+		return '\';
+	end Separator;
+	
+	
+	function Get_Home return String is
+		-- return the location of user's home dir/my documents folder
+	begin
+		return Value("USERPROFILE");
 	end Get_Home;
 
+	
 	function Get_Config_Dir( App: in String ) return String is
 		-- return a hidden folder where the user can store settings for the
 		-- application called Application.
 
 		use Aw_Lib.String_Util;
 	begin
-		return  Get_Home & "/." & Str_Replace( '/', '-', App );
+		return Get_Home & Str_Replace( '/', '-', App);
 	end Get_Config_Dir;
 
 	function Get_Global_Config_Dir( App: in String := "" ) return String is
@@ -41,16 +68,21 @@ package body Aw_Lib.File_System is
 		-- if App is not set, return the global configuration folder of the system
 		use Aw_Lib.String_Util;
 	begin
-		return "/etc/" & Str_Replace( '/', '-', App );
+		return Value("APPDATA") & "\" & Str_Replace( '/', '-', App );
 	end Get_Global_Config_Dir;
-
-
 
 
 	function Get_Working_Dir return String is
 		-- return the local working directory
+		
+		Ada_Buffer: String(1 .. 1000 ) := ( Others => ' ' );
+		Buffer : Interfaces.C.Strings.Chars_Ptr := new_string(ada_buffer);		
+			
+		Result : Interfaces.C.Unsigned_Long;
 	begin
-		return Value( "PWD" );
+		Result := GetCurrentDirectory(1000, Buffer);
+
+		return Interfaces.C.Strings.Value(Buffer);
 	end Get_Working_Dir;
 
 
@@ -58,7 +90,9 @@ package body Aw_Lib.File_System is
 		-- return the absolute path of the URL.
 		-- system dependent implementation
 		i : Integer := Original'First;
-
+		
+		use Aw_Lib.String_Util;
+		
 		function Process_Home (O : in String) return String is
 			-- replace ~/ by it's home
 			i : Integer := O'First;
@@ -68,23 +102,25 @@ package body Aw_Lib.File_System is
 			else
 				if O'Length = 1 then
 					return Get_Home;
-				elsif O (i + 1) = '/' then
+				elsif O (i + 1) = '\' then
 					return Get_Home & O (i + 1 .. O'Last);
 				end if;
 			end if;
 			return O;
-		end Process_Home;
+		end Process_Home;	
+		
 
 		function Process_Working_Dir( O: in String ) return String is
-			-- replace ./ by local working directory
+			-- replace .\ by local working directory
 		begin
 			if O'Length < 1 or O (i) /= '.' then
 				return O;
 			else
 				if O'Length = 1 then
-					return Get_Working_dir;
-				elsif O (i + 1) = '/' then
-					return Get_Working_Dir & O (i + 1 .. O'Last);
+					return Get_Working_Dir;
+				elsif O (i + 1) = '\' then
+					return Get_Working_Dir &
+						O (i + 1 .. O'Last);
 				end if;
 			end if;
 			return O;
@@ -98,14 +134,14 @@ package body Aw_Lib.File_System is
 			use Aw_Lib.String_Util;
 			use Ada.Strings.Unbounded;
 
-			Vect: Vector := explode( '/', O );
+			Vect: Vector := explode( '\', O );
 
 			i: Natural := 1;
 
-			function "=" (L: Unbounded_String; R: String ) return Boolean is
+			function "=" (L: Unbounded_String; R: String ) 
+				return Boolean is
 				-- compare an unbonded string with a bounded string
 				-- returns true only if they are identical
-
 				L_Index: Natural := 1;
 			begin
 				if Length( L ) /= R'Length then
@@ -113,7 +149,8 @@ package body Aw_Lib.File_System is
 				end if;
 
 				for R_Index in R'Range loop
-					if Element( L, L_Index ) /= R(R_Index) then
+					if Element( L, L_Index ) /= R(R_Index)
+						then
 						return false;
 					end if;
 					L_Index := L_Index + 1;
@@ -122,7 +159,6 @@ package body Aw_Lib.File_System is
 				return true;
 
 			end "=";
-
 
 		begin
 
@@ -136,11 +172,12 @@ package body Aw_Lib.File_System is
 				end if;
 			end loop;
 
-			return implode( '/', Vect );
+			return implode( '\', Vect );
 		end Process_Dots;
 
 	begin
-		return Process_Dots (Process_Working_Dir( Process_Home( Original ) ) );
+		return Process_Dots (Process_Working_Dir(Process_Home( 
+			Str_Replace( '/', '\', Original ) )));
 	end Get_Absolute_Path;
 
 
@@ -150,38 +187,35 @@ package body Aw_Lib.File_System is
 		use Aw_Lib.String_Util;
 		use Aw_Lib.UString_Vectors;
 
-		Expl: Aw_Lib.UString_Vectors.Vector := explode('/', Path);
+		Expl: Aw_Lib.UString_Vectors.Vector := explode('\', Str_Replace( '/', '\', Path ));
 	begin
 		return To_String(Last_Element( Expl ));
 	end Get_File_Name;
 
 	function Get_Dir_Name( Path: in String ) return String is
 		-- given the complete path, return the path for the directory
-		
+				
 		use Aw_Lib.String_Util;
 		use Aw_Lib.UString_Vectors;
 
-		Expl: Aw_Lib.UString_Vectors.Vector := explode('/', Path);
+		Expl: Aw_Lib.UString_Vectors.Vector := explode('\', Str_Replace( '/', '\', Path ));
 	begin
 		Delete_Last(Expl);
-		return Get_Absolute_Path(implode('/', Expl));
+		return Get_Absolute_Path(implode('\', Expl));
 	end Get_Dir_Name;
 
 
-
-
-	function To_Vector (SPath : in String) return Aw_Lib.UString_Vectors.Vector is
+	function To_Vector (SPath : in String)
+		return Aw_Lib.UString_Vectors.Vector is
 
 		-- explode the String SPath using ":"
 		use Aw_Lib.UString_Vectors;
-		Vect : Vector := Aw_Lib.String_Util.explode (':', SPath);
+		Vect : Vector := Aw_Lib.String_Util.explode (';', SPath);
 	begin
-		Append (Vect, To_Unbounded_String(Value ("PWD")));
+		--	Append (Vect, To_Unbounded_String(Get_Working_Dir));
 
 		return Vect;
 	end To_Vector;
-
-
 
 
 	function Is_File( File_Name: in String ) return Boolean is
@@ -193,7 +227,7 @@ package body Aw_Lib.File_System is
 		use Ada.Text_IO;
 		F: File_Type;	
 	begin
-		Open( F, In_File, File_Name );
+		Open( F, In_File, Get_Absolute_Path(File_Name) );
 		Close( F );
 		return true;
 	exception
@@ -201,8 +235,5 @@ package body Aw_Lib.File_System is
 			return false;
 	end Is_File;
 
-
-
 end Aw_Lib.File_System;
-
 
