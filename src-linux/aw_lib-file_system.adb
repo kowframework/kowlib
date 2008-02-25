@@ -194,27 +194,6 @@ package body Aw_Lib.File_System is
 	end To_Vector;
 
 
-
-
-	function Is_File( File_Name: in String ) return Boolean is
-		-- return true if file called File_Name exists
-
-		-- NOTE: this isn't the best implementation this could have
-		-- maybe using a C function for file handling which
-		-- actualy use a syscall or something.
-		use Ada.Text_IO;
-		F: File_Type;	
-	begin
-		Open( F, In_File, File_Name );
-		Close( F );
-		return true;
-	exception
-		when OTHERS =>
-			return false;
-	end Is_File;
-
-
-
 end Aw_Lib.File_System;
 
 
