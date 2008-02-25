@@ -15,7 +15,17 @@ project Awlib is
    version := "0.1.0";
 
 
-   for Source_Dirs use ( "src", "src-linux" );
+   Type Supported_OS is ("WIN32", "GNU/Linux");
+
+   target: Supported_OS := external("TARGET", "GNU/Linux");
+
+
+   case target is
+   	when "WIN32" =>
+		for Source_Dirs use ( "src", "src-windows" );
+	when "GNU/Linux" =>
+		for Source_Dirs use ( "src", "src-linux" );
+   end case;
    for Object_Dir use "obj";
 
    -- LIBRARY
