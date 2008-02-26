@@ -21,6 +21,9 @@ with Ada.Unchecked_Conversion;
 with Interfaces.C;		use Interfaces.C;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;
 
+with Ada.Text_IO; use Ada.Text_IO;
+
+
 with System;			use System;
 
 package body Aw_Lib.Libraries is
@@ -81,18 +84,17 @@ package body Aw_Lib.Libraries is
 	
 	
 	function Get_Symbol(H: in Handler; Symbol: in String) return Symbol_Type is
-		Name : aliased String (1 .. Symbol'Length) := Symbol;
+		Name : aliased String := '_' & Symbol;
 		Addr : System.Address;
 		S: Symbol_Type;
 	begin	
 		Name (Symbol'Range) := Symbol;
 		Name (Name'Last) := ASCII.Nul;
 		
-		
 		Addr := GetProcAddress(H.OS_Handler, To_CharPtr(Name'Address));
 
 		if Addr = System.Null_Address then
-			Raise_Exception(Library_Exception'Identity, "*Can't get symbol " & Symbol);
+			Raise_Exception(Library_Exception'Identity, "Can't get symbol " & Symbol);
 		end if;
 		
 		S := Convert( Addr );
