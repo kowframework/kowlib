@@ -52,9 +52,5 @@ package Aw_Lib.String_Util is
 	-- replace all the ocurences of the character From by To returning the new Value.
 
 
-
-	function Trim( Source: in String ) return String;
-	-- removes all the white spaces in the beginning and end of the String
-
 end Aw_Lib.String_Util;
 

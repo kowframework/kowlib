@@ -145,26 +145,6 @@ package body Aw_Lib.String_Util is
 	end Str_Replace;
 
 
-	function Trim( Source: in String ) return String is
-		-- removes all the white spaces in the beginning and end of the String
-		First: Integer := Source'First;
-		Last:  Integer := Source'Last;
-	begin
-		while First < Source'Last AND Source(First) = ' '
-		loop
-			First := First + 1;
-		end loop;
-
-		while First < Last and Source(Last) = ' '
-		loop
-			Last := Last - 1;
-		end loop;
-		
-		return Source( First .. Last );
-		
-	end Trim;
-
-
 
 end Aw_Lib.String_Util;
 
