@@ -53,7 +53,7 @@ package Aw_Lib.String_Util is
 
    -- for compatibility
    procedure Str_Replace( From, To: in Unbounded_String; Str: in out Unbounded_String ); 
-   function Str_Replace( From, To: in Unbounded_String; Str: in Unbounded_String ) return Unbounded_String; 
+   --function Str_Replace( From, To: in Unbounded_String; Str: in Unbounded_String ) return Unbounded_String; 
 
    procedure Str_Replace( From, To: in String; Str: in out Unbounded_String ); 
    function Str_Replace( From, To: in String; Str: in Unbounded_String ) return Unbounded_String; 
