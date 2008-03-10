@@ -2,6 +2,7 @@ with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting; use Ada.Calendar.Formatting;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded;   use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded.Hash;
 with Ada.Unchecked_Conversion;
 
 package Aw_Lib.Locales is
@@ -213,13 +214,11 @@ package Aw_Lib.Locales is
 
 	DEFAULT_LOCALE: Locale := LOCALE_pt_BR;
 
- 	function Hash (id: Unbounded_String) return Hash_Type;
-  	 --  you need to provide this to every hashed container
 
 	package Locale_Tables is new Ada.Containers.Hashed_Maps(
 		Key_Type => Unbounded_String,
 		Element_Type => Locale,
-		Hash => Hash,
+		Hash => Ada.Strings.Unbounded.Hash,
       		Equivalent_Keys => "=");
 
 	Supported_Locales: Locale_Tables.Map;

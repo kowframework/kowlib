@@ -2,20 +2,10 @@ with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting; use Ada.Calendar.Formatting;
 with Ada.Strings.Unbounded;   use Ada.Strings.Unbounded;
-with Ada.Unchecked_Conversion;
+
 
 package body Aw_Lib.Locales is
 	
-	function To_Hash is 
-		new Ada.Unchecked_Conversion (Unbounded_String,
-			Ada.Containers.Hash_Type);
-  	
-
-	function Hash (id : Unbounded_String) return Ada.Containers.Hash_Type is
-  	begin
-    		return To_Hash (id);
-   	end;
-
 
 	function Get_Locale( Code: String) return Locale is
 		pragma Inline (Get_Locale);
