@@ -258,5 +258,29 @@ package body Aw_Lib.String_Util is
    end Find_Occurances;
 
 
+   -- for compatibility with older version
+   procedure Str_Replace( From, To: in Unbounded_String; Str: in out Unbounded_String ) is
+   begin
+      Str := Str_Replace( To_String( From ), To_String( To ), To_String( Str ) );
+   end Str_Replace;
+
+   function Str_Replace( From, To: in Unbounded_String; Str: in Unbounded_String ) return Unbounded_String is
+   begin
+      return Str_Replace( To_String( From ), To_String( To ), To_String( Str ) );
+   end Str_Replace;
+
+
+   procedure Str_Replace( From, To: in String; Str: in out Unbounded_String ) is
+   begin
+      Str := Str_Replace( From, To, To_String( Str ) );
+   end Str_Replace;
+ 
+   function Str_Replace( From, To: in String; Str: in Unbounded_String ) return Unbounded_String is
+   begin
+      return Str_Replace( From, To, To_String( Str ) );
+   end Str_Replace;
+
+
+
 end Aw_Lib.String_Util;
 

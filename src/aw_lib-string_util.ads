@@ -51,6 +51,15 @@ package Aw_Lib.String_Util is
    function Str_Replace( From, To, Str: in Unbounded_String; Case_Sensitive: Boolean := True ) return Unbounded_String;
    procedure Str_Replace( From, To, Str: in Unbounded_String; Result: in out Unbounded_String; Case_Sensitive: Boolean := True );
 
+   -- for compatibility
+   procedure Str_Replace( From, To: in Unbounded_String; Str: in out Unbounded_String ); 
+   function Str_Replace( From, To: in Unbounded_String; Str: in Unbounded_String ) return Unbounded_String; 
+
+   procedure Str_Replace( From, To: in String; Str: in out Unbounded_String ); 
+   function Str_Replace( From, To: in String; Str: in Unbounded_String ) return Unbounded_String; 
+
+
+
 private
 
    function Find_Occurances( Find, Context : in String; Case_Sensitive: Boolean ) return Positions_Vectors.Vector;
