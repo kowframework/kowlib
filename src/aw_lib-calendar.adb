@@ -9,26 +9,34 @@
 -- $Author$
 
 with Ada.Calendar; use Ada.Calendar; 
-with Aw_Lib.Replacer; use Aw_Lib.Replacer;
+with Ada.Calendar.Formatting; use Ada.Calendar.Formatting;
+with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+with Ada.Characters.Handling;
 
+
+with Aw_Lib.Locales; use Aw_Lib.Locales;
+with Aw_Lib.Replacer; use Aw_Lib.Replacer;
 
 package body Aw_Lib.Calendar is
 
+	---------- TIMESTAMP ----------
 
-	MomentoUnix: Time := Time_Of(1970, 1,1);
+	MomentoUnix: Time := Ada.Calendar.Time_Of(1970, 1,1);
 	-- Momento inicial do Timestamp
 	
-	function Get(This: in Timestamp; Key: in Character) return Unbounded_String is 
-	-- Funcao que recebauma chave e retorna o valor;
+	function Get(This: in Timestamp; Key: in Character)
+		return Unbounded_String is 
+	-- Funcao que receba uma chave e retorna o valor;
 		Str : Unbounded_String;
 		Hora: Time := To_Time(This);
 
 
-		function To_Unb(Num: Integer; Tamanho: Integer) return Unbounded_String is
+		function To_Unb(Num: Integer; Tamanho: Integer)
+			return Unbounded_String is
 			-- Transforma numero em Unb String com tamanho especifico;
 			Str: Unbounded_String;
 			T : Integer := Tamanho;
@@ -53,14 +61,15 @@ package body Aw_Lib.Calendar is
 		case Key is
 				
 			when 'd' => 
-				Str := To_Unb(Integer(Day(Hora)),10);
-				Put(Integer(Day(Hora)));
+				Str := To_Unb(Integer(Ada.Calendar.Day(Hora)),10);
+				Put(Integer(Ada.Calendar.Day(Hora)));
 			when 'm' => 
-				Str := To_Unb(Integer(Month(Hora)),10);
+				Str := To_Unb(Integer(Ada.Calendar.Month(Hora)),10);
 			when 'y' =>
-				Str := To_Unb(Integer(Year(Hora)) mod 100, 10);
+				Str := To_Unb(Integer(Ada.Calendar.Year(Hora))
+					mod 100, 10);
 			when 'Y' => 
-				Str := To_Unb(Integer(Year(Hora)), 1000);
+				Str := To_Unb(Integer(Ada.Calendar.Year(Hora)), 1000);
 			
 			when others => Str := Str;
 		end case;
@@ -90,14 +99,14 @@ package body Aw_Lib.Calendar is
 	end To_Time;
 
 
-        function Date( Formato: in Unbounded_String; Hora: in Timestamp) return Unbounded_String is
+        function Date( Formato: in Unbounded_String; Hora: in Timestamp)
+		return Unbounded_String is
+
 		Str : Unbounded_String := Formato;
 	begin
 		Date(Str, Hora);
 		return Str;
 	end Date;
-
-
 
 
 	procedure Date( Formato: in out Unbounded_String; Hora: in Timestamp) is
@@ -115,15 +124,470 @@ package body Aw_Lib.Calendar is
 			Str_New := get(Hora, Element(Str,1));
 			New_Line;
 			Put(To_String(Str_New));
-			Replace_Slice(Formato, Positive(Str_Pos), Natural(Str_Len + Str_Pos), To_String(Str_New));
+			Replace_Slice(	Formato, Positive(Str_Pos),
+					Natural(Str_Len + Str_Pos),
+					To_String(Str_New));
 			Str_Len := 0;
 
 			exit when Str_Len = 0;
 		end loop;		
 
 	end Date;
-		
 
+
+	---------- FORMATTER ----------
+
+	function Get_Date return Time is
+		A_Time : Ada.Calendar.Time := Ada.Calendar.Clock;
+		UTC_Adjustment : Ada.Calendar.Time_Zones.Time_Offset :=
+			Ada.Calendar.Time_Zones.UTC_Time_Offset (A_Time); 
+	begin	
+		return A_Time + Duration(UTC_Adjustment * 60);
+	end Get_Date;
+
+
+	function Get_Formatter(Pattern : Unbounded_String) return Formatter is
+		F : Formatter;
+	begin
+		F := (Pattern => Pattern);
+		return F;
+	end Get_Formatter;
+
+	function Get_Formatter(Pattern : String) return Formatter is
+		pragma Inline(Get_Formatter);
+	begin
+		return Get_Formatter(To_Unbounded_String(Pattern));
+	end Get_Formatter;
+
+
+	type Padding_Mode is (None, Zero, Space);
+
+   	type Sec_Number is mod 2 ** 64;
+  	--  Type used to compute the number of seconds since 01/01/1970. A 32 bit
+  	--  number will cover only a period of 136 years. This means that for date
+   	--  past 2106 the computation is not possible. A 64 bits number should be
+   	--  enough for a very large period of time.
+
+
+  	--------------------------------------
+	---- INICIO DOS SUBPROGRAMAS LOCAIS --
+   	--------------------------------------
+
+	function Am_Pm (H : Natural) return String;
+	--  Return AM or PM depending on the hour H
+
+	function Hour_12 (H : Natural) return Positive;
+	--  Convert a 1-24h format to a 0-12 hour format
+
+	function Image (Str : String; Length : Natural := 0) return String;
+ 	--  Return Str capitalized and cut to length number of characters. If
+	--  length is set to 0 it does not cut it.
+
+   	function Image (
+		N : Sec_Number;
+      		Padding : Padding_Mode := Zero;
+     		Length  : Natural := 0) return String;
+   	--  Return image of N. This number is eventually padded with zeros or spaces
+   	--  depending of the length required. If length is 0 then no padding occurs.
+
+   	function Image (
+     		N       : Natural;
+      		Padding : Padding_Mode := Zero;
+      		Length  : Natural := 0) return String;
+	
+   	--  As above with N provided in Integer format
+
+	-----------
+	-- Am_Pm --
+	-----------
+	function Am_Pm (H : Natural) return String is
+	begin
+	   if H = 0 or else H > 12 then
+	      return "PM";
+	   else
+	      return "AM";
+	   end if;
+	end Am_Pm;
+
+	-------------
+	-- Hour_12 --
+	-------------
+
+	function Hour_12 (H : Natural) return Positive is
+	begin
+	   if H = 0 then
+	      return 12;
+	   elsif H <= 12 then
+	      return H;
+	   else --  H > 12
+	      return H - 12;
+	   end if;
+	end Hour_12;
+
+   	-----------
+   	-- Image --
+	-----------
+	
+	function Image (Str : String;
+	   Length : Natural := 0) return String
+	is
+	   use Ada.Characters.Handling;
+	   Local : constant String :=
+	            To_Upper (Str (Str'First)) &
+		    To_Lower (Str (Str'First + 1 .. Str'Last));
+	begin
+	   if Length = 0 then
+	      return Local;
+	   else
+	     return Local (1 .. Length);
+	   end if;
+	end Image;
+
+   	-----------
+   	-- Image --
+   	-----------
+
+   	function Image (
+		N       : Natural;
+      		Padding : Padding_Mode := Zero;
+      		Length  : Natural := 0) return String is
+   	begin
+      		return Image (Sec_Number (N), Padding, Length);
+   	end Image;
+
+ 	-----------
+   	-- Image --
+	-----------
+	
+	function Image (
+		N       : Sec_Number;
+      		Padding : Padding_Mode := Zero;
+      		Length  : Natural := 0) return String is
+      
+      		function Pad_Char return String;
+
+		function Pad_Char return String is
+		begin
+        		case Padding is
+        			when None  => return "";
+				when Zero  => return "00";
+				when Space => return "  ";
+			end case;
+      		end Pad_Char;
+
+		NI  : constant String := Sec_Number'Image (N);
+      		NIP : constant String := Pad_Char & NI (2 .. NI'Last);
+
+   	--  Start of processing for Image
+   	begin
+      		if Length = 0 or else Padding = None then
+       			return NI (2 .. NI'Last);
+      		else
+        		return NIP (NIP'Last - Length + 1 .. NIP'Last);
+      		end if;
+   	end Image;
+
+	---------------------------------
+	-- FIM DOS SUBPROGRAMAS LOCAIS --
+	---------------------------------
+
+
+	function Format(date : Time) return String is 
+	begin
+		return Format(Get_Locale("ISO"), Get_Formatter(""), date);
+	end format;
+
+
+  	-----------
+   	-- Image --
+   	-----------
+
+  	function Format (
+   		L: Locale;
+     		F : Formatter;
+		Date    : Ada.Calendar.Time) return String
+   	is
+      		Picture : String := To_String(F.Pattern);
+      
+      		Padding : Padding_Mode := Zero;
+      		--  Padding is set for one directive
+
+      		Result : Unbounded_String;
+
+      		Year       : Year_Number;
+		Month      : Month_Number;
+		Day        : Day_Number;
+		Hour       : Hour_Number;
+		Minute     : Minute_Number;
+		Second     : Second_Number;
+		Sub_Second : Second_Duration;
+
+		P : Positive := Picture'First;
+
+   	begin
+      		Split (Date, Year, Month, Day, Hour, Minute, Second, Sub_Second);
+
+     	loop
+         --  A directive has the following format "%[-_]."
+
+         if Picture (P) = '%' then
+
+            Padding := Zero;
+
+            if P = Picture'Last then
+               raise Pattern_Error;
+            end if;
+
+            --  Check for GNU extension to change the padding
+
+            if Picture (P + 1) = '-' then
+               Padding := None;
+               P := P + 1;
+            elsif Picture (P + 1) = '_' then
+               Padding := Space;
+               P := P + 1;
+            end if;
+
+            if P = Picture'Last then
+               raise Pattern_Error;
+            end if;
+
+            case Picture (P + 1) is
+
+               --  Literal %
+
+               when '%' =>
+                  Result := Result & '%';
+
+               --  A newline
+
+               when 'n' =>
+                  Result := Result & ASCII.LF;
+
+               --  A horizontal tab
+
+               when 't' =>
+                  Result := Result & ASCII.HT;
+
+               --  Hour (00..23)
+
+               when 'H' =>
+                  Result := Result & Image (Hour, Padding, 2);
+
+               --  Hour (01..12)
+
+               when 'I' =>
+                  Result := Result & Image (Hour_12 (Hour), Padding, 2);
+
+               --  Hour ( 0..23)
+
+               when 'k' =>
+                  Result := Result & Image (Hour, Space, 2);
+
+               --  Hour ( 1..12)
+
+               when 'l' =>
+                  Result := Result & Image (Hour_12 (Hour), Space, 2);
+
+               --  Minute (00..59)
+
+               when 'M' =>
+                  Result := Result & Image (Minute, Padding, 2);
+
+               --  AM/PM
+
+               when 'p' =>
+                  Result := Result & Am_Pm (Hour);
+
+               --  Time, 12-hour (hh:mm:ss [AP]M)
+
+               when 'r' =>
+                  Result := Result &
+                    Image (Hour_12 (Hour), Padding, Length => 2) & ':' &
+                    Image (Minute, Padding, Length => 2) & ':' &
+                    Image (Second, Padding, Length => 2) & ' ' &
+                    Am_Pm (Hour);
+
+               --   Seconds  since 1970-01-01  00:00:00 UTC
+               --   (a nonstandard extension)
+
+           -- 	when 's' =>
+           --
+	   --    declare
+           --      Sec : constant Sec_Number :=
+           --                  Sec_Number (Julian_Day (Year, Month, Day) -
+           --                            Julian_Day (1970, 1, 1)) * 86_400
+           --                              + Sec_Number (Hour) * 3_600
+           --                             + Sec_Number (Minute) * 60
+           --                              + Sec_Number (Second);
+	   --		
+           --        begin
+           --          Result := Result & Image (Sec, None);
+           --      end;
+
+               --  Second (00..59)
+
+               when 'S' =>
+                  Result := Result & Image (Second, Padding, Length => 2);
+
+               --  Milliseconds (3 digits)
+               --  Microseconds (6 digits)
+               --  Nanoseconds  (9 digits)
+
+               when 'i' | 'e' | 'o' =>
+                  declare
+                     Sub_Sec : constant Long_Integer :=
+                                 Long_Integer (Sub_Second * 1_000_000_000);
+
+                     Img1  : constant String := Sub_Sec'Img;
+                     Img2  : constant String :=
+                               "00000000" & Img1 (Img1'First + 1 .. Img1'Last);
+                     Nanos : constant String :=
+                               Img2 (Img2'Last - 8 .. Img2'Last);
+
+                  begin
+                     case Picture (P + 1) is
+                        when 'i' =>
+                           Result := Result &
+                             Nanos (Nanos'First .. Nanos'First + 2);
+
+                        when 'e' =>
+                           Result := Result &
+                             Nanos (Nanos'First .. Nanos'First + 5);
+
+                        when 'o' =>
+                           Result := Result & Nanos;
+
+                        when others =>
+                           null;
+                     end case;
+                  end;
+
+               --  Time, 24-hour (hh:mm:ss)
+
+               when 'T' =>
+                  Result := Result &
+                    Image (Hour, Padding, Length => 2) & ':' &
+                    Image (Minute, Padding, Length => 2) & ':' &
+                    Image (Second, Padding, Length => 2);
+
+               --  Locale's abbreviated weekday name (Sun..Sat)
+		when 'a' =>
+			declare
+	       			D: Day_Name :=
+					Ada.Calendar.Formatting.Day_Of_Week(Date);
+	       	    		S: String :=  Aw_lib.Locales.Image(L, D);
+			begin
+				Result := Result & Image (S, 3);
+			end;
+
+
+               --  Locale's full weekday name, variable length
+               --  (Sunday..Saturday)
+               when 'A' =>
+	       		declare
+				D: Day_Name := Ada.Calendar.Formatting.Day_Of_Week(Date);
+	       	    		S: String :=  Aw_lib.Locales.Image(L, D);
+			begin
+				Result := Result & Image (S);
+			end;
+
+
+               --  Locale's abbreviated month name (Jan..Dec)
+               when 'b' | 'h' =>
+                  Result := Result &
+                    Image (Image(L, Month), 3);
+
+               --  Locale's full month name, variable length
+               --  (January..December)
+
+               when 'B' =>
+                  Result := Result &
+                    Image (Image(L, Month));
+
+               --  Locale's date and time (Sat Nov 04 12:02:33 EST 1989)
+               when 'c' =>
+	       		declare
+				Zero_Formatter : Formatter := 
+					Get_Formatter("%a %b %d %T %Y");
+				Space_Formatter : Formatter :=
+					Get_Formatter("%a %b %_d %_T %Y");
+				None_Formatter : Formatter :=
+					Get_Formatter("%a %b %-d %-T %Y");
+			begin
+				case Padding is
+                     			when Zero => Result := Result &
+						Format(L, Zero_Formatter, Date);
+                     			when Space => Result := Result &
+						Format(L, Space_Formatter, Date);
+                    			when None => Result := Result &
+						Format(L, None_Formatter, Date);
+				end case;
+			end;
+
+               --   Day of month (01..31)
+               when 'd' =>
+                  Result := Result & Image (Day, Padding, 2);
+
+               --  Date (mm/dd/yy)
+
+               when 'D' | 'x' =>
+                  Result := Result &
+                              Image (Month, Padding, 2) & '/' &
+                              Image (Day, Padding, 2) & '/' &
+                              Image (Year, Padding, 2);
+
+
+               --  Month (01..12)
+               when 'm' =>
+                  Result := Result & Image (Month, Padding, 2);
+
+
+               --  Day of week (0..6) with 0 corresponding to Sunday
+               when 'w' =>
+                  declare
+                     DOW : Natural range 0 .. 6;
+
+                  begin
+                     if Day_Of_Week (Date) = Sunday then
+                        DOW := 0;
+                     else
+                        DOW := Day_Name'Pos (Day_Of_Week (Date));
+                     end if;
+
+			Result := Result & Image (DOW, Length => 1);
+                  end;
+
+               when 'y' =>
+                  declare
+                     Y : constant Natural := Year - (Year / 100) * 100;
+                  begin
+                     Result := Result & Image (Y, Padding, 2);
+                  end;
+
+               --   Year (1970...)
+
+               when 'Y' =>
+                  Result := Result & Image (Year, None, 4);
+
+               when others =>
+	       		raise Pattern_Error;
+            end case;
+
+            P := P + 2;
+
+         else
+            Result := Result & Picture (P);
+            P := P + 1;
+         end if;
+
+         exit when P > Picture'Last;
+
+      end loop;
+
+      return To_String (Result);
+   end Format;
+	
 end Aw_Lib.Calendar;
 
 
