@@ -15,8 +15,7 @@ with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
-with Ada.Characters.Handling;
-
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 
 with Aw_Lib.Locales; use Aw_Lib.Locales;
 with Aw_Lib.Replacer; use Aw_Lib.Replacer;
@@ -146,17 +145,17 @@ package body Aw_Lib.Calendar is
 	end Get_Date;
 
 
-	function Get_Formatter(Pattern : Unbounded_String) return Formatter is
+	function Get_Formatter(Pattern : Unbounded_Wide_String) return Formatter is
 		F : Formatter;
 	begin
 		F := (Pattern => Pattern);
 		return F;
 	end Get_Formatter;
 
-	function Get_Formatter(Pattern : String) return Formatter is
+	function Get_Formatter(Pattern : Wide_String) return Formatter is
 		pragma Inline(Get_Formatter);
 	begin
-		return Get_Formatter(To_Unbounded_String(Pattern));
+		return Get_Formatter(To_Unbounded_Wide_String(Pattern));
 	end Get_Formatter;
 
 
@@ -169,38 +168,41 @@ package body Aw_Lib.Calendar is
    	--  enough for a very large period of time.
 
 
-  	--------------------------------------
-	---- INICIO DOS SUBPROGRAMAS LOCAIS --
-   	--------------------------------------
+  	--------------------------------
+	-- BEGIN OF LOCAL SUBPROGRAMS --
+   	--------------------------------
 
-	function Am_Pm (H : Natural) return String;
+	function Am_Pm (H : Natural) return Wide_String;
 	--  Return AM or PM depending on the hour H
 
 	function Hour_12 (H : Natural) return Positive;
 	--  Convert a 1-24h format to a 0-12 hour format
 
-	function Image (Str : String; Length : Natural := 0) return String;
+	function Image (Str : Wide_String; Length : Natural := 0)
+		return Wide_String;
  	--  Return Str capitalized and cut to length number of characters. If
 	--  length is set to 0 it does not cut it.
 
    	function Image (
 		N : Sec_Number;
       		Padding : Padding_Mode := Zero;
-     		Length  : Natural := 0) return String;
-   	--  Return image of N. This number is eventually padded with zeros or spaces
-   	--  depending of the length required. If length is 0 then no padding occurs.
+     		Length  : Natural := 0) return Wide_String;
+   	--  Return image of N. This number is eventually padded with
+	--  zeros or spaces
+   	--  depending of the length required. If length is 0 then no
+	--  padding occurs.
 
    	function Image (
      		N       : Natural;
       		Padding : Padding_Mode := Zero;
-      		Length  : Natural := 0) return String;
+      		Length  : Natural := 0) return Wide_String;
 	
    	--  As above with N provided in Integer format
 
 	-----------
 	-- Am_Pm --
 	-----------
-	function Am_Pm (H : Natural) return String is
+	function Am_Pm (H : Natural) return Wide_String is
 	begin
 	   if H = 0 or else H > 12 then
 	      return "PM";
@@ -228,13 +230,10 @@ package body Aw_Lib.Calendar is
    	-- Image --
 	-----------
 	
-	function Image (Str : String;
-	   Length : Natural := 0) return String
+	function Image (Str : Wide_String;
+	   Length : Natural := 0) return Wide_String
 	is
-	   use Ada.Characters.Handling;
-	   Local : constant String :=
-	            To_Upper (Str (Str'First)) &
-		    To_Lower (Str (Str'First + 1 .. Str'Last));
+	   Local : constant Wide_String := Str;
 	begin
 	   if Length = 0 then
 	      return Local;
@@ -250,7 +249,7 @@ package body Aw_Lib.Calendar is
    	function Image (
 		N       : Natural;
       		Padding : Padding_Mode := Zero;
-      		Length  : Natural := 0) return String is
+      		Length  : Natural := 0) return Wide_String is
    	begin
       		return Image (Sec_Number (N), Padding, Length);
    	end Image;
@@ -262,11 +261,11 @@ package body Aw_Lib.Calendar is
 	function Image (
 		N       : Sec_Number;
       		Padding : Padding_Mode := Zero;
-      		Length  : Natural := 0) return String is
+      		Length  : Natural := 0) return Wide_String is
       
-      		function Pad_Char return String;
+      		function Pad_Char return Wide_String;
 
-		function Pad_Char return String is
+		function Pad_Char return Wide_String is
 		begin
         		case Padding is
         			when None  => return "";
@@ -275,8 +274,9 @@ package body Aw_Lib.Calendar is
 			end case;
       		end Pad_Char;
 
-		NI  : constant String := Sec_Number'Image (N);
-      		NIP : constant String := Pad_Char & NI (2 .. NI'Last);
+		NI  : constant Wide_String := To_Wide_String(
+			(Sec_Number'Image (N)));
+      		NIP : constant Wide_String := Pad_Char & NI (2 .. NI'Last);
 
    	--  Start of processing for Image
    	begin
@@ -287,12 +287,12 @@ package body Aw_Lib.Calendar is
       		end if;
    	end Image;
 
-	---------------------------------
-	-- FIM DOS SUBPROGRAMAS LOCAIS --
-	---------------------------------
+	------------------------------
+	-- END OF LOCAL SUBPROGRAMS --
+	------------------------------
 
 
-	function Format(date : Time) return String is 
+	function Format(date : Time) return Wide_String is 
 	begin
 		return Format(Get_Locale("ISO"), Get_Formatter(""), date);
 	end format;
@@ -305,14 +305,14 @@ package body Aw_Lib.Calendar is
   	function Format (
    		L: Locale;
      		F : Formatter;
-		Date    : Ada.Calendar.Time) return String
+		Date    : Ada.Calendar.Time) return Wide_String
    	is
-      		Picture : String := To_String(F.Pattern);
+      		Picture : Wide_String := To_Wide_String(F.Pattern);
       
       		Padding : Padding_Mode := Zero;
       		--  Padding is set for one directive
 
-      		Result : Unbounded_String;
+      		Result : Unbounded_Wide_String;
 
       		Year       : Year_Number;
 		Month      : Month_Number;
@@ -362,12 +362,12 @@ package body Aw_Lib.Calendar is
                --  A newline
 
                when 'n' =>
-                  Result := Result & ASCII.LF;
+                  Result := Result & To_Wide_Character(ASCII.LF);
 
                --  A horizontal tab
 
                when 't' =>
-                  Result := Result & ASCII.HT;
+                  Result := Result & To_Wide_Character(ASCII.HT);
 
                --  Hour (00..23)
 
@@ -439,10 +439,10 @@ package body Aw_Lib.Calendar is
                      Sub_Sec : constant Long_Integer :=
                                  Long_Integer (Sub_Second * 1_000_000_000);
 
-                     Img1  : constant String := Sub_Sec'Img;
-                     Img2  : constant String :=
-                               "00000000" & Img1 (Img1'First + 1 .. Img1'Last);
-                     Nanos : constant String :=
+                     Img1  : constant Wide_String := To_Wide_String(Sub_Sec'Img);
+                     Img2  : constant Wide_String := "00000000" &
+		     	Img1 (Img1'First + 1 .. Img1'Last);
+                     Nanos : constant Wide_String :=
                                Img2 (Img2'Last - 8 .. Img2'Last);
 
                   begin
@@ -476,9 +476,9 @@ package body Aw_Lib.Calendar is
 			declare
 	       			D: Day_Name :=
 					Ada.Calendar.Formatting.Day_Of_Week(Date);
-	       	    		S: String :=  Aw_lib.Locales.Image(L, D);
+	       	    		S: Wide_String :=  Aw_lib.Locales.Image(L, D, true);
 			begin
-				Result := Result & Image (S, 3);
+				Result := Result & Image (S);
 			end;
 
 
@@ -486,8 +486,9 @@ package body Aw_Lib.Calendar is
                --  (Sunday..Saturday)
                when 'A' =>
 	       		declare
-				D: Day_Name := Ada.Calendar.Formatting.Day_Of_Week(Date);
-	       	    		S: String :=  Aw_lib.Locales.Image(L, D);
+				D: Day_Name := 
+					Ada.Calendar.Formatting.Day_Of_Week(Date);
+	       	    		S: Wide_String :=  Aw_lib.Locales.Image(L, D, false);
 			begin
 				Result := Result & Image (S);
 			end;
@@ -496,14 +497,14 @@ package body Aw_Lib.Calendar is
                --  Locale's abbreviated month name (Jan..Dec)
                when 'b' | 'h' =>
                   Result := Result &
-                    Image (Image(L, Month), 3);
+                    Image (Image(L, Month, true));
 
                --  Locale's full month name, variable length
                --  (January..December)
 
                when 'B' =>
                   Result := Result &
-                    Image (Image(L, Month));
+                    Image (Image(L, Month, false));
 
                --  Locale's date and time (Sat Nov 04 12:02:33 EST 1989)
                when 'c' =>
@@ -585,7 +586,7 @@ package body Aw_Lib.Calendar is
 
       end loop;
 
-      return To_String (Result);
+      return To_Wide_String (Result);
    end Format;
 	
 end Aw_Lib.Calendar;

@@ -12,7 +12,7 @@ with Ada.Calendar; use Ada.Calendar;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Aw_Lib.Replacer; use Aw_Lib.Replacer;
 with Aw_Lib.Locales; use Aw_Lib.Locales;
-
+with Ada.Strings.Wide_Unbounded;   use Ada.Strings.Wide_Unbounded;
 
 package Aw_Lib.Calendar is
 
@@ -66,7 +66,7 @@ package Aw_Lib.Calendar is
 
 
 	type Formatter is record
-		Pattern: Unbounded_String;
+		Pattern: Unbounded_Wide_String;
 	end record;
 
    --  This is a string to describe date and time output format. The string is
@@ -122,14 +122,15 @@ package Aw_Lib.Calendar is
    --          %e   microseconds (6 digits)
    --          %o   nanoseconds  (9 digits)
 
-	function Get_Formatter(Pattern : Unbounded_String) return Formatter;
-	function Get_Formatter(Pattern : String) return Formatter;
+	function Get_Formatter(Pattern : Unbounded_Wide_String) return Formatter;
+	function Get_Formatter(Pattern : Wide_String) return Formatter;
 
-	function Format(L: Locale; F: Formatter; date: Time) return String;
+	function Format(L: Locale; F: Formatter; date: Time) 
+		return Wide_String;
 
 
-	-- formata usando o padrão ISO --
-	function Format(date : Time) return String;
+	-- format using the ISO norm --
+	function Format(date : Time) return Wide_String;
 
 	function Get_Date return Time;
 
