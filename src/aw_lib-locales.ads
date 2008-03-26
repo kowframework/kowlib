@@ -4,9 +4,9 @@ with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded;   use Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Unbounded;   use Ada.Strings.Wide_Unbounded;
 with Ada.Strings.Unbounded.Hash;
-with Ada.Unchecked_Conversion;
 
-package Aw_Lib.Locales is
+package Aw_Lib.Locales is 
+	pragma Elaborate_Body;
 
 	subtype Time_Image is Unbounded_Wide_String;
 

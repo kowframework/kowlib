@@ -4,7 +4,6 @@ with Ada.Calendar.Formatting; use Ada.Calendar.Formatting;
 with Ada.Strings;   use Ada.Strings;
 with Ada.Strings.Fixed;  
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Text_IO; use Ada.Text_IO;
 
 package body Aw_Lib.Locales is
 	
@@ -166,7 +165,10 @@ package body Aw_Lib.Locales is
 		end if;
 
 		Integer_Length := Integer_Part'Length + Separs;
-		Res_Length := Integer_Length + Decimal_Part'Length + 1; 
+		Res_Length := Integer_Length;
+		if dec_digits > 0 then
+			Res_Length := Res_Length + Decimal_Part'Length + 1; 
+		end if;
 
 		declare
 			Result : String( 1 .. Res_Length );
@@ -188,14 +190,17 @@ package body Aw_Lib.Locales is
 				Index := Index + 1;
 			end loop;
 			
-			Result(Index) := L.DECIMAL_SEPARATOR;
-			Index := Index + 1;
-			
-			for k in Decimal_Part'Range loop
-				Result(Index) := Decimal_Part(k);	
+			if dec_digits > 0 then
+				Result(Index) := L.DECIMAL_SEPARATOR;
 				Index := Index + 1;
-			end loop;
-
+		
+			
+				for k in Decimal_Part'Range loop
+					Result(Index) := Decimal_Part(k);	
+					Index := Index + 1;
+				end loop;
+			end if;
+	
 			return To_Wide_String(Result);
 		end;
 
@@ -232,58 +237,28 @@ package body Aw_Lib.Locales is
 	end Get_Formatted_Percentage;
 
 	
+	procedure Add_Locale(L: Locale) is
+		code : Unbounded_String := L.CODE;
+	begin
+		loop
+			Locale_Tables.Insert( Supported_Locales, code, L);
+
+			if (Length(code) - 3) > 1 then
+				code := Head(code, (Length(code)- 3));
+			else
+				return;
+			end if;		
+		end loop;
+
+	end Add_Locale;
+
 
 begin
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("pt_BR"),
-				LOCALE_pt_BR );
-
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("pt"),
-				LOCALE_pt_BR );
-	
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("en_US"),
-				LOCALE_en_US );
-	
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("en"),
-				LOCALE_en_US );
-
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("es_ES"),
-				LOCALE_es_ES );
-	
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("es"),
-				LOCALE_es_ES );
-
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("fr_FR"),
-				LOCALE_fr_FR );
-	
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("fr"),
-				LOCALE_fr_FR );
-
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("de_DE"),
-				LOCALE_de_DE );
-	
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("de"),
-				LOCALE_de_DE );
-
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("jp_JP"),
-				LOCALE_jp_JP );
-	
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("jp"),
-				LOCALE_jp_JP );
-	
-	Locale_Tables.Insert( 	Supported_Locales,
-				To_Unbounded_String("ISO"),
-				LOCALE_ISO );
+	Add_Locale(LOCALE_pt_BR);
+	Add_Locale(LOCALE_en_US);
+	Add_Locale(LOCALE_es_ES);
+	Add_Locale(LOCALE_fr_FR);
+	Add_Locale(LOCALE_jp_JP);
+	Add_Locale(LOCALE_ISO);
 
 end Aw_Lib.Locales;
