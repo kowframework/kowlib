@@ -154,7 +154,7 @@ package body Aw_Lib.String_Util is
    begin
 
       if Occurances.Length = 0 then
-         return Result; -- To_Unbounded_String( Str )
+         return To_Unbounded_String( Str );
       end if;
 
       while Index_str <= Str'Last loop
