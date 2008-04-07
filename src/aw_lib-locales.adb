@@ -63,17 +63,17 @@ package body Aw_Lib.Locales is
 
 
 	function Image( L: in Locale; D: in Day_Name; short: in Boolean)
-		return Wide_String is
+		return String is
 	begin
 		if short = true then
-			return To_Wide_String(L.DAY_OF_WEEK_SHORT_NAMES(D));
+			return To_String(L.DAY_OF_WEEK_SHORT_NAMES(D));
 		else
-			return To_Wide_String(L.DAY_OF_WEEK_NAMES(D));
+			return To_String(L.DAY_OF_WEEK_NAMES(D));
 		end if;
 	end Image;
 
 	function Image( D: in Day_Name; short: in Boolean)
-		return Wide_String is
+		return String is
 	begin
 		return Image(Get_Default_Locale, D, short);
 	end Image;
@@ -81,17 +81,17 @@ package body Aw_Lib.Locales is
 	
 
 	function Image( L: in Locale; D: in Month_Number; short: in Boolean)
-		return Wide_String is
+		return String is
 	begin
 		if short = true then
-		 	return To_Wide_String(L.MONTH_SHORT_NAMES(D));
+		 	return To_String(L.MONTH_SHORT_NAMES(D));
 		else
-		 	return To_Wide_String(L.MONTH_NAMES(D));
+		 	return To_String(L.MONTH_NAMES(D));
 		end if;
 	end Image;
 
 	function Image( D: in Month_Number; short: in Boolean)
-		return Wide_String is
+		return String is
 	begin
 		return Image(Get_Default_Locale, D, short);
 	end Image;
@@ -99,50 +99,50 @@ package body Aw_Lib.Locales is
 
 
 	function Get_Short_Date_Pattern(L: in Locale)
-		return Wide_String is
+		return String is
 	begin
-		return To_Wide_String(L.DEFAULT_SHORT_DATE);
+		return To_String(L.DEFAULT_SHORT_DATE);
 	end Get_Short_Date_Pattern;
 	
 	function Get_Long_Date_Pattern(L: in Locale) return
-		Wide_String is
+		String is
 	begin
-		return To_Wide_String(L.DEFAULT_LONG_DATE);
+		return To_String(L.DEFAULT_LONG_DATE);
 	end Get_Long_Date_Pattern;
 	
-	function Get_Short_Date_Pattern	return Wide_String is
+	function Get_Short_Date_Pattern	return String is
 	begin
-		return To_Wide_String(Get_Default_Locale.DEFAULT_SHORT_DATE);
+		return To_String(Get_Default_Locale.DEFAULT_SHORT_DATE);
 	end Get_Short_Date_Pattern;
 
-	function Get_Long_Date_Pattern return Wide_String is
+	function Get_Long_Date_Pattern return String is
 	begin
-		return To_Wide_String(Get_Default_Locale.DEFAULT_LONG_DATE);
+		return To_String(Get_Default_Locale.DEFAULT_LONG_DATE);
 	end Get_Long_Date_Pattern;
 
 
 	function Get_Default_Time_Pattern( L: in Locale )
-		return Wide_String is
+		return String is
 	begin
-		return To_Wide_String(L.DEFAULT_TIME);
+		return To_String(L.DEFAULT_TIME);
 	end Get_Default_Time_Pattern;
 
 
 	function Get_Default_Date_Pattern( L: in Locale )
-		return Wide_String is
+		return String is
 	begin
-		return To_Wide_String(L.DEFAULT_DATE);
+		return To_String(L.DEFAULT_DATE);
 	end Get_Default_Date_Pattern;
 	
 	
 	function Get_Formatted_Number(L: in Locale; n: in Long_Float)
-		return Wide_String is
+		return String is
 	begin
 		return Get_Formatted_Number(L, n, 2);
 	end Get_Formatted_Number;
 	
 	function Get_Formatted_Number(L: in Locale; n: in Long_Float;
-		dec_digits : in Integer) return Wide_String is
+		dec_digits : in Integer) return String is
 
 		Integer_Value : Integer := Integer(Long_Float'Truncation(n));
 		Decimal_Value : Integer := Integer(Long_Float'Truncation((n
@@ -201,37 +201,37 @@ package body Aw_Lib.Locales is
 				end loop;
 			end if;
 	
-			return To_Wide_String(Result);
+			return Result;
 		end;
 
 	end Get_Formatted_Number;
 
 
 	function Get_Formatted_Currency(L: in Locale; n: in Long_Float)
-		return Wide_String is
+		return String is
 	begin
-		return To_Wide_String(L.CURRENCY_PREFIX) & " " &
+		return To_String(L.CURRENCY_PREFIX) & " " &
 			Get_Formatted_Number(L, n);
 	end Get_Formatted_Currency;
 
 
 	function Get_Formatted_Currency(L: in Locale; n: in Long_Float;
-		dec_digits : in Integer) return Wide_String is
+		dec_digits : in Integer) return String is
 	begin
-		return To_Wide_String(L.CURRENCY_PREFIX) & " " &
+		return To_String(L.CURRENCY_PREFIX) & " " &
 			Get_Formatted_Number(L, n, dec_digits);
 	end Get_Formatted_Currency;
 
 		
 	function Get_Formatted_Percentage(L: in Locale; n: in Long_Float)
-		return Wide_String is
+		return String is
 	begin
 		return Get_Formatted_Number(L, n * 100.0) & "%";
 	end Get_Formatted_Percentage;
 
 	
 	function Get_Formatted_Percentage(L: in Locale; n: in Long_Float;
-			dec_digits : in Integer) return Wide_String is
+			dec_digits : in Integer) return String is
 	begin
 		return Get_Formatted_Number(L, n * 100.0, dec_digits) & "%";
 	end Get_Formatted_Percentage;
