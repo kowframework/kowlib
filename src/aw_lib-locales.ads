@@ -15,6 +15,8 @@ package Aw_Lib.Locales is
 	
 	subtype Separator is Character; 
 
+	subtype Name_Image is Unbounded_String;
+
 	type Day_Of_Week_Array is Array( Day_Name'Range )
 		of Unbounded_String;
 	
@@ -52,6 +54,9 @@ package Aw_Lib.Locales is
 		
 		MONTH_SHORT_NAMES: Month_Array;
 		-- array with abbreviated month names.
+
+
+		FULL_NAMES: Name_Image;
 
 	end record;
 
@@ -108,7 +113,9 @@ package Aw_Lib.Locales is
 				To_Unbounded_String("set"),
 				To_Unbounded_String("out"),
 				To_Unbounded_String("nov"),
-				To_Unbounded_String("dez"))
+				To_Unbounded_String("dez")),
+
+		FULL_NAMES => To_Unbounded_String( "%f %l" )
 	);
 	
 	LOCALE_en_US: Locale := (
@@ -163,7 +170,9 @@ package Aw_Lib.Locales is
 				  To_Unbounded_String("Sep"),
 				  To_Unbounded_String("Oct"),
 				  To_Unbounded_String("Nov"),
-				  To_Unbounded_String("Dec"))
+				  To_Unbounded_String("Dec")),
+		
+		FULL_NAMES => To_Unbounded_String( "%l, %f" )
 	);
 
 	LOCALE_es_ES: Locale := (
@@ -218,8 +227,10 @@ package Aw_Lib.Locales is
 				  To_Unbounded_String("sep"),
 				  To_Unbounded_String("oct"),
 				  To_Unbounded_String("nov"),
-				  To_Unbounded_String("dic"))
-				);
+				  To_Unbounded_String("dic")),
+		
+		FULL_NAMES => To_Unbounded_String( "%f %l" )
+		);
 	
 
 	LOCALE_fr_FR: Locale := (
@@ -276,7 +287,10 @@ package Aw_Lib.Locales is
 				  To_Unbounded_String("oct"),
 				  To_Unbounded_String("nov"),
 				  To_Unbounded_String("déc")
-				  ));
+				  ),
+		
+		FULL_NAMES => To_Unbounded_String( "%f %l" )
+		);
 	LOCALE_de_DE: Locale := (
 		CODE => To_Unbounded_String("de_DE"),
 
@@ -328,7 +342,10 @@ package Aw_Lib.Locales is
 				  To_Unbounded_String("Sep"),
 				  To_Unbounded_String("Okt"),
 				  To_Unbounded_String("Nov"),
-				  To_Unbounded_String("Dez"))
+				  To_Unbounded_String("Dez")),
+
+		
+		FULL_NAMES => To_Unbounded_String( "%f %l" )
 		);	
 
 	LOCALE_jp_JP: Locale := (
@@ -454,7 +471,10 @@ package Aw_Lib.Locales is
 		To_Unbounded_String("10"), -- 10月
 		To_Unbounded_String("11"), -- 11月
 		To_Unbounded_String("12") -- 12月
-		)
+		),
+
+		
+		FULL_NAMES => To_Unbounded_String( "%f %l" )
 	);
 
 	
@@ -512,7 +532,10 @@ package Aw_Lib.Locales is
 				  To_Unbounded_String("Sep"),
 				  To_Unbounded_String("Oct"),
 				  To_Unbounded_String("Nov"),
-				  To_Unbounded_String("Dec"))
+				  To_Unbounded_String("Dec")),
+
+		
+		FULL_NAMES => To_Unbounded_String( "%f %l" )
 	);
 
 	DEFAULT_LOCALE: Locale := LOCALE_pt_BR;
@@ -603,5 +626,9 @@ package Aw_Lib.Locales is
 		dec_digits : in Integer) return String;
 	
 
+	function Get_Formated_Full_Name(
+		L: in Locale;
+		First_Name: in String;
+		Last_Name: in String := "" ) return String;
 end Aw_Lib.Locales;
 

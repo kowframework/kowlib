@@ -5,6 +5,9 @@ with Ada.Strings;   use Ada.Strings;
 with Ada.Strings.Fixed;  
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 
+
+with Aw_Lib.String_Util;	
+
 package body Aw_Lib.Locales is
 	
 
@@ -251,6 +254,37 @@ package body Aw_Lib.Locales is
 		end loop;
 
 	end Add_Locale;
+
+
+
+	function Get_Formated_Full_Name(
+		L: in Locale; 
+		First_Name: in String; 
+		Last_Name: in String := "" ) return String is
+
+
+		Temporary_Name: Unbounded_String;
+	begin
+		if Last_Name'Length = 0 then
+			-- There is no need to format if the last name is
+			-- empty.
+			--
+			-- Then we expect the full name is stored in the first name field.
+			return First_Name;
+		end if;
+
+		Temporary_Name := Aw_Lib.String_Util.Str_Replace(
+			From	=> "%f",
+			To	=> First_Name,
+			Str	=> To_String( L.FULL_NAMES ));
+
+		Temporary_Name := Aw_Lib.String_Util.Str_Replace(
+			From	=> "%l",
+			To	=> Last_Name,
+			Str	=> To_String( Temporary_Name ) );
+
+		return To_String( Temporary_Name );
+	end Get_Formated_Full_Name;
 
 
 begin
