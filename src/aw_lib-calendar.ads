@@ -1,6 +1,8 @@
 ------------------------------------------------------------------------------
 --                                                                          --
---                               A W _ L I B                                --
+--                          Ada Works :: Library                            --
+--                                                                          --
+--                                Ada Works                                 --
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
@@ -26,13 +28,12 @@
 -- covered by the  GNU Public License.                                      --
 ------------------------------------------------------------------------------
 
--- author Willian Gigliotti <wgigliotti@gmail.com>
--- created at 2007-02-21
---
--- Repository information
--- $Date$
--- $Revision$
--- $Author$
+------------------------------------------------------------------------------
+-- This is the Aw_Lib.Calendar package                                      --
+--                                                                          --
+-- [A SHORT DESCRIPTION OF THIS PACKAGE]                                    --
+--                                                                          --
+------------------------------------------------------------------------------
 
 
 
