@@ -1,8 +1,10 @@
 ------------------------------------------------------------------------------
 --                                                                          --
---                               A W _ L I B                                --
+--                          Ada Works :: Library                            --
 --                                                                          --
---                                 B o d y                                  --
+--                                Ada Works                                 --
+--                                                                          --
+--                                 B o d y                                 		--
 --                                                                          --
 --         Copyright (C) 2007-2008, Ydea Desenv. de Softwares Ltda          --
 --                                                                          --
@@ -26,27 +28,26 @@
 -- covered by the  GNU Public License.                                      --
 ------------------------------------------------------------------------------
 
--- Biblioteca de Calendario, com timestamp
--- author Willian Gigliotti <wgigliotti@gmail.com>
--- created at 2007-02-21
---
--- Repository information
--- $Date$
--- $Revision$
--- $Author$
+------------------------------------------------------------------------------
+-- This is the Aw_Lib.Calendar package                                      --
+--                                                                          --
+-- Provides functions to handle dates and time, especially to format        --
+-- according to Locale and Formatter's Pattern.                             --
+------------------------------------------------------------------------------
 
-
-with Ada.Calendar;		use Ada.Calendar; 
+with Ada.Calendar;				use Ada.Calendar; 
 with Ada.Calendar.Formatting;	use Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones; 	use Ada.Calendar.Time_Zones;
 
-with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-with Ada.Text_IO;		use Ada.Text_IO;
-with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
+with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
+with Ada.Text_IO;				use Ada.Text_IO;
+with Ada.Integer_Text_IO;		use Ada.Integer_Text_IO;
 with Ada.Characters.Handling;	use Ada.Characters.Handling;
 
-with Aw_Lib.Locales;		use Aw_Lib.Locales;
-with Aw_Lib.Replacer;		use Aw_Lib.Replacer;
+with Aw_Lib.Locales;			use Aw_Lib.Locales;
+with Aw_Lib.Replacer;			use Aw_Lib.Replacer;
+
+
 
 package body Aw_Lib.Calendar is
 
@@ -69,9 +70,9 @@ package body Aw_Lib.Calendar is
 	
 	-- Transforma numero em Unb String com tamanho especifico;
 	
-	Str: Unbounded_String;
-	T : Integer := Tamanho;
-	N : Integer := Num;
+	Str	: Unbounded_String;
+	T 	: Integer := Tamanho;
+	N 	: Integer := Num;
 	
 	begin
 		while T >= 1 loop
@@ -144,11 +145,11 @@ package body Aw_Lib.Calendar is
 
 	procedure Date( Formato: in out Unbounded_String; Hora: in Timestamp) is
 		Str_Pos : Integer;
-		Str	: Unbounded_String;
+		Str		: Unbounded_String;
 		Str_New : Unbounded_String;
 		Str_Len : Integer;
 		Comeco  : Unbounded_String;
-		Fim	: Unbounded_String;
+		Fim		: Unbounded_String;
 	begin
 		loop
 			Get_Variavel(Formato, 1, Str_Pos, Str_Len, Str);
@@ -234,18 +235,16 @@ package body Aw_Lib.Calendar is
  	--  Return Str capitalized and cut to length number of characters. If
 	--  length is set to 0 it does not cut it.
 
-	function Image (
-		N : Sec_Number;
-		Padding : Padding_Mode := Zero;
-		Length  : Natural := 0) return String;
+	function Image (	N : Sec_Number;
+						Padding : Padding_Mode := Zero;
+						Length  : Natural := 0) return String;
 	--  Return image of N. This number is eventually padded with
 	--  zeros or spaces depending of the length required.
 	--  If length is 0 then no padding occurs.
 
-	function Image (
-		N	: Natural;
-		Padding : Padding_Mode := Zero;
-		Length  : Natural := 0) return String;
+	function Image (	N		: Natural;
+						Padding : Padding_Mode := Zero;
+						Length  : Natural := 0) return String;
 	
 	--  As above with N provided in Integer format
 
@@ -280,8 +279,8 @@ package body Aw_Lib.Calendar is
 	-- Image --
 	-----------
 	
-	function Image (Str : String;
-		Length : Natural := 0) return String
+	function Image (	Str : String;
+						Length : Natural := 0) return String
 	is
 		Local : constant String := Str;
 	begin
@@ -296,10 +295,9 @@ package body Aw_Lib.Calendar is
 	-- Image --
 	-----------
 
-	function Image (
-		N	: Natural;
-		Padding : Padding_Mode := Zero;
-		Length  : Natural := 0) return String is
+	function Image (	N	: Natural;
+						Padding : Padding_Mode := Zero;
+						Length  : Natural := 0) return String is
 	begin
 		return Image (Sec_Number (N), Padding, Length);
 	end Image;
@@ -308,10 +306,9 @@ package body Aw_Lib.Calendar is
 	-- Image --
 	-----------
 	
-	function Image (
-		N 	: Sec_Number;
-		Padding : Padding_Mode := Zero;
-		Length  : Natural := 0) return String is
+	function Image (	N	 	: Sec_Number;
+						Padding : Padding_Mode := Zero;
+						Length  : Natural := 0) return String is
 		
 		function Pad_Char return String;
 
@@ -349,10 +346,11 @@ package body Aw_Lib.Calendar is
 	end format;
 
 
-	function Format (	L	: Locale;
-				F 	: Formatter;
-				Date 	: Ada.Calendar.Time ) return String is
-				
+	function Format (	L		: Locale;
+						F 		: Formatter;
+						Date 	: Ada.Calendar.Time ) return String is
+		-- returns the date formatted according to Formatter's Pattern and Locale.
+
 		Picture : String := To_String(F.Pattern);
 		
 		Padding : Padding_Mode := Zero;
@@ -362,7 +360,7 @@ package body Aw_Lib.Calendar is
 
 		Year		: Year_Number;
 		Month		: Month_Number;
-		Day		: Day_Number;
+		Day			: Day_Number;
 		Hour		: Hour_Number;
 		Minute		: Minute_Number;
 		Second		: Second_Number;

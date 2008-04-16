@@ -31,16 +31,16 @@
 ------------------------------------------------------------------------------
 -- This is the Aw_Lib.Calendar package                                      --
 --                                                                          --
--- [A SHORT DESCRIPTION OF THIS PACKAGE]                                    --
---                                                                          --
+-- Provides functions to handle dates and time, especially to format        --
+-- according to Locale and Formatter's Pattern.                             --
 ------------------------------------------------------------------------------
 
 
 
-with Ada.Calendar; 			use Ada.Calendar; 
+with Ada.Calendar; 					use Ada.Calendar; 
 with Ada.Strings.Unbounded; 		use Ada.Strings.Unbounded;
-with Aw_Lib.Replacer;			use Aw_Lib.Replacer;
-with Aw_Lib.Locales; 			use Aw_Lib.Locales;
+with Aw_Lib.Replacer;				use Aw_Lib.Replacer;
+with Aw_Lib.Locales; 				use Aw_Lib.Locales;
 with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 
 package Aw_Lib.Calendar is
