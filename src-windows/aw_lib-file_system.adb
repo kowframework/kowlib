@@ -1,17 +1,45 @@
--- this is the windows implementation of system-dependent functions for Aw_Lib
---
--- author Adele Helena Ribeiro <adele,helena@gmail.com>
--- createdAt 2008-02-17
---
--- Repository information:
--- $Date: $
--- $Revision: $
--- $Author: $
+------------------------------------------------------------------------------
+--                                                                          --
+--                          Ada Works :: Library                            --
+--                                                                          --
+--                                Ada Works                                 --
+--                                                                          --
+--                                 B o d y                                  --
+--                                                                          --
+--         Copyright (C) 2007-2008, Ydea Desenv. de Softwares Ltda          --
+--                                                                          --
+--                                                                          --
+-- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- terms of the  GNU General Public License as published  by the Free Soft- --
+-- ware  Foundation;  either version 2,  or (at your option) any later ver- --
+-- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+-- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+-- for  more details.  You should have  received  a copy of the GNU General --
+-- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+-- MA 02111-1307, USA.                                                      --
+--                                                                          --
+-- As a special exception,  if other files  instantiate  generics from this --
+-- unit, or you link  this unit with other files  to produce an executable, --
+-- this  unit  does not  by itself cause  the resulting  executable  to  be --
+-- covered  by the  GNU  General  Public  License.  This exception does not --
+-- however invalidate  any other reasons why  the executable file  might be --
+-- covered by the  GNU Public License.                                      --
+------------------------------------------------------------------------------
 
-with System; use System;
+------------------------------------------------------------------------------
+-- This is the Aw_Lib.File_System package                                   --
+--                                                                          --
+-- this is the windows implementation of system-dependent functions         --
+-- for Aw_Lib                                                               --
+------------------------------------------------------------------------------
+
+
+with System; 			use System;
 with Ada.unchecked_conversion;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO; 		use Ada.Text_IO;
 with Ada.Environment_Variables;	use Ada.Environment_Variables;
 with Aw_Lib.String_Util;	
 with Aw_Lib.UString_Vectors;
@@ -20,24 +48,24 @@ with Interfaces.C.Strings;	use Interfaces.C.Strings;
 
 package body Aw_Lib.File_System is
 
-	--------------
+	-----------
 	-- TYPES --
-	--------------
+	-----------
 	
 	type CharPtr is access constant Interfaces.C.Char;
 	
-	---------------------
+	--------------
 	-- BINDINGS --
-	---------------------
+	--------------
 	
-	function GetCurrentDirectory(nBufferLength: Interfaces.C.Unsigned_Long;
-					lpBuffer : Interfaces.C.Strings.Chars_Ptr)
-                                        return Interfaces.C.Unsigned_Long;
+	function GetCurrentDirectory(	nBufferLength	: Interfaces.C.Unsigned_Long;
+					lpBuffer 	: Interfaces.C.Strings.Chars_Ptr	)
+		return Interfaces.C.Unsigned_Long;
 	pragma Import(Stdcall, GetCurrentDirectory, "GetCurrentDirectoryA");
 	
-	---------------------------------
-	-- IMPLEMENTATIONS--
-	----------------------------------	
+	---------------------
+	-- IMPLEMENTATIONS --
+	---------------------
 	
 	function Separator return Character is
 		Pragma Inline( Separator );
@@ -187,7 +215,8 @@ package body Aw_Lib.File_System is
 		use Aw_Lib.String_Util;
 		use Aw_Lib.UString_Vectors;
 
-		Expl: Aw_Lib.UString_Vectors.Vector := explode('\', Str_Replace( '/', '\', Path ));
+		Expl: Aw_Lib.UString_Vectors.Vector := 
+			explode('\', Str_Replace( '/', '\', Path ));
 	begin
 		return To_String(Last_Element( Expl ));
 	end Get_File_Name;
@@ -198,7 +227,8 @@ package body Aw_Lib.File_System is
 		use Aw_Lib.String_Util;
 		use Aw_Lib.UString_Vectors;
 
-		Expl: Aw_Lib.UString_Vectors.Vector := explode('\', Str_Replace( '/', '\', Path ));
+		Expl: Aw_Lib.UString_Vectors.Vector :=
+			explode('\', Str_Replace( '/', '\', Path ));
 	begin
 		Delete_Last(Expl);
 		return Get_Absolute_Path(implode('\', Expl));

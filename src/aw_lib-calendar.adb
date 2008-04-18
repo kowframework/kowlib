@@ -4,7 +4,7 @@
 --                                                                          --
 --                                Ada Works                                 --
 --                                                                          --
---                                 B o d y                                 		--
+--                                 B o d y                                  --
 --                                                                          --
 --         Copyright (C) 2007-2008, Ydea Desenv. de Softwares Ltda          --
 --                                                                          --
@@ -35,17 +35,17 @@
 -- according to Locale and Formatter's Pattern.                             --
 ------------------------------------------------------------------------------
 
-with Ada.Calendar;				use Ada.Calendar; 
+with Ada.Calendar;		use Ada.Calendar; 
 with Ada.Calendar.Formatting;	use Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones; 	use Ada.Calendar.Time_Zones;
 
-with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
-with Ada.Text_IO;				use Ada.Text_IO;
-with Ada.Integer_Text_IO;		use Ada.Integer_Text_IO;
+with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
+with Ada.Text_IO;		use Ada.Text_IO;
+with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
 with Ada.Characters.Handling;	use Ada.Characters.Handling;
 
-with Aw_Lib.Locales;			use Aw_Lib.Locales;
-with Aw_Lib.Replacer;			use Aw_Lib.Replacer;
+with Aw_Lib.Locales;		use Aw_Lib.Locales;
+with Aw_Lib.Replacer;		use Aw_Lib.Replacer;
 
 
 
