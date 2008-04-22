@@ -152,7 +152,7 @@ package body Aw_Lib.Calendar is
 		Fim		: Unbounded_String;
 	begin
 		loop
-			Get_Variavel(Formato, 1, Str_Pos, Str_Len, Str);
+			Get_Variable(Formato, 1, Str_Pos, Str_Len, Str);
 			
 			exit when Str_Len = 0;
 			--Put(Str_Pos); Put(Str_Len); Put(To_String(Str));
