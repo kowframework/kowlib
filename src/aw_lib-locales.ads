@@ -738,8 +738,8 @@ package Aw_Lib.Locales is
 
 
 	function Get_Formated_Full_Name(	L: in Locale;
-										First_Name: in String;
-										Last_Name: in String := "" ) return String;
+						First_Name: in String;
+						Last_Name: in String := "" ) return String;
 	-- returns the full name with first and last Name order according to
 	-- Locale L.
 	
