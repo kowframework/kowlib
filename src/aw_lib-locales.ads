@@ -622,9 +622,9 @@ package Aw_Lib.Locales is
 
 	package Locale_Tables is new
 		 Ada.Containers.Hashed_Maps(	Key_Type => Unbounded_String,
-										Element_Type => Locale,
-										Hash => Ada.Strings.Unbounded.Hash,
-      									Equivalent_Keys => "=");
+						Element_Type => Locale,
+						Hash => Ada.Strings.Unbounded.Hash,
+      						Equivalent_Keys => "="	);
 
 	Supported_Locales: Locale_Tables.Map;
 	-- Map with all Supported Locales.
