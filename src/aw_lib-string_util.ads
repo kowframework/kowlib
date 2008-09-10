@@ -45,6 +45,7 @@ with Aw_Lib.UString_Vectors;
 
 package Aw_Lib.String_Util is
 
+	type UString_Array is Array( Integer range <> ) of Unbounded_String;
 
 	function implode(	Sep: Character;
 				Vect: Aw_Lib.UString_Vectors.Vector	) return String;
