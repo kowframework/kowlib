@@ -4,7 +4,7 @@
 --                                                                          --
 --                                Ada Works                                 --
 --                                                                          --
---                                 B o d y                                 		--
+--                                 B o d y                                  --
 --                                                                          --
 --         Copyright (C) 2007-2008, Ydea Desenv. de Softwares Ltda          --
 --                                                                          --
@@ -29,7 +29,7 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Locales package                                      	--
+-- This is the Aw_Lib.Locales package                                  	    --
 --                                                                          --
 -- Provides functions to get patterns that describe dates or times and      --
 -- functions that return a formatted number, date or name according to      --
@@ -38,20 +38,43 @@
 
 
 with Ada.Containers.Hashed_Maps;	use Ada.Containers; 
-with Ada.Calendar; 					use Ada.Calendar;
+with Ada.Calendar; 			use Ada.Calendar;
 with Ada.Calendar.Formatting;		use Ada.Calendar.Formatting;
-with Ada.Strings;  					use Ada.Strings;
+with Ada.Strings;  			use Ada.Strings;
 with Ada.Strings.Fixed;  
 with Ada.Characters.Handling;		use Ada.Characters.Handling;
 
-
 with Aw_Lib.String_Util;	
+with Ada.Text_IO;			use Ada.Text_IO;
 
 package body Aw_Lib.Locales is
 	
 
-	function Get_Locale( Code: String) return Locale is
-		pragma Inline (Get_Locale);
+	function Get_Locale_Envvar return String is
+	begin
+		return "LOCALE"; 
+	end Get_Locale_Envvar;
+	
+	function Get_Locale_Envvar_Value return String is
+		use Ada.Environment_Variables;
+	begin
+		if Exists( Get_Locale_Envvar ) then
+		 	return Value(Get_Locale_Envvar);
+		else
+			raise LOCALE_ENVVAR_INVALID with
+				"Locale Environment Variable """ &
+				Get_Locale_Envvar & """does not exist.";
+		end if;
+	end Get_Locale_Envvar_Value;
+	
+	function Get_Environment_Locale return Locale is
+	begin
+		return Get_Locale( Get_Locale_Envvar_Value ); 
+	end Get_Environment_Locale; 
+
+	
+	function Get_Locale( Code: String ) return Locale is
+		pragma Inline(Get_Locale);
 	begin
 		return Get_Locale(To_Unbounded_String(Code));
 	end Get_Locale;
@@ -191,8 +214,8 @@ package body Aw_Lib.Locales is
 	end Get_Formatted_Number;
 	
 	function Get_Formatted_Number(	L: in Locale;
-									n: in Long_Float;
-									decimal_places : in Integer) return String is
+					n: in Long_Float;
+					decimal_places : in Integer) return String is
 		-- format according to Locale L, inserting decimal and
 		-- thousand separators on n and with precision of 
 		-- decimal_places decimal places.
@@ -293,8 +316,8 @@ package body Aw_Lib.Locales is
 
 	
 	function Get_Formatted_Percentage(	L: in Locale;
-										n: in Long_Float;
-										decimal_places : in Integer) return String is
+						n: in Long_Float;
+						decimal_places : in Integer) return String is
 	begin
 		return Get_Formatted_Number(L, n * 100.0, decimal_places) & "%";
 	end Get_Formatted_Percentage;
@@ -302,8 +325,8 @@ package body Aw_Lib.Locales is
 	
 
 	function Get_Formated_Full_Name(	L: in Locale; 
-										First_Name: in String; 
-										Last_Name: in String := "" ) return String is
+						First_Name: in String; 
+						Last_Name: in String := "" ) return String is
 		Temporary_Name: Unbounded_String;
 	begin
 		if Last_Name'Length = 0 then
@@ -315,13 +338,13 @@ package body Aw_Lib.Locales is
 
 		Temporary_Name := 
 			Aw_Lib.String_Util.Str_Replace(	From	=> "%f",
-											To		=> First_Name,
-											Str		=> To_String( L.FULL_NAMES ));
+							To		=> First_Name,
+							Str		=> To_String( L.FULL_NAMES ));
 
 		Temporary_Name := 
 			Aw_Lib.String_Util.Str_Replace(	From	=> "%l",
-											To	=> Last_Name,
-											Str	=> To_String( Temporary_Name ) );
+							To	=> Last_Name,
+							Str	=> To_String( Temporary_Name ) );
 
 		return To_String( Temporary_Name );
 	end Get_Formated_Full_Name;
@@ -333,8 +356,10 @@ package body Aw_Lib.Locales is
 		-- add all possible code for a Locale. For a code ll_CC_LL,
 		-- ll, ll_CC and ll_CC_LL are added to Supported_Locales.
 		loop
-			Locale_Tables.Insert( Supported_Locales, code, L);
-
+			if not Locale_Tables.Contains( Supported_Locales, code )  then
+				Locale_Tables.Insert( Supported_Locales, code, L);
+			end if;
+			
 			if (Length(code) - 3) > 1 then
 				code := Head(code, (Length(code)- 3));
 			else
@@ -344,13 +369,16 @@ package body Aw_Lib.Locales is
 
 	end Add_Locale;
 
-
+	procedure Add_All_Supported_Locales is
+	begin
+		Add_Locale(LOCALE_pt_BR);
+		Add_Locale(LOCALE_en_US);
+		Add_Locale(LOCALE_es_ES);
+		Add_Locale(LOCALE_fr_FR);
+		Add_Locale(LOCALE_jp_JP);
+		Add_Locale(LOCALE_ISO);
+	end Add_All_Supported_Locales;
+	
 begin
-	Add_Locale(LOCALE_pt_BR);
-	Add_Locale(LOCALE_en_US);
-	Add_Locale(LOCALE_es_ES);
-	Add_Locale(LOCALE_fr_FR);
-	Add_Locale(LOCALE_jp_JP);
-	Add_Locale(LOCALE_ISO);
-
+	Add_All_Supported_Locales;
 end Aw_Lib.Locales;

@@ -37,14 +37,20 @@
 ------------------------------------------------------------------------------
 
 
-with Ada.Calendar;					use Ada.Calendar;
+with Ada.Calendar;			use Ada.Calendar;
 with Ada.Calendar.Formatting;		use Ada.Calendar.Formatting;
 with Ada.Containers.Hashed_Maps;	use Ada.Containers;
-with Ada.Strings.Unbounded;			use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
+with Ada.Environment_Variables;
+
 
 package Aw_Lib.Locales is 
 	pragma Elaborate_Body;
+
+
+	LOCALE_ENVVAR_INVALID : exception;
+
 
 	subtype Locale_Code is Unbounded_String;
 	-- Represents a code of a specific Locale
@@ -652,7 +658,16 @@ package Aw_Lib.Locales is
 	procedure Set_Default_Locale(L: in Locale );
 	function Get_Default_Locale return Locale;
 
+	function Get_Locale_Envvar return String;
+	-- returns Locale environment variable name;
 	
+	function Get_Locale_Envvar_Value return String;
+	-- returns Locale environment variable value;
+	
+	function Get_Environment_Locale return Locale;
+	-- returns the Locale to current Locale environmnet variable value
+
+
 	function Image( L: in Locale; D: in Ada.Calendar.Formatting.Day_Name;
 		short: in Boolean ) return String;
 	-- returns the abbreviated day of the week image (e.g. mon) if short is true or full
@@ -743,5 +758,7 @@ package Aw_Lib.Locales is
 	-- returns the full name with first and last Name order according to
 	-- Locale L.
 	
+	procedure Add_All_Supported_Locales;
+
 end Aw_Lib.Locales;
 
