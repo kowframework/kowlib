@@ -75,4 +75,11 @@ package Aw_Lib.File_System is
 	-- returning an array with the absolute path of each directory.
 	-- also add the current directory to the path
 
+
+	function To_Unix_Path( Path: in String ) return String;
+	-- Convert the path using the system separator to the unix path
+
+	function To_System_Path( Path: in String ) return String;
+	-- Convert the unix path to the one using the system separator
+
 end Aw_Lib.File_System;

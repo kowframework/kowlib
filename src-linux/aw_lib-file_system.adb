@@ -217,6 +217,17 @@ package body Aw_Lib.File_System is
 		return Vect;
 	end To_Vector;
 
+	function To_Unix_Path( Path: in String ) return String is
+		-- Convert the path using the system separator to the unix path
+	begin
+		return Path;
+	end To_Unix_Path;
+
+	function To_System_Path( Path: in String ) return String is
+		-- Convert the unix path to the one using the system separator
+	begin
+		return Path;
+	end To_System_Path;
 
 end Aw_Lib.File_System;
 
