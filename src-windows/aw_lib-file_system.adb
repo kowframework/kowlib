@@ -254,7 +254,7 @@ package body Aw_Lib.File_System is
 		Aw_Lib.String_Util.Str_Replace(
 				From	=> '\',
 				To	=> '/',
-				Result
+				Str	=> Result
 				);
 		return Result;
 	end To_Unix_Path;
@@ -266,10 +266,10 @@ package body Aw_Lib.File_System is
 		Aw_Lib.String_Util.Str_Replace(
 				From	=> '/',
 				To	=> '\',
-				Result
+				Str	=> Result
 				);
 		return Result;
-	end To_Unix_Path;
+	end To_System_Path;
 
 end Aw_Lib.File_System;
 
