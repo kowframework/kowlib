@@ -248,7 +248,8 @@ package body Aw_Lib.Locales is
 		Integer_Length := Integer_Part'Length + Separs;
 		Res_Length := Integer_Length;
 		if decimal_places > 0 then
-			Res_Length := Res_Length + Decimal_Part'Length + 1; 
+			Res_Length := Res_Length + Decimal_Places + 1;
+			--Decimal_Part'Length + 1; 
 		end if;
 
 		declare
@@ -280,6 +281,11 @@ package body Aw_Lib.Locales is
 				
 				for k in Decimal_Part'Range loop
 					Result(Index) := Decimal_Part(k);	
+					Index := Index + 1;
+				end loop;
+
+				while Index <= Result'Last loop
+					Result(Index) := '0';
 					Index := Index + 1;
 				end loop;
 			end if;
