@@ -4,7 +4,7 @@
 --                                                                          --
 --                                Ada Works                                 --
 --                                                                          --
---                                 B o d y                                  --
+--                                 S p e c                                  --
 --                                                                          --
 --         Copyright (C) 2007-2008, Ydea Desenv. de Softwares Ltda          --
 --                                                                          --
