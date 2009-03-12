@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---         Copyright (C) 2007-2008, Ydea Desenv. de Softwares Ltda          --
+--               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
 -- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
