@@ -105,7 +105,7 @@ package body Aw_Lib.Locales is
 			if (Length(Tmp) - 3) > 1 then
 				Tmp := Head(Tmp, (Length(Tmp)- 3));
 			else
-				raise LOCALE_NOT_SUPPORTED;
+				raise LOCALE_NOT_SUPPORTED with To_String( Code );
 			end if;		
 		end loop;
 
