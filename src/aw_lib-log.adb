@@ -77,8 +77,14 @@ package body Aw_Lib.Log is
 			Put( Output, Log_String );
 			New_Line;
 		end Inner_Log;
+
+
+		Use_Level : Log_Level := Logger.Level;
 	begin
-		if Level > Logger.Level then
+		if Use_Level = Level_Nul then
+			Use_level := Default_Level;
+		end if;
+		if Level > Use_Level then
 			-- checks if the message has to be logged
 			return;
 		end if;
