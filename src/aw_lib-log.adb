@@ -76,6 +76,7 @@ package body Aw_Lib.Log is
 		begin
 			Put( Output, Log_String );
 			New_Line( Output );
+			Flush( Output );
 		end Inner_Log;
 
 
