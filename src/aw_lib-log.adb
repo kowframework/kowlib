@@ -75,7 +75,7 @@ package body Aw_Lib.Log is
 				Message;
 		begin
 			Put( Output, Log_String );
-			New_Line;
+			New_Line( Output );
 		end Inner_Log;
 
 
