@@ -71,7 +71,7 @@ package body Aw_Lib.Log is
 			-- has to be logged.
 			Log_String: String :=
 				"[" & Log_Level'Image( Level ) &
-				"@" & To_String( Logger.Component ) & "] " &
+				" @ " & To_String( Logger.Component ) & "] " &
 				Message;
 		begin
 			Put( Output, Log_String );
