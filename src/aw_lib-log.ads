@@ -71,12 +71,6 @@ package Aw_Lib.Log is
 
 	Default_Level: Log_Level := Level_Off;
 	-- the default is to disable all the logging.
-	--
-	-- this can be changed at compile time (editing this file) only.
-	--
-	-- Keep in mind that Aw_Lib.Log is meant to be used by AdaWorks developers!
-	--
-	-- That's why we did it this way.
 
 
 	type Logger_Type is private;
