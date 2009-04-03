@@ -63,9 +63,10 @@ package Aw_Lib.Log is
 		Level_Debug	=> 20 );
 
 
+	type Log_File_Type is not null access Ada.Text_IO.File_Type;
 	-- set those output files to manage where the log messages are stored ::
-	Info_Output	: Ada.Text_IO.File_Type	:= Ada.Text_IO.Standard_Output;
-	Error_Output	: Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Error;
+	Info_Output	: Log_File_Type	:= new Ada.Text_IO.File_Type'( Ada.Text_IO.Standard_Output );
+	Error_Output	: Log_File_Type := new Ada.Text_IO.File_Type'( Ada.Text_IO.Standard_Error );
 
 
 	Default_Level: constant Log_Level := Level_Off;
