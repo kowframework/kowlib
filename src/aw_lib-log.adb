@@ -85,9 +85,9 @@ package body Aw_Lib.Log is
 
 		case Level is
 			when Level_Info | Level_Debug =>
-				Inner_Log( Standard_Output );
+				Inner_Log( Info_Output );
 			when Level_Error | Level_Warning =>
-				Inner_Log( Standard_Error );
+				Inner_Log( Error_Output );
 			when Others =>
 				null; -- does nothing if the user tries to log NUl or off
 		end case;

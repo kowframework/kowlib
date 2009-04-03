@@ -40,6 +40,7 @@
 
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
+with Ada.Text_IO;
 
 
 package Aw_Lib.Log is
@@ -61,6 +62,10 @@ package Aw_Lib.Log is
 		Level_Info	=> 14,
 		Level_Debug	=> 20 );
 
+
+	-- set those output files to manage where the log messages are stored ::
+	Info_Output	: Ada.Text_IO.File_Type	:= Ada.Text_IO.Standard_Output;
+	Error_Output	: Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Error;
 
 
 	Default_Level: constant Log_Level := Level_Off;
