@@ -97,7 +97,9 @@ package Aw_Lib.Log is
 private
 	type Logger_Type is record
 		Component	: Unbounded_String;
-		Level		: Log_Level := Default_Level;
+		Level		: Log_Level := Level_nul;
+		-- TODO :: provide means for the user to set the level for each logger
+		-- this is gonna be usefull when debugging a given package only
 	end record;
 end Aw_Lib.Log;
 
