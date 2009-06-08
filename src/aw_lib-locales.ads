@@ -84,7 +84,17 @@ package Aw_Lib.Locales is
 	type Locale is record
 
 		CODE: Locale_Code;
+		-- the code for this locale
+
+		Name: Unbounded_String;
+		-- the label/name for this locale (US English, Portuguẽs Brasileiro, etc)
 		
+		Auto_Generalized : Boolean := False;
+		-- this is to track if this locale has been automatically generalized
+		-- IE: when we add pt_BR into an enpty registry, it becomes default for the pt locale as well
+		-- when it hapens, the return value for getting the pt locale has Auto_Generalized = True
+
+
 		DEFAULT_DATE: Time_Image;
 		-- default format to display dates
 		DEFAULT_TIME: Time_Image;
@@ -126,6 +136,8 @@ package Aw_Lib.Locales is
 	-- Brazilian Portuguese Locale
 	LOCALE_pt_BR: Locale := (
 		CODE => To_Unbounded_String("pt_BR"),
+		Name => To_Unbounded_String( "Português Brasileiro" ),
+		Auto_Generalized => False,
 			
 		THOUSANDS_SEPARATOR => '.',
 		DECIMAL_SEPARATOR => ',',
@@ -187,6 +199,8 @@ package Aw_Lib.Locales is
 	-- English or U.S.English Locale 
 	LOCALE_en_US: Locale := (
 		CODE => To_Unbounded_String("en_US"),
+		Name => To_Unbounded_String( "US English" ),
+		Auto_Generalized => False,
 			
 		THOUSANDS_SEPARATOR => ',',
 		DECIMAL_SEPARATOR => '.',
@@ -247,6 +261,8 @@ package Aw_Lib.Locales is
 	-- Spanish Locale of Spain
 	LOCALE_es_ES: Locale := (
 		CODE => To_Unbounded_String("es_ES"),
+		Name => To_Unbounded_String( "TODO :: es_ES" ),
+		Auto_Generalized => False,
 
 		THOUSANDS_SEPARATOR => '.',
 		DECIMAL_SEPARATOR => ',',
@@ -306,6 +322,8 @@ package Aw_Lib.Locales is
 	--French Locale of France
 	LOCALE_fr_FR: Locale := (
 		CODE => To_Unbounded_String("fr_FR"),
+		Name => To_Unbounded_String( "TODO :: fr_FR" ),
+		Auto_Generalized => False,
 		
 		THOUSANDS_SEPARATOR => '.',
 		DECIMAL_SEPARATOR => ',',
@@ -366,6 +384,8 @@ package Aw_Lib.Locales is
 	--German LOCALE for Germany
 	LOCALE_de_DE: Locale := (
 		CODE => To_Unbounded_String("de_DE"),
+		Name => To_Unbounded_String( "TODO :: de_DE" ),
+		Auto_Generalized => False,
 
 		THOUSANDS_SEPARATOR => '.',
 		DECIMAL_SEPARATOR => ',',
@@ -425,6 +445,8 @@ package Aw_Lib.Locales is
 	-- Japanese Locale of Japan
 	LOCALE_jp_JP: Locale := (
 		CODE => To_Unbounded_String("jp_JP"),
+		Name => To_Unbounded_String( "TODO :: jp_JP" ),
+		Auto_Generalized => False,
 		
 		THOUSANDS_SEPARATOR => ',',
 		DECIMAL_SEPARATOR => '.',
@@ -564,6 +586,8 @@ package Aw_Lib.Locales is
 	-- and time representations 
 	LOCALE_ISO: Locale := (
 		CODE => To_Unbounded_String("ISO"),
+		Name => To_Unbounded_String( "ISO" ),
+		Auto_Generalized => False,
 
 		THOUSANDS_SEPARATOR => ' ',
 		DECIMAL_SEPARATOR => '.',

@@ -358,16 +358,19 @@ package body Aw_Lib.Locales is
 
 	procedure Add_Locale(L: Locale) is
 		code : Unbounded_String := L.CODE;
+
+		LL : Locale := L;
 	begin
 		-- add all possible code for a Locale. For a code ll_CC_LL,
 		-- ll, ll_CC and ll_CC_LL are added to Supported_Locales.
 		loop
 			if not Locale_Tables.Contains( Supported_Locales, code )  then
-				Locale_Tables.Insert( Supported_Locales, code, L);
+				Locale_Tables.Insert( Supported_Locales, code, LL);
 			end if;
 			
 			if (Length(code) - 3) > 1 then
 				code := Head(code, (Length(code)- 3));
+				LL.Auto_Generalized := True;
 			else
 				return;
 			end if;		
