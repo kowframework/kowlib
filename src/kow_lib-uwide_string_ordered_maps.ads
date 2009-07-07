@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,15 +29,16 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.UString_Ordered_Maps package                          --
+-- This is the KOW_Lib.UWide_String_Ordered_Maps package                     --
 --                                                                          --
--- Vector of Natural index and String values                                --
+-- Vector of Natural index and Wide_String values                           --
 ------------------------------------------------------------------------------
 
 
 with Ada.Containers.Ordered_Maps;
-with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
+with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 
-package Aw_Lib.UString_Ordered_Maps is new 
-	Ada.Containers.Ordered_Maps(	Key_Type	=> Unbounded_String,
-					Element_Type	=> Unbounded_String );
+package KOW_Lib.UWide_String_Ordered_Maps is new
+	Ada.Containers.Ordered_Maps(	Key_Type	=> Unbounded_Wide_String,
+					Element_Type	=> Unbounded_Wide_String	);
+					

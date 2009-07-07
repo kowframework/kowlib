@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,11 +29,11 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Log package                                           --
+-- This is the KOW_Lib.Log package                                           --
 --                                                                          --
 --  It has been conceived to avoid circular dependencies problems.          --
---  It's a simple Logging implementation meant to be used by the AdaWorks   --
--- components (including Aw_Log) for debugging.                             --
+--  It's a simple Logging implementation meant to be used by the AdKOWorks   --
+-- components (including KOW_Log) for debugging.                             --
 --                                                                          --
 ------------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
 
-package Aw_Lib.Log is
+package KOW_Lib.Log is
 
 	type Log_Level is (
 		Level_Nul,		-- use the default level
@@ -101,5 +101,5 @@ private
 		-- TODO :: provide means for the user to set the level for each logger
 		-- this is gonna be usefull when debugging a given package only
 	end record;
-end Aw_Lib.Log;
+end KOW_Lib.Log;
 

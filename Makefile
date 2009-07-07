@@ -2,7 +2,7 @@
 #
 # @author Marcelo Coraça de Freitas <marcelo.batera@gmail.com> 
 
-projectFile="awlib.gpr"
+projectFile="kowlib.gpr"
 
 
 libs:

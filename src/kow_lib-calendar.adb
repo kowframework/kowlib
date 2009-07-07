@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,7 +29,7 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Calendar package                                      --
+-- This is the KOW_Lib.Calendar package                                      --
 --                                                                          --
 -- Provides functions to handle dates and time, especially to format        --
 -- according to Locale and Formatter's Pattern.                             --
@@ -44,12 +44,12 @@ with Ada.Text_IO;		use Ada.Text_IO;
 with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
 with Ada.Characters.Handling;	use Ada.Characters.Handling;
 
-with Aw_Lib.Locales;		use Aw_Lib.Locales;
-with Aw_Lib.Replacer;		use Aw_Lib.Replacer;
+with KOW_Lib.Locales;		use KOW_Lib.Locales;
+with KOW_Lib.Replacer;		use KOW_Lib.Replacer;
 
 
 
-package body Aw_Lib.Calendar is
+package body KOW_Lib.Calendar is
 
 	-------------------------------
 	---------- TIMESTAMP ----------
@@ -509,7 +509,7 @@ package body Aw_Lib.Calendar is
 					declare
 						D: Day_Name :=
 							Ada.Calendar.Formatting.Day_Of_Week(Date);
-						S: String :=  Aw_lib.Locales.Image(L, D, true);
+						S: String :=  KOW_lib.Locales.Image(L, D, true);
 					begin
 						Result := Result & Image (S);
 					end;
@@ -521,7 +521,7 @@ package body Aw_Lib.Calendar is
 						declare
 							D: Day_Name := 
 								Ada.Calendar.Formatting.Day_Of_Week(Date);
-							S: String :=  Aw_lib.Locales.Image(L, D, false);
+							S: String :=  KOW_lib.Locales.Image(L, D, false);
 		
 						begin
 							Result := Result & Image (S);
@@ -625,5 +625,5 @@ package body Aw_Lib.Calendar is
 		return To_String (Result);
 	end Format;
 	
-end Aw_Lib.Calendar;
+end KOW_Lib.Calendar;
 

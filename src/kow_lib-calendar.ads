@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,7 +29,7 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Calendar package                                      --
+-- This is the KOW_Lib.Calendar package                                      --
 --                                                                          --
 -- Provides functions to handle dates and time, especially to format        --
 -- according to Locale and Formatter's Pattern.                             --
@@ -39,11 +39,11 @@
 
 with Ada.Calendar;			use Ada.Calendar; 
 with Ada.Strings.Unbounded; 		use Ada.Strings.Unbounded;
-with Aw_Lib.Replacer;			use Aw_Lib.Replacer;
-with Aw_Lib.Locales; 			use Aw_Lib.Locales;
+with KOW_Lib.Replacer;			use KOW_Lib.Replacer;
+with KOW_Lib.Locales; 			use KOW_Lib.Locales;
 with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 
-package Aw_Lib.Calendar is
+package KOW_Lib.Calendar is
 
 	-------------------------------
 	---------- TIMESTAMP ----------
@@ -154,6 +154,6 @@ package Aw_Lib.Calendar is
 	function Get_Date return Time;
 	-- returns the current time.
 
-end Aw_Lib.Calendar;
+end KOW_Lib.Calendar;
 
 

@@ -1,4 +1,4 @@
--- Build file for Aw_Lib.
+-- Build file for KOW_Lib.
 --
 -- author Marcelo Coraça de Freitas <marcelo.batera@gmail.com>
 --
@@ -10,7 +10,7 @@
 
 
 
-project Awlib is
+project KOWlib is
 
 	version := "0.1.0";
 
@@ -32,7 +32,7 @@ project Awlib is
 
 	-- LIBRARY
 	for Library_Dir use "lib";
-	for Library_Name use "awlib";
+	for Library_Name use "kowlib";
 	case target is
 		when "Windows_NT" =>
 			for Library_Kind use "dynamic";
@@ -40,7 +40,7 @@ project Awlib is
 		when "GNU/Linux" =>
 			for Library_Kind use "dynamic";
 	end case;
-	for Library_Version use "libawlib.so." & Version;
+	for Library_Version use "libkowlib.so." & Version;
 
 
 	package Compiler is
@@ -54,5 +54,5 @@ project Awlib is
 			when "Windows_NT" =>
 		end case;
 	end Linker;
-end Awlib;
+end KOWlib;
 

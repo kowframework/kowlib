@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,7 +29,7 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Libraries package                                     --
+-- This is the KOW_Lib.Libraries package                                     --
 --                                                                          --
 -- Header for system-dependent libraries (dll/so) utilities                 --
 -- It doesn't initialize any compílation unit. It's just a simple           --
@@ -37,13 +37,13 @@
 ------------------------------------------------------------------------------
 
 
-with Aw_Lib.UString_Vectors;
+with KOW_Lib.UString_Vectors;
 
 
 with Ada.Unchecked_Conversion;
 with System;
 
-package Aw_Lib.Libraries is
+package KOW_Lib.Libraries is
 
 
 	Library_Exception: Exception;
@@ -107,7 +107,7 @@ package Aw_Lib.Libraries is
 	-- 	in Windows => ".dll"
 
 
-	function Library_Path return Aw_Lib.UString_Vectors.Vector;
+	function Library_Path return KOW_Lib.UString_Vectors.Vector;
 	-- Return the vector representation for the default library
 	-- search path for this system.
 	--
@@ -127,4 +127,4 @@ package Aw_Lib.Libraries is
 	-- this type is different in every system
 	-- must be declared in the package body
 
-end Aw_Lib.Libraries;
+end KOW_Lib.Libraries;

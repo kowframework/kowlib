@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,10 +29,10 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.File_System package                                   --
+-- This is the KOW_Lib.File_System package                                   --
 --                                                                          --
 -- this is the windows implementation of system-dependent functions         --
--- for Aw_Lib                                                               --
+-- for KOW_Lib                                                               --
 ------------------------------------------------------------------------------
 
 
@@ -41,12 +41,12 @@ with Ada.unchecked_conversion;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO; 		use Ada.Text_IO;
 with Ada.Environment_Variables;	use Ada.Environment_Variables;
-with Aw_Lib.String_Util;	
-with Aw_Lib.UString_Vectors;
+with KOW_Lib.String_Util;	
+with KOW_Lib.UString_Vectors;
 with Interfaces.C;		use Interfaces.C;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;
 
-package body Aw_Lib.File_System is
+package body KOW_Lib.File_System is
 
 	-----------
 	-- TYPES --
@@ -85,7 +85,7 @@ package body Aw_Lib.File_System is
 		-- return a hidden folder where the user can store settings for the
 		-- application called Application.
 
-		use Aw_Lib.String_Util;
+		use KOW_Lib.String_Util;
 	begin
 		return Get_Home & Str_Replace( '/', '-', App);
 	end Get_Config_Dir;
@@ -94,7 +94,7 @@ package body Aw_Lib.File_System is
 		-- return a directory where all the configuration global to all users
 		-- of the application App (when set) should be stored.
 		-- if App is not set, return the global configuration folder of the system
-		use Aw_Lib.String_Util;
+		use KOW_Lib.String_Util;
 	begin
 		return Value("APPDATA") & "\" & Str_Replace( '/', '-', App );
 	end Get_Global_Config_Dir;
@@ -119,7 +119,7 @@ package body Aw_Lib.File_System is
 		-- system dependent implementation
 		i : Integer := Original'First;
 		
-		use Aw_Lib.String_Util;
+		use KOW_Lib.String_Util;
 		
 		function Process_Home (O : in String) return String is
 			-- replace ~/ by it's home
@@ -158,8 +158,8 @@ package body Aw_Lib.File_System is
 		function Process_Dots (O : in String) return String is
 			-- process '..' signs removing one level from the directory hierarchy
 
-			use Aw_Lib.UString_Vectors;
-			use Aw_Lib.String_Util;
+			use KOW_Lib.UString_Vectors;
+			use KOW_Lib.String_Util;
 			use Ada.Strings.Unbounded;
 
 			Vect: Vector := explode( '\', O );
@@ -212,10 +212,10 @@ package body Aw_Lib.File_System is
 	function Get_File_Name( Path: in String ) return String is
 		-- given the path, return the file name without the directory
 		
-		use Aw_Lib.String_Util;
-		use Aw_Lib.UString_Vectors;
+		use KOW_Lib.String_Util;
+		use KOW_Lib.UString_Vectors;
 
-		Expl: Aw_Lib.UString_Vectors.Vector := 
+		Expl: KOW_Lib.UString_Vectors.Vector := 
 			explode('\', Str_Replace( '/', '\', Path ));
 	begin
 		return To_String(Last_Element( Expl ));
@@ -224,10 +224,10 @@ package body Aw_Lib.File_System is
 	function Get_Dir_Name( Path: in String ) return String is
 		-- given the complete path, return the path for the directory
 				
-		use Aw_Lib.String_Util;
-		use Aw_Lib.UString_Vectors;
+		use KOW_Lib.String_Util;
+		use KOW_Lib.UString_Vectors;
 
-		Expl: Aw_Lib.UString_Vectors.Vector :=
+		Expl: KOW_Lib.UString_Vectors.Vector :=
 			explode('\', Str_Replace( '/', '\', Path ));
 	begin
 		Delete_Last(Expl);
@@ -236,11 +236,11 @@ package body Aw_Lib.File_System is
 
 
 	function To_Vector (SPath : in String)
-		return Aw_Lib.UString_Vectors.Vector is
+		return KOW_Lib.UString_Vectors.Vector is
 
 		-- explode the String SPath using ":"
-		use Aw_Lib.UString_Vectors;
-		Vect : Vector := Aw_Lib.String_Util.explode (';', SPath);
+		use KOW_Lib.UString_Vectors;
+		Vect : Vector := KOW_Lib.String_Util.explode (';', SPath);
 	begin
 		--	Append (Vect, To_Unbounded_String(Get_Working_Dir));
 
@@ -251,7 +251,7 @@ package body Aw_Lib.File_System is
 		-- Convert the path using the system separator to the unix path
 		Result: String := Path;
 	begin
-		Aw_Lib.String_Util.Str_Replace(
+		KOW_Lib.String_Util.Str_Replace(
 				From	=> '\',
 				To	=> '/',
 				Str	=> Result
@@ -263,7 +263,7 @@ package body Aw_Lib.File_System is
 		-- Convert the unix path to the one using the system separator
 		Result: String := Path;
 	begin
-		Aw_Lib.String_Util.Str_Replace(
+		KOW_Lib.String_Util.Str_Replace(
 				From	=> '/',
 				To	=> '\',
 				Str	=> Result
@@ -271,5 +271,5 @@ package body Aw_Lib.File_System is
 		return Result;
 	end To_System_Path;
 
-end Aw_Lib.File_System;
+end KOW_Lib.File_System;
 

@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,7 +29,7 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.String_Util package                                   --
+-- This is the KOW_Lib.String_Util package                                   --
 --                                                                          --
 -- Library to perform actions over Strings                                  --
 ------------------------------------------------------------------------------
@@ -39,30 +39,30 @@ with Ada.Strings;		use Ada.Strings;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 
 with Ada.Containers.Vectors;
-with Aw_Lib.UString_Vectors;
+with KOW_Lib.UString_Vectors;
 
 
 
-package Aw_Lib.String_Util is
+package KOW_Lib.String_Util is
 
 	type UString_Array is Array( Integer range <> ) of Unbounded_String;
 
 	function implode(	Sep: Character;
-				Vect: Aw_Lib.UString_Vectors.Vector	) return String;
+				Vect: KOW_Lib.UString_Vectors.Vector	) return String;
 	-- join all parts of the Vector into a String of 
 	-- value element1[SEP]element2[SEP]ele...
 
 	function implode(	Sep: Character;
-				Vect: Aw_Lib.UString_Vectors.Vector	) return Unbounded_String;
+				Vect: KOW_Lib.UString_Vectors.Vector	) return Unbounded_String;
 	-- join all parts of the Vector into a Unbounded_String
 	-- of value element1[SEP]element2[SEP]ele...
 
-	function explode( Sep: Character; Str: String )	return Aw_Lib.UString_Vectors.Vector;
+	function explode( Sep: Character; Str: String )	return KOW_Lib.UString_Vectors.Vector;
 	-- split the string Str by Sep and
 	-- return a vector containing it.
 
 	function explode(	Sep: Character;
-				Str: Unbounded_String ) return Aw_Lib.UString_Vectors.Vector;
+				Str: Unbounded_String ) return KOW_Lib.UString_Vectors.Vector;
 	-- split the string Str by Sep and return a vector containing it.
 
 
@@ -114,5 +114,5 @@ private
 	-- find all occurances of Find in Context and returns an vector
 	-- with the starting positions of each occurance
 
-end Aw_Lib.String_Util;
+end KOW_Lib.String_Util;
 

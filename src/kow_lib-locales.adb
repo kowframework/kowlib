@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,7 +29,7 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Locales package                                  	    --
+-- This is the KOW_Lib.Locales package                                  	    --
 --                                                                          --
 -- Provides functions to get patterns that describe dates or times and      --
 -- functions that return a formatted number, date or name according to      --
@@ -44,10 +44,10 @@ with Ada.Strings;  			use Ada.Strings;
 with Ada.Strings.Fixed;  
 with Ada.Characters.Handling;		use Ada.Characters.Handling;
 
-with Aw_Lib.String_Util;	
+with KOW_Lib.String_Util;	
 with Ada.Text_IO;			use Ada.Text_IO;
 
-package body Aw_Lib.Locales is
+package body KOW_Lib.Locales is
 	
 
 	function Get_Locale_Envvar return String is
@@ -343,12 +343,12 @@ package body Aw_Lib.Locales is
 		end if;
 
 		Temporary_Name := 
-			Aw_Lib.String_Util.Str_Replace(	From	=> "%f",
+			KOW_Lib.String_Util.Str_Replace(	From	=> "%f",
 							To		=> First_Name,
 							Str		=> To_String( L.FULL_NAMES ));
 
 		Temporary_Name := 
-			Aw_Lib.String_Util.Str_Replace(	From	=> "%l",
+			KOW_Lib.String_Util.Str_Replace(	From	=> "%l",
 							To	=> Last_Name,
 							Str	=> To_String( Temporary_Name ) );
 
@@ -390,4 +390,4 @@ package body Aw_Lib.Locales is
 	
 begin
 	Add_All_Supported_Locales;
-end Aw_Lib.Locales;
+end KOW_Lib.Locales;

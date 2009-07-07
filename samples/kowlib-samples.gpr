@@ -1,4 +1,4 @@
--- Build file for Aw_Lib tests.
+-- Build file for KOW_Lib tests.
 --
 -- author Marcelo Coraça de Freitas <marcelo.batera@gmail.com> 
 --
@@ -9,10 +9,10 @@
 
 
 
-with "awlib.gpr";
+with "kowlib.gpr";
 
 
-project Awlib.Samples is
+project KOWlib.Samples is
 
    for Source_Dirs use ( "src" );
 
@@ -28,8 +28,8 @@ project Awlib.Samples is
       for Default_Switches ("ada") use ("-O2", "-gnat05");
    end Compiler;
 
-   package Linker renames AwLib.Linker;
+   package Linker renames KOWLib.Linker;
 
 
-end Awlib.Samples;
+end KOWlib.Samples;
 

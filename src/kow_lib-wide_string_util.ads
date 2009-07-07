@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,38 +29,38 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Wide_String_Util package                              --
+-- This is the KOW_Lib.Wide_String_Util package                              --
 --                                                                          --
 -- Library to perform actions over Wide_Strings                             --
 ------------------------------------------------------------------------------
 
 with Ada.Strings.Wide_Unbounded;		use Ada.Strings.Wide_Unbounded;
 with Ada.Containers.Vectors;
-with Aw_Lib.UWide_String_Vectors;
+with KOW_Lib.UWide_String_Vectors;
 
 
 
-package Aw_Lib.Wide_String_Util is
+package KOW_Lib.Wide_String_Util is
 
 
 	function implode(	Sep: Wide_Character; 
-				Vect: Aw_Lib.UWide_String_Vectors.Vector )
+				Vect: KOW_Lib.UWide_String_Vectors.Vector )
 		return Wide_String;
 	-- join all parts of the Vector into a Wide_String
 	-- of value element1[SEP]element2[SEP]ele...
 
 	function implode(	Sep: Wide_Character;
-				Vect: Aw_Lib.UWide_String_Vectors.Vector )
+				Vect: KOW_Lib.UWide_String_Vectors.Vector )
 		return Unbounded_Wide_String;
 	-- join all parts of the Vector into a Unbounded_Wide_String
 	-- of value element1[SEP]element2[SEP]ele...
 
 	function explode( Sep: Wide_Character; Str: Wide_String )
-		return Aw_Lib.UWide_String_Vectors.Vector;
+		return KOW_Lib.UWide_String_Vectors.Vector;
 	-- split the Wide_String Str by Sep and return a vector containing it.
 
 	function explode( Sep: Wide_Character; Str: Unbounded_Wide_String )
-		return Aw_Lib.UWide_String_Vectors.Vector;
+		return KOW_Lib.UWide_String_Vectors.Vector;
 	-- split the Wide_String Str by Sep and return a vector containing it.
 
 
@@ -110,5 +110,5 @@ private
 	-- algorithm to find all occurances of Find in Context
 	-- and returns an vector with the starting positions of each occurance
 
-end Aw_Lib.Wide_String_Util;
+end KOW_Lib.Wide_String_Util;
 

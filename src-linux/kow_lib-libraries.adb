@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -29,15 +29,15 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Aw_Lib.Libraries package                                      --
+-- This is the KOW_Lib.Libraries package                                      --
 --                                                                          --
 -- Implementation for library handling in linux and other unixes.           --
 ------------------------------------------------------------------------------
 
 
-with Aw_Lib.File_System;
-with Aw_Lib.String_Util;	use Aw_Lib.String_Util;
-with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
+with KOW_Lib.File_System;
+with KOW_Lib.String_Util;	use KOW_Lib.String_Util;
+with KOW_Lib.UString_Vectors;	use KOW_Lib.UString_Vectors;
 
 
 with Ada.Environment_Variables;
@@ -49,7 +49,7 @@ with Interfaces.C.Strings;	use Interfaces.C.Strings;
 
 with System;			use System;
 
-package body Aw_Lib.Libraries is
+package body KOW_Lib.Libraries is
 
 
 	function Dlopen (	Lib_Name : Interfaces.C.Strings.Chars_Ptr;
@@ -172,7 +172,7 @@ package body Aw_Lib.Libraries is
 	end Library_Suffix;
 
 
-	function Library_Path return Aw_Lib.UString_Vectors.Vector is
+	function Library_Path return KOW_Lib.UString_Vectors.Vector is
 		
 		use Ada.Environment_Variables;
 		
@@ -185,9 +185,9 @@ package body Aw_Lib.Libraries is
 
 		Append( P, To_Unbounded_String( "/usr/lib" ) );
 		Append( P, To_Unbounded_String( "/usr/local/lib" ) );
-		Append( P, To_Unbounded_String( Aw_Lib.File_System.Get_Working_Dir ) ); 
+		Append( P, To_Unbounded_String( KOW_Lib.File_System.Get_Working_Dir ) ); 
 
 		return P;
 	end Library_Path;
 
-end Aw_Lib.Libraries;
+end KOW_Lib.Libraries;
