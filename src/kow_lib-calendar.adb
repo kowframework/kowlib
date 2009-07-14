@@ -625,5 +625,23 @@ package body KOW_Lib.Calendar is
 		return To_String (Result);
 	end Format;
 	
+	function Format( L : in Locale; Date : in Time ) return String is
+		-- format the date using the default date formater for the given locale
+	begin
+		return Format(
+				L,
+				Get_Formatter(
+						KOW_Lib.Locales.Get_Default_Date_Pattern( L )
+					),
+				Date
+			);
+	end Format;
+
+	function Format( Date : in Time ) return String is
+		-- format the date using the default date formater for the default locale
+	begin
+		return Format( KOW_Lib.Locales.DEFAULT_LOCALE, Date );
+	end Format;
+
 end KOW_Lib.Calendar;
 

@@ -148,6 +148,13 @@ package KOW_Lib.Calendar is
 		return String;
 	-- returns the date formatted according to Formatter's Pattern and Locale.
 
+
+	function Format( L : in Locale; Date : in Time ) return String;
+	-- format the date using the default date formater for the given locale
+	
+	function Format( Date : in Time ) return String;
+	-- format the date using the default date formater for the default locale
+
 	function Format(F : Formatter; Date : Time) return String;
 	--  Format the date using the ISO Locale.  
 	
