@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -31,7 +31,7 @@
 ------------------------------------------------------------------------------
 -- This is the Fs_Tests                                                     --
 --                                                                          --
--- test of the Aw_Lib.File_System package.                                  --     
+-- test of the KOW_Lib.File_System package.                                  --     
 -- it's ment to be running on a unix environment!                           --
 ------------------------------------------------------------------------------
 
@@ -43,8 +43,8 @@ with Ada.Integer_Text_IO;	use Ada.Integer_text_IO;
 
 with Ada.Environment_Variables;	use Ada.Environment_Variables;
 
-with Aw_Lib.File_System;	use Aw_Lib.File_System;
-with Aw_Lib.UString_Vectors;	use Aw_Lib.UString_Vectors;
+with KOW_Lib.File_System;	use KOW_Lib.File_System;
+with KOW_Lib.UString_Vectors;	use KOW_Lib.UString_Vectors;
 with Interfaces.C;		use Interfaces.C;
 with Interfaces.C.Strings;	use Interfaces.C.Strings;
 

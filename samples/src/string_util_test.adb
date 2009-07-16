@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -31,28 +31,28 @@
 ------------------------------------------------------------------------------
 -- This is the String_Util_Test                                             --
 --                                                                          --
--- test procedure for String utilities in Aw_Lib                            --
+-- test procedure for String utilities in KOW_Lib                            --
 ------------------------------------------------------------------------------
 
 with Ada.Text_IO;			use Ada.Text_IO;
 with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
 
-with Aw_Lib.String_Util;		use Aw_Lib.String_Util;
-with Aw_Lib.UString_Vectors;		use Aw_Lib.UString_Vectors;
-with Aw_Lib.UString_Ordered_Maps;	use Aw_Lib.UString_Ordered_Maps;
+with KOW_Lib.String_Util;		use KOW_Lib.String_Util;
+with KOW_Lib.UString_Vectors;		use KOW_Lib.UString_Vectors;
+with KOW_Lib.UString_Ordered_Maps;	use KOW_Lib.UString_Ordered_Maps;
 
 
 procedure String_Util_Test is
 
 
-	procedure Vector_Iterator( c: in Aw_Lib.UString_Vectors.Cursor ) is
+	procedure Vector_Iterator( c: in KOW_Lib.UString_Vectors.Cursor ) is
 		-- print the element at position c
 	begin
 		Put_Line( " " & To_String( Element( c ) ) );
 	end Vector_Iterator;
 
 
-	procedure Map_Iterator( c: in Aw_Lib.UString_Ordered_Maps.Cursor ) is
+	procedure Map_Iterator( c: in KOW_Lib.UString_Ordered_Maps.Cursor ) is
 	begin
 		Put_Line( " " & To_String( Key( C ) ) & " => " & To_String( Element( C ) ) );
 	end Map_Iterator;

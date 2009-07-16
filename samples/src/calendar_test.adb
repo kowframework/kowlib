@@ -9,14 +9,14 @@
 --               Copyright (C) 2007-2009, Ada Works Project                 --
 --                                                                          --
 --                                                                          --
--- Aw_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. Aw_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with Aw_Lib; see file COPYING. If not, write --
+-- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -31,11 +31,11 @@
 ------------------------------------------------------------------------------
 -- This is the Calendar_Test                                                --
 --                                                                          --
--- Example on how to use Aw_Lib.Calendar                                    --
+-- Example on how to use KOW_Lib.Calendar                                    --
 ------------------------------------------------------------------------------
 
-with Aw_Lib.Calendar;		use Aw_Lib.Calendar;
-with Aw_Lib.Locales;		use Aw_Lib.Locales;
+with KOW_Lib.Calendar;		use KOW_Lib.Calendar;
+with KOW_Lib.Locales;		use KOW_Lib.Locales;
 
 with Ada.Float_Text_IO;		use Ada.Float_Text_IO;
 with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;

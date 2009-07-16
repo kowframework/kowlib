@@ -1,7 +1,7 @@
 with Ada.Text_IO;	use Ada.Text_IO;
 
 
-with Aw_Lib.Log;	use Aw_Lib.Log;
+with KOW_Lib.Log;	use KOW_Lib.Log;
 
 
 
