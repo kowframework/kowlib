@@ -27,6 +27,7 @@ project KOWlib is
 	for Library_Name use "kowlib";
 	for Library_Kind use KOW_Framework_Setup'Library_Kind;
 	for Library_Version use "libkowlib.so." & Version;
+	for Externally_Built use "true";
 
 
 	package Compiler is
