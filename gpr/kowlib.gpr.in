@@ -14,16 +14,16 @@ with "kow_framework_setup.gpr";
 project KOWlib is
 
 	version	:= $version;
-	prefix	:= $prefix;
+	
 
 
 	target: KOW_Framework_Setup.Supported_OS := Kow_Framework_Setup.Target;
 
 
-	for Source_Dirs use ( prefix & "/include/kowlib" );
+	for Source_Dirs use ( $include_prefix );
 
 	-- LIBRARY
-	for Library_Dir use prefix & "/lib";
+	for Library_Dir use $lib_prefix;
 	for Library_Name use "kowlib";
 	for Library_Kind use KOW_Framework_Setup'Library_Kind;
 	for Library_Version use "libkowlib.so." & Version;

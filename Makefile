@@ -15,9 +15,17 @@ endif
 ifndef ($(PREFIX))
 	PREFIX=/usr/local
 endif
-INCLUDE_PREFIX=$(PREFIX)/include/kowlib
-LIB_PREFIX=$(PREFIX)/lib
-GPR_PREFIX=$(LIB_PREFIX)/gnat
+
+ifndef ($(INCLUDE_PREFIX))
+	INCLUDE_PREFIX=$(PREFIX)/include/kowlib
+endif
+
+ifndef ($(LIB_PREFIX))
+	LIB_PREFIX=$(PREFIX)/lib
+endif
+ifndef ($(GPR_PREFIX)) 
+	GPR_PREFIX=$(LIB_PREFIX)/gnat 
+endif
 
 
 projectFile="kowlib.gpr"
@@ -44,6 +52,8 @@ gprfile:
 	@echo "Preparing GPR file.."
 	@echo version:=\"$(VERSION)\" > gpr/kowlib.def
 	@echo prefix:=\"$(PREFIX)\" >> gpr/kowlib.def
+	@echo lib_prefix:=\"$(LIB_PREFIX)\" >> gpr/kowlib.def
+	@echo include_prefix:=\"$(INCLUDE_PREFIX)\" >> gpr/kowlib.def
 	@gnatprep gpr/kowlib.gpr.in gpr/kowlib.gpr gpr/kowlib.def
 
 gprclean:
