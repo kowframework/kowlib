@@ -8,24 +8,34 @@
 -- $Author$
 
 
-with "kow_framework_setup.gpr";
-
 
 project KOWlib is
 
 	version	:= $version;
 	
+	type Supported_OS is ("Windows_NT", "GNU/Linux", "Darwin" );
 
 
-	target: KOW_Framework_Setup.Supported_OS := Kow_Framework_Setup.Target;
+	-- the default is GNU/Linux
+	target : Supported_OS := external( "OS", "GNU/Linux" );
 
 
-	for Source_Dirs use ( $include_prefix );
+
+	for Source_Dirs use ( $include_path );
 
 	-- LIBRARY
-	for Library_Dir use $lib_prefix;
+	for Library_Dir use $lib_path;
 	for Library_Name use "kowlib";
-	for Library_Kind use KOW_Framework_Setup'Library_Kind;
+	case target is
+		when "Windows_NT" =>
+			for Library_Kind use "static";
+
+		when "GNU/Linux" =>
+			for Library_Kind use "dynamic";
+
+		when "Darwin" =>
+			for Library_Kind use "static";
+	end case;
 	for Library_Version use "libkowlib.so." & Version;
 	for Externally_Built use "true";
 
