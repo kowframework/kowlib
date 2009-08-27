@@ -5,6 +5,7 @@
 \usepackage{longtable}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{floatflt}
 
 \usepackage{fancyhdr}
 
@@ -116,6 +117,17 @@
 	numbersep=15pt
 }
 
+\lstdefinelanguage{bash}{%
+	morekeywords={alfa,and,array,begin,boolean,byte,case,char,const,div,%
+	do,downto,else,end,false,file,for,function,get,goto,if,in,%
+	integer,label,maxint,mod,new,not,of,or,pack,packed,page,program,%
+	procedure,put,read,readln,real,record,repeat,reset,rewrite,set,%
+	text,then,to,true,type,unpack,until,var,while,with,write,writeln,make,\$},%
+	sensitive=true,%
+	morecomment=[s]{(*}{*)},%
+	morecomment=[s]{\{}{\}},%
+	morestring=[d]{'}%
+}
 
 
 \lstdefinelanguage{Ada}{%
@@ -143,6 +155,8 @@
 }
 
 
+\lstnewenvironment{bash}{\lstset{language=bash}}{}
+
 
 
 %==============%
@@ -169,7 +183,7 @@ of the KOW Framework project.
 
 
 
-\subsection{The KOW Framework}
+\section{The KOW Framework}
 The KOW Framework project has as it main objective to provide means for RAD of Web
 Applications (most notably applications in for process and resource management)
 using the Ada 2005 programming language.
@@ -186,7 +200,7 @@ Ada in your project. If you are in doubt if the language is the best choice for 
 please google about. This is out of the scope of this manual.
 
 
-\subsection{Rationale}
+\section{Rationale}
 The functionality on this library could have been implemented in other KOW Framework
 libraries. For instance, the KOW\_Lib.Libraries described at \Ref{api:libraries} could have been
 implemented in KOW\_Plug module (not available in the 1.0b release but already functional).
@@ -198,19 +212,71 @@ All other KOW Framework projects should be Operating System neutral.
 
 
 
-\subsection{Implementation goals}
+\section{Implementation goals}
 The main goal of KOW\_Lib is to provide a simple and consistent set of libraries that
 work really well on Windows an Unix-like operating systems.
 
 By working really well we ment not only the Ada code but also the building system,
 specially \emph{GNAT Project} setting the right linker arguments for given OS.
 
-For instance, in Darwin shared libraries and Ada has proven not to be a sane
+For instance, in Darwin (Mac OS X) shared libraries and Ada has proven not to be a sane
 combination. We actually don't know yet why is that, but we do know shared libraries
 simply won't work with recent GNAT versions (\~GNAT GCC 4.3). As the KOW Framework
 requires Ada 2005 packages we must have sure our code play well with a GNAT
 greater than 4.2 and the host Operating System.
 
+\section{Supported OS}
+\label{supported_os}
+The library is distributed in source form only. You should be able to build it in
+most systems with GNAT 4.3 or greater.
+
+The systems where we tested it so far are:
+
+\begin{floatingtable}{
+   \begin{tabular}{lcc}
+   System       &  Kernel/Version &  Compiler      \\
+   \hline
+   Linux        &  2.6.X          &  GNAT GCC 4.3  \\
+   Windows      &  2003/XP/Vista  &  GNAT GPL 2008 \\
+   MacOS X      &  10.5           &  GNAT GCC 4.2  \\
+   \end{tabular}}
+   \caption{Database Product Support}\label{t:DBSupport}
+\end{floatingtable}
+
+
+Though it should run fine in all linux flavours with a recent GNAT compiler please
+let us know if you have used it with succes in an system that's not listed here.
+
+
+\chapter{Getting the library}
+\label{getting_it}
+You can download it from http://framework.kow.com.br
+
+\section{Compiling}
+\label{getting_it:compiling}
+Once you have downloaded the lastest release, simply do a:
+
+\begin{bash}
+\$ tar zxf kowlib-\${VERSION}.tar.gz
+\$ cd kowlib-\${VERSION}
+\$ make
+\end{bash}
+
+If it doesn't fail it means you have built KOW Lib. 
+
+That's it. No \emph{./configure}, no \emph{cmake}, no \emph{make setup}.
+
+If it has failed, you most problably have an unsupported system. Please verify
+at \Ref{supported_os}.
+
+\section{Installing}
+\label{getting_it:installing}
+
+\subsection{Short Version}
+
+\begin{bash}
+\$ make install
+\end{bash}
 
 \chapter{Source Code Organization}
 \label{source_organization}
@@ -218,33 +284,33 @@ greater than 4.2 and the host Operating System.
 \chapter{Package Documentation}
 \label{api}
 
-\subsection{Calendar Functions}
+\section{Calendar Functions}
 \label{api:calendar}
 
 
-\subsection{File System Operations}
+\section{File System Operations}
 \label{api:file_system}
 
-\subsection{Dynamic Libraries Handling}
+\section{Dynamic Libraries Handling}
 \label{api:libraries}
 
-\subsection{Locales}
+\section{Locales}
 \label{api:locales}
 
 
-\subsection{Basic Logging}
+\section{Basic Logging}
 \label{api:log}
 
-\subsection{String variables}
+\section{String variables}
 \label{api:replacer}
 
-\subsection{String Utilities}
+\section{String Utilities}
 \label{api:string_util}
 
-\subsection{Wide String Utilities}
+\section{Wide String Utilities}
 \label{api:wide_string_util}
 
-\subsection{Containers}
+\section{Containers}
 \label{api:containers}
 
 We provide instanciation of generic container libraries for \emph{Unbounded\_String} and \emph{Wide\_Unbounded\_String} types.
