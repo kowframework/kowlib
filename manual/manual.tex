@@ -1,0 +1,266 @@
+\documentclass[english,letterpaper]{book}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{fancyhdr}
+
+\usepackage{bookman}
+
+\pagestyle{fancy}
+
+%\lhead{}
+%\chead{}
+\rhead{}
+
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{KOW Lib 1.0b}
+
+
+\newcommand\Ref[1]{\textsection\ref{#1} (page~\pageref{#1})}
+
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\usepackage{makeidx}
+\makeindex
+
+\IfFileExists{url.sty}{\usepackage{url}}
+                      {\newcommand{\url}{\texttt}}
+
+\makeatletter
+
+\usepackage{babel}
+\makeatother
+
+
+
+%==========%
+% HYPERREF %
+%==========%
+\usepackage[dvipdfm, bookmarks, colorlinks, breaklinks, pdftitle={KOW Lib General Purpose Libraries},
+    pdfauthor={KOW Framework Project}]{hyperref}
+\hypersetup{
+	linkcolor=DarkSkyBlue,
+	citecolor= DarkSkyBlue,
+	filecolor= DarkSkyBlue,
+	urlcolor= DarkSkyBlue
+}
+
+
+
+%========================%
+% Listings Package Setup %
+%========================%
+\usepackage{xcolor}
+\usepackage{listings}
+
+
+% COLORS (Tango)
+\definecolor{LightButter}{rgb}{0.98,0.91,0.31}
+\definecolor{LightOrange}{rgb}{0.98,0.68,0.24}
+\definecolor{LightChocolate}{rgb}{0.91,0.72,0.43}
+\definecolor{LightChameleon}{rgb}{0.54,0.88,0.20}
+\definecolor{LightSkyBlue}{rgb}{0.45,0.62,0.81}
+\definecolor{LightPlum}{rgb}{0.68,0.50,0.66}
+\definecolor{LightScarletRed}{rgb}{0.93,0.16,0.16}
+\definecolor{Butter}{rgb}{0.93,0.86,0.25}
+\definecolor{Orange}{rgb}{0.96,0.47,0.00}
+\definecolor{Chocolate}{rgb}{0.75,0.49,0.07}
+\definecolor{Chameleon}{rgb}{0.45,0.82,0.09}
+\definecolor{SkyBlue}{rgb}{0.20,0.39,0.64}
+\definecolor{Plum}{rgb}{0.46,0.31,0.48}
+\definecolor{ScarletRed}{rgb}{0.80,0.00,0.00}
+\definecolor{DarkButter}{rgb}{0.77,0.62,0.00}
+\definecolor{DarkOrange}{rgb}{0.80,0.36,0.00}
+\definecolor{DarkChocolate}{rgb}{0.56,0.35,0.01}
+\definecolor{DarkChameleon}{rgb}{0.30,0.60,0.02}
+\definecolor{DarkSkyBlue}{rgb}{0.12,0.29,0.53}
+\definecolor{DarkPlum}{rgb}{0.36,0.21,0.40}
+\definecolor{DarkScarletRed}{rgb}{0.64,0.00,0.00}
+\definecolor{Aluminium1}{rgb}{0.93,0.93,0.92}
+\definecolor{Aluminium2}{rgb}{0.82,0.84,0.81}
+\definecolor{Aluminium3}{rgb}{0.73,0.74,0.71}
+\definecolor{Aluminium4}{rgb}{0.53,0.54,0.52}
+\definecolor{Aluminium5}{rgb}{0.33,0.34,0.32}
+\definecolor{Aluminium6}{rgb}{0.18,0.20,0.21}
+
+
+
+
+\lstset{
+	keywordstyle=[1]{\color{DarkSkyBlue}},
+	keywordstyle=[2]{\color{DarkScarletRed}},
+	keywordstyle=[3]{\bfseries},
+	keywordstyle=[4]{\color{DarkPlum}},
+	keywordstyle=[5]{\color{SkyBlue}},
+	commentstyle={\color{Aluminium4}\small},
+	stringstyle={\color{Chocolate}},
+	tabsize=4,
+	breaklines=true,
+	basicstyle={\ttfamily\small},
+	xleftmargin=21pt,
+	xrightmargin=11pt,
+	frame=single,
+	rulecolor=\color{black!30},
+	captionpos=b,
+	framesep=10pt,
+	framexleftmargin=18pt,
+	numbers=none,
+	numberstyle={\tiny},
+	stepnumber=1,
+	numbersep=15pt
+}
+
+
+
+\lstdefinelanguage{Ada}{%
+	morekeywords={alfa,and,array,begin,boolean,byte,case,char,const,div,%
+	do,downto,else,end,false,file,for,function,get,goto,if,in,%
+	integer,label,maxint,mod,new,not,of,or,pack,packed,page,program,%
+	procedure,put,read,readln,real,record,repeat,reset,rewrite,set,%
+	text,then,to,true,type,unpack,until,var,while,with,write,writeln},%
+	sensitive=false,%
+	morecomment=[s]{(*}{*)},%
+	morecomment=[s]{\{}{\}},%
+	morestring=[d]{'}%
+}
+\lstdefinelanguage{SQL}{%
+	morekeywords={select,insert,table,from,into,create,delete,alfa,and,array,begin,boolean,byte,case,char,const,div,%
+	do,downto,else,end,false,file,for,function,get,goto,if,in,%
+	integer,label,maxint,mod,new,not,of,or,pack,packed,page,program,%
+	procedure,put,read,readln,real,record,repeat,reset,rewrite,set,%
+	text,then,to,true,type,unpack,until,var,while,with,write,writeln},%
+	sensitive=false,%
+	morecomment=[s]{(*}{*)},%
+	morecomment=[s]{\{}{\}},%
+	morestring=[d]{'},%
+	caption=SQL%
+}
+
+
+
+
+%==============%
+% The document %
+%==============%
+
+
+\begin{document}
+
+\title{KOW Lib General Purpose Libraries}
+\author{%
+Copyright (c) 2007-2009, KOW Framework Project
+}
+\date{\today}
+\maketitle
+
+\tableofcontents{}
+\listoftables
+%\listoffigures
+
+\chapter{Introduction}
+KOW Lib has been idealized to fullfill the simple and Operating System dependent needs
+of the KOW Framework project.
+
+
+
+\subsection{The KOW Framework}
+The KOW Framework project has as it main objective to provide means for RAD of Web
+Applications (most notably applications in for process and resource management)
+using the Ada 2005 programming language.
+
+Ada is one of the most strong and yet fast languages out there. It has been used
+for decades in big projects. One could say that if you have some code where bugs
+could lead to disasters you should Ada.
+
+Yet, this programming language in my own work experience (and I've worked with PHP,
+Java, C, C++ and Python) leads to less bugs and a clearer design.
+
+There is a big debate and several articles about why you should (or should not) use
+Ada in your project. If you are in doubt if the language is the best choice for you,
+please google about. This is out of the scope of this manual.
+
+
+\subsection{Rationale}
+The functionality on this library could have been implemented in other KOW Framework
+libraries. For instance, the KOW\_Lib.Libraries described at \Ref{api:libraries} could have been
+implemented in KOW\_Plug module (not available in the 1.0b release but already functional).
+
+The reason we've chose a central place for this kind of library is to easy the work
+of maintaining the build system and extend OS support.
+
+All other KOW Framework projects should be Operating System neutral.
+
+
+
+\subsection{Implementation goals}
+The main goal of KOW\_Lib is to provide a simple and consistent set of libraries that
+work really well on Windows an Unix-like operating systems.
+
+By working really well we ment not only the Ada code but also the building system,
+specially \emph{GNAT Project} setting the right linker arguments for given OS.
+
+For instance, in Darwin shared libraries and Ada has proven not to be a sane
+combination. We actually don't know yet why is that, but we do know shared libraries
+simply won't work with recent GNAT versions (\~GNAT GCC 4.3). As the KOW Framework
+requires Ada 2005 packages we must have sure our code play well with a GNAT
+greater than 4.2 and the host Operating System.
+
+
+\chapter{Source Code Organization}
+\label{source_organization}
+
+\chapter{Package Documentation}
+\label{api}
+
+\subsection{Calendar Functions}
+\label{api:calendar}
+
+
+\subsection{File System Operations}
+\label{api:file_system}
+
+\subsection{Dynamic Libraries Handling}
+\label{api:libraries}
+
+\subsection{Locales}
+\label{api:locales}
+
+
+\subsection{Basic Logging}
+\label{api:log}
+
+\subsection{String variables}
+\label{api:replacer}
+
+\subsection{String Utilities}
+\label{api:string_util}
+
+\subsection{Wide String Utilities}
+\label{api:wide_string_util}
+
+\subsection{Containers}
+\label{api:containers}
+
+We provide instanciation of generic container libraries for \emph{Unbounded\_String} and \emph{Wide\_Unbounded\_String} types.
+
+Those instanciations can be found in the given files:
+
+\lstinputlisting[language=Ada,numbers=left,title=KOW\_Lib.UString\_Ordered\_Maps]{../src/kow_lib-ustring_ordered_maps.ads}
+
+\lstinputlisting[language=Ada,numbers=left,title=KOW\_Lib.UString\_Vectors]{../src/kow_lib-ustring_vectors.ads}
+
+\lstinputlisting[language=Ada,numbers=left,title=KOW\_Lib.UWide\_String\_Ordered\_Maps]{../src/kow_lib-uwide_string_ordered_maps.ads}
+
+\lstinputlisting[language=Ada,numbers=left,title=KOW\_Lib.UWide\_String\_Vectors]{../src/kow_lib-uwide_string_vectors.ads}
+
+
+
+
+These packages are given for convenience only
+\end{document}

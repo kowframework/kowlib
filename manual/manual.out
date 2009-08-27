@@ -1,0 +1,14 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}
+\BOOKMARK [1][-]{subsection.1.0.1}{Rationale}{chapter.1}
+\BOOKMARK [2][-]{subsection.1.0.2}{Implementation goals}{subsection.1.0.1}
+\BOOKMARK [0][-]{chapter.2}{Source Code Organization}{}
+\BOOKMARK [0][-]{chapter.3}{Package Documentation}{}
+\BOOKMARK [1][-]{subsection.3.0.3}{Calendar Functions}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.0.4}{File System Operations}{subsection.3.0.3}
+\BOOKMARK [2][-]{subsection.3.0.5}{Dynamic Libraries Handling}{subsection.3.0.3}
+\BOOKMARK [2][-]{subsection.3.0.6}{Locales}{subsection.3.0.3}
+\BOOKMARK [2][-]{subsection.3.0.7}{Basic Logging}{subsection.3.0.3}
+\BOOKMARK [2][-]{subsection.3.0.8}{String variables}{subsection.3.0.3}
+\BOOKMARK [2][-]{subsection.3.0.9}{String Utilities}{subsection.3.0.3}
+\BOOKMARK [2][-]{subsection.3.0.10}{Wide String Utilities}{subsection.3.0.3}
+\BOOKMARK [2][-]{subsection.3.0.11}{Containers}{subsection.3.0.3}

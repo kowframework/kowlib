@@ -7,6 +7,9 @@ GPR_FILES=kowlib.gpr
 INCLUDE_FILES=src/*
 
 
+DOCS_DIRS=manual
+
+
 ifeq ($(OS), Windows_NT)
 	INCLUDE_FILES=src/* src-windows/*
 else
