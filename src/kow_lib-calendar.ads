@@ -39,7 +39,7 @@
 
 with Ada.Calendar;			use Ada.Calendar; 
 with Ada.Strings.Unbounded; 		use Ada.Strings.Unbounded;
-with KOW_Lib.Replacer;			use KOW_Lib.Replacer;
+--with KOW_Lib.Replacer;			use KOW_Lib.Replacer;
 with KOW_Lib.Locales; 			use KOW_Lib.Locales;
 with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 

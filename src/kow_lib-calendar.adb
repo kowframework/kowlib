@@ -45,7 +45,7 @@ with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
 with Ada.Characters.Handling;	use Ada.Characters.Handling;
 
 with KOW_Lib.Locales;		use KOW_Lib.Locales;
-with KOW_Lib.Replacer;		use KOW_Lib.Replacer;
+with KOW_Lib.Replacer;--		use KOW_Lib.Replacer;
 
 
 
@@ -152,7 +152,7 @@ package body KOW_Lib.Calendar is
 		Fim		: Unbounded_String;
 	begin
 		loop
-			Get_Variable(Formato, 1, Str_Pos, Str_Len, Str);
+			KOW_Lib.Replacer.Get_Variable(Formato, 1, Str_Pos, Str_Len, Str);
 			
 			exit when Str_Len = 0;
 			--Put(Str_Pos); Put(Str_Len); Put(To_String(Str));
