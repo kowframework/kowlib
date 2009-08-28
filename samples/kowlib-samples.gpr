@@ -21,7 +21,14 @@ project KOWlib.Samples is
 
    -- TESTES:
    for Exec_Dir use "bin";
-   for Main use ("fs_tests", "string_util_test", "wide_string_util_test", "calendar_test", "log_test");
+   for Main use (
+			"calendar_test",
+	   		"fs_tests",
+			"log_test",
+			"regular_expressions_test",
+			"string_util_test",
+			"wide_string_util_test"
+		);
 
 
    package Compiler is
