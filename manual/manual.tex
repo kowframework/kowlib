@@ -257,9 +257,10 @@ You can download it from http://framework.kow.com.br
 Once you have downloaded the lastest release, simply do a:
 
 \begin{bash}
-\$ tar zxf kowlib-\${VERSION}.tar.gz
-\$ cd kowlib-\${VERSION}
-\$ make
+$ tar zxf kowlib-${VERSION}.tar.gz
+$ cd kowlib-${VERSION}
+$ make
+$
 \end{bash}
 
 If it doesn't fail it means you have built KOW Lib. 
@@ -272,11 +273,34 @@ at \Ref{supported_os}.
 \section{Installing}
 \label{getting_it:installing}
 
+
 \subsection{Short Version}
 
 \begin{bash}
-\$ make install
+$ make install
+$
 \end{bash}
+
+
+\subsection{Long Version}
+KOWLib installs files in 3 places:
+\begin{enumerate}
+	\item some folder for specs and bodies
+	\item some folder for the GPR file
+	\item some folder for both compiled library and .ali files
+\end{enumerate}
+
+But that's not the only thing. Also you can tweak the way the gpr file is created.
+It's usefull when building scripts for automated download and installation (such as
+Gentoo's portage).
+
+To control all these variants you have some variables you can set.
+
+\subsubsection{PREFIX}
+This will set the root of installation. The default is \emph{/ust/local} but you
+could set it to any valid path in your system.
+
+\subsubsection{LIB}
 
 \chapter{Source Code Organization}
 \label{source_organization}
