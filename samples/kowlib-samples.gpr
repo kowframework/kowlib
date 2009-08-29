@@ -9,7 +9,7 @@
 
 
 
-with "kowlib.gpr";
+with "../kowlib.gpr";
 
 
 project KOWlib.Samples is
