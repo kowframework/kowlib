@@ -16,6 +16,11 @@ package KOW_Lib.Regular_Expressions is
 	type Replace_Method_Type is ( Group_Only, Entire_String );
 	-- should the replace procedures return the entire string with
 	-- the group replaced or only the replaced group?
+	--
+	-- if entire_string, replaces only if has found match; otherwise does not change 
+	-- the string
+	--
+	-- if group_only, return the replace_subject with some atempt to fill in some info
 
 
 	function Get_Match(
