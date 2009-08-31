@@ -28,6 +28,7 @@ package body KOW_Lib.Regular_Expressions is
 			Subject		: in String;
 			Pattern		: in Pattern_Matcher;
 			Replace_Subject	: in String;
+			Replace_Method	: in Replace_Method_Type := Group_Only;
 			Max_Groups	: in Match_Count := 5
 		) return String is
 		-- Replace using agiven matcher pattern and
@@ -40,10 +41,10 @@ package body KOW_Lib.Regular_Expressions is
 		Matches		: Match_Array( 0 .. Max_Groups );
 
 		Replace_Matches	: Match_Array( 0 .. Max_Groups );
-		The_Match	: Match_Location;
 
 
 		function Build_Response( Current_Index	: in Integer ) return String is
+			The_Match	: Match_Location;
 		begin
 
 
@@ -80,7 +81,17 @@ package body KOW_Lib.Regular_Expressions is
 				Data	=> Subject,
 				Matches	=> Matches
 			);
-		return Build_Response( Current_Index	=> Replace_Subject'First );
+		if Replace_Method = Group_Only then
+			return Build_Response( Current_Index => Replace_Subject'First );
+		else
+			if Matches(0) = No_Match then
+				return Subject & "NAO";
+			else
+				return  Subject( Subject'First .. Matches(0).First - 1 ) &
+						Build_Response( Current_Index => Replace_Subject'First ) &
+						Subject( Matches(0).Last + 1 .. Subject'Last );
+			end if;
+		end if;
 	end Replace;
 
 
@@ -88,13 +99,14 @@ package body KOW_Lib.Regular_Expressions is
 			Subject		: in String;
 			Pattern		: in String;
 			Replace_Subject	: in String;
+			Replace_Method	: in Replace_Method_Type := Group_Only;
 			Max_Groups	: in Match_Count := 5
 		) return String is
 		-- same as above, but pattern isn't compilled when it's comming in
 
 		P_Matcher : Pattern_Matcher := Compile( Pattern );
 	begin
-		return Replace( Subject, P_Matcher, Replace_Subject, Max_Groups );
+		return Replace( Subject, P_Matcher, Replace_Subject, Replace_Method, Max_Groups );
 	end Replace;
 
 

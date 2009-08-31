@@ -13,6 +13,9 @@ package KOW_Lib.Regular_Expressions is
 	Replace_Pattern	: constant Pattern_Matcher := Compile( "(\\\d+)" );
 
 
+	type Replace_Method_Type is ( Group_Only, Entire_String );
+	-- should the replace procedures return the entire string with
+	-- the group replaced or only the replaced group?
 
 
 	function Get_Match(
@@ -26,6 +29,7 @@ package KOW_Lib.Regular_Expressions is
 			Subject		: in String;
 			Pattern		: in Pattern_Matcher;
 			Replace_Subject	: in String;
+			Replace_Method	: in Replace_Method_Type := Group_Only;
 			Max_Groups	: in Match_Count := 5
 		) return String;
 	-- Replace using agiven matcher pattern and
@@ -40,6 +44,7 @@ package KOW_Lib.Regular_Expressions is
 			Subject		: in String;
 			Pattern		: in String;
 			Replace_Subject	: in String;
+			Replace_Method	: in Replace_Method_Type := Group_Only;
 			Max_Groups	: in Match_Count := 5
 		) return String;
 	-- same as above, but pattern isn't compilled when it's comming in

@@ -25,13 +25,28 @@ procedure Regular_Expressions_Test is
 	begin
 		My_Vector := KOW_Lib.Regular_Expressions.Split(
 				subject,
-				"(\d+)",
+				"(\d+)|(\ )",
 				append_null
 			);
 
 		Put_Line( "Running split on """ & Subject & """ ( Append_Null :: " & Boolean'Image( Append_Null ) & ")" );
 		KOW_Lib.UString_Vectors.Iterate( My_Vector, Iterator'Access );
 	end Split_It;
+
+
+	procedure Split_It2( Subject : in String; Append_Null : Boolean := True ) is
+		My_Vector : KOW_Lib.UString_Vectors.Vector;
+	begin
+		My_Vector := KOW_Lib.Regular_Expressions.Split(
+				subject,
+				"(\ |\.|\,|\(|\)|\[|\]|\{|\}|\!|\?|\;|\:)",
+				append_null
+			);
+
+		Put_Line( "Running split on """ & Subject & """ ( Append_Null :: " & Boolean'Image( Append_Null ) & ")" );
+		KOW_Lib.UString_Vectors.Iterate( My_Vector, Iterator'Access );
+	end Split_It2;
+
 
 begin
 
@@ -43,6 +58,33 @@ begin
 			)
 		);
 	
+	Put_Line( 
+			KOW_Lib.Regular_Expressions.Replace(
+				"não-coisa não-coisas",
+				"^não-(.*)$",
+				"\0 => não \1",
+				KOW_Lib.Regular_Expressions.Entire_String
+			)
+		);
+	
+
+	Put_Line( 
+			KOW_Lib.Regular_Expressions.Replace(
+				"idéia de girico",
+				"éia(s|)(\W|$)",
+				"eia\1\2"
+			)
+		);
+	
+	Put_Line( 
+			KOW_Lib.Regular_Expressions.Replace(
+				"idéia de girico",
+				"éia(s|)(\W|$)",
+				"eia\1\2",
+				KOW_Lib.Regular_Expressions.Entire_String
+			)
+		);
+
 
 	New_Line( 2 );
 
@@ -52,7 +94,7 @@ begin
 	New_Line;
 	Split_It( "uma1string2separada3por4" );
 	New_Line;
-	Split_It( "uma string não separada por números" );
+	Split_It2( "uma string não separada por números" );
 
 
 	New_Line( 2 );
