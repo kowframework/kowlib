@@ -85,6 +85,25 @@ begin
 			)
 		);
 
+	Put_Line( 
+			KOW_Lib.Regular_Expressions.Replace(
+				"esse foi um ato heróico!",
+				"óico(s|)(\W|$)",
+				"oico\1\2",
+				KOW_Lib.Regular_Expressions.Entire_String
+			)
+		);
+
+	Put_Line( 
+			KOW_Lib.Regular_Expressions.Replace(
+				"esse foi um ato heróico!",
+				"óico(s|)(\W|$)",
+				"oico\1\2",
+				KOW_Lib.Regular_Expressions.Group_Only
+			)
+		);
+
+
 
 	New_Line( 2 );
 
