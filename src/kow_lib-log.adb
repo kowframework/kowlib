@@ -34,6 +34,9 @@ with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;		use Ada.Text_IO;
 
 
+
+with KOW_Lib.Calendar;
+
 package body KOW_Lib.Log is
 
 
@@ -60,6 +63,12 @@ package body KOW_Lib.Log is
 	end Get_Logger;
 
 
+
+
+
+	Fmter : constant KOW_Lib.Calendar.Formatter := KOW_Lib.Calendar.Get_Formatter( "%Y-%m-%d %H:%M:%S" );
+
+
 	procedure Log(	Logger	: in Logger_Type;
 			Level	: in Log_Level;
 			Message	: in String) is
@@ -69,10 +78,19 @@ package body KOW_Lib.Log is
 		procedure Inner_Log( Output: in File_Type ) is
 			-- this procedure is called only when the message
 			-- has to be logged.
-			Log_String: String :=
-				"[" & Log_Level'Image( Level ) &
-				" @ " & To_String( Logger.Component ) & "] " &
-				Message;
+
+
+			function Now_Str return String is
+				pragma Inline( Now_Str );
+				use KOW_Lib.Calendar;
+			begin
+				return '[' & Format( Fmter, Get_Date ) & ']';
+			end Now_Str;
+
+			Log_String: String := Now_Str &
+						" [" & Log_Level'Image( Level ) &
+						" @ " & To_String( Logger.Component ) & "] " &
+						Message;
 		begin
 			Put( Output, Log_String );
 			New_Line( Output );
