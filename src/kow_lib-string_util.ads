@@ -77,6 +77,20 @@ package KOW_Lib.String_Util is
 		Ada.Containers.Vectors(	Element_Type 	=> Natural,
 					Index_Type	=> Natural );
 
+
+
+	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
+	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
+	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
+	-- -------------------BIG AND FAT WARNING ---------------  --
+	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
+	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
+	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
+	
+	-- The str_replace implementation assumes the string is from 1 .. 'length...
+	-- which is a big and fat lie! no one can assure that and it's also undocumented in here....
+	--
+	-- change the implementation so it really works... DAMNIT!
 	function Str_Replace(	From, To, Str: in String;
 				Case_Sensitive: Boolean := True ) return Unbounded_String;
 	
