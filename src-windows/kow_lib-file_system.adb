@@ -271,5 +271,13 @@ package body KOW_Lib.File_System is
 		return Result;
 	end To_System_Path;
 
+
+	function "/"( L,R : in String ) return String is
+		-- return L & Separator & R
+	begin
+		return L & '\' & R;
+	end "/";
+
+
 end KOW_Lib.File_System;
 

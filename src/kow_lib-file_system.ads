@@ -82,4 +82,8 @@ package KOW_Lib.File_System is
 	function To_System_Path( Path: in String ) return String;
 	-- Convert the unix path to the one using the system separator
 
+
+	function "/"( L,R : in String ) return String;
+	-- return L & Separator & R
+
 end KOW_Lib.File_System;
