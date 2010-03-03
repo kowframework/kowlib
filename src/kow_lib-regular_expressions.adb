@@ -85,7 +85,7 @@ package body KOW_Lib.Regular_Expressions is
 			return Build_Response( Current_Index => Replace_Subject'First );
 		else
 			if Matches(0) = No_Match then
-				return Subject & "NAO";
+				return Subject;
 			else
 				return  Subject( Subject'First .. Matches(0).First - 1 ) &
 						Build_Response( Current_Index => Replace_Subject'First ) &
