@@ -120,6 +120,8 @@ package KOW_Lib.String_Util is
 
 
 
+	function Scriptify( Str : in String ) return String;
+	-- replace \ by \\, " by \" and ' by \' for sending to external resources as a single string
 private
 
 	function Find_Occurances(	Find, Context : in String;

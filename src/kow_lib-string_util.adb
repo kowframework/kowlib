@@ -322,5 +322,24 @@ package body KOW_Lib.String_Util is
 	end Str_Replace;
 
 
+
+	function Scriptify( Str : in String ) return String is
+		-- replace \ by \\, " by \" and ' by \' for sending to external resources as a single string
+
+		The_Str : Unbounded_String := To_Unbounded_String( Str );
+
+		Escape	: String := (
+					1	=> '\',
+					2	=> ''',
+					3	=> '"'
+				);
+
+	begin
+		for i in Escape'Range loop
+			Str_Replace( From => Escape( i .. i ), To => '\' & Escape( i ), Str => The_Str );
+		end loop;
+
+		return To_String( The_Str );
+	end Scriptify;
 end KOW_Lib.String_Util;
 
