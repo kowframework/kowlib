@@ -78,19 +78,6 @@ package KOW_Lib.String_Util is
 					Index_Type	=> Natural );
 
 
-
-	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
-	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
-	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
-	-- -------------------BIG AND FAT WARNING ---------------  --
-	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
-	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
-	-- TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO --
-	
-	-- The str_replace implementation assumes the string is from 1 .. 'length...
-	-- which is a big and fat lie! no one can assure that and it's also undocumented in here....
-	--
-	-- change the implementation so it really works... DAMNIT!
 	function Str_Replace(	From, To, Str: in String;
 				Case_Sensitive: Boolean := True ) return Unbounded_String;
 	
@@ -129,6 +116,11 @@ private
 	-- uses the Knuth-Morris_Pratt string searching algorithm to
 	-- find all occurances of Find in Context and returns an vector
 	-- with the starting positions of each occurance
+	-- NOTE : as in 2010-05-25 we are not using the KMP algorithim as the implementation was
+	-- broken.
+	--
+	-- Instead of fixing I (Marcelo C. Freitas) used the Ada.Strings.Fixed functions to
+	-- find the desired positions.
 
 end KOW_Lib.String_Util;
 

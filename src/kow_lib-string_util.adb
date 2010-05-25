@@ -34,17 +34,21 @@
 -- Library to perform actions over Strings                                  --
 ------------------------------------------------------------------------------
 
-
-with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-
-with Ada.Containers;		use Ada.Containers;
-
-with KOW_Lib.UString_Vectors;
-with Ada.Text_IO;
+--------------
+-- Ada 2005 --
+--------------
 with Ada.Characters.Handling;	use Ada.Characters.Handling;
+with Ada.Containers;		use Ada.Containers;
+with Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
+with Ada.Text_IO;
 
--- Used for string replacement
--- with GNAT.Spitbol.Patterns;
+
+-------------------
+-- KOW Framework --
+-------------------
+with KOW_Lib.UString_Vectors;
+
 
 
 package body KOW_Lib.String_Util is
@@ -229,9 +233,32 @@ package body KOW_Lib.String_Util is
 	end Str_Replace;
 
 
-	function Find_Occurances(	Find, Context : in String; 
+	function Find_Occurances(
+					Find, Context	: in String;
+					Case_Sensitive	: in Boolean
+				) return Positions_Vectors.Vector is
+		Last_Index	: Natural := 0;
+		Vector		: Positions_Vectors.Vector;
+	begin
+		loop
+			Last_Index := Ada.Strings.Fixed.Index(
+					Source	=> Context,
+					Pattern	=> Find,
+					From	=> Positive( Last_Index + 1 )
+				);
+			exit when Last_Index = 0;
+
+			Positions_Vectors.Append( Vector, Last_Index );
+		end loop;
+
+		return Vector;
+	end Find_Occurances;
+
+
+	function KMP_Find_Occurances(	Find, Context : in String; 
 					Case_Sensitive: Boolean	)
 		return Positions_Vectors.Vector is
+		-- this implementation is broken as it expects every string to go from 1 to str'length..
 
 		type List is array ( Natural range <> ) of Integer;
 
@@ -300,7 +327,7 @@ package body KOW_Lib.String_Util is
 
 		return Matches;
 
-	end Find_Occurances;
+	end KMP_Find_Occurances;
 
 
 	-- for compatibility with older version
