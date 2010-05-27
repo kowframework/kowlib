@@ -351,14 +351,20 @@ package body KOW_Lib.String_Util is
 
 
 	function Scriptify( Str : in String ) return String is
-		-- replace \ by \\, " by \" and ' by \' for sending to external resources as a single string
+		-- process any string setting it safe to directly send to script environments such as bash
+		-- replace \ by \\, " by \" and ' by \' (and so on) for sending to external resources as a single string
 
 		The_Str : Unbounded_String := To_Unbounded_String( Str );
 
 		Escape	: String := (
-					1	=> '\',
-					2	=> ''',
-					3	=> '"'
+					 1	=> '\',
+					 2	=> ''',
+					 3	=> '"',
+					 4	=> '$',
+					 5	=> '{',  6	=> '}',
+					 7	=> '[',  8	=> ']',
+					 9	=> '(', 10	=> ')',
+					11	=> '&'
 				);
 
 	begin
