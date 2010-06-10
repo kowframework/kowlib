@@ -394,6 +394,7 @@ package body KOW_Lib.String_Util is
 		for i in Escape'Range loop
 			Str_Replace( From => Escape( i .. i ), To => '\' & Escape( i ), Str => The_Str );
 		end loop;
+		Str_Replace( From => "" & Ada.Characters.Latin_1.CR, To => "" , Str => The_Str );
 
 		return To_String( The_Str );
 	end JSon_Scriptify;
