@@ -374,5 +374,27 @@ package body KOW_Lib.String_Util is
 
 		return To_String( The_Str );
 	end Scriptify;
+
+
+
+	function JSon_Scriptify( Str : in String ) return String is
+		-- process any string setting it safe to directly send to JSon script environments such as bash
+		-- replace \ by \\, " by \" and ' by \' (and so on) for sending to external resources as a single string
+		The_Str : Unbounded_String := To_Unbounded_String( Str );
+
+		Escape	: String := (
+					 1	=> '\',
+					 2	=> ''',
+					 3	=> '"'
+				);
+
+	begin
+		for i in Escape'Range loop
+			Str_Replace( From => Escape( i .. i ), To => '\' & Escape( i ), Str => The_Str );
+		end loop;
+
+		return To_String( The_Str );
+	end JSon_Scriptify;
+
 end KOW_Lib.String_Util;
 

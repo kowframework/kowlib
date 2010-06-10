@@ -110,6 +110,12 @@ package KOW_Lib.String_Util is
 	function Scriptify( Str : in String ) return String;
 	-- process any string setting it safe to directly send to script environments such as bash
 	-- replace \ by \\, " by \" and ' by \' (and so on) for sending to external resources as a single string
+
+
+	function JSon_Scriptify( Str : in String ) return String;
+	-- process any string setting it safe to directly send to JSon script environments such as bash
+	-- replace \ by \\, " by \" and ' by \' (and so on) for sending to external resources as a single string
+
 private
 
 	function Find_Occurances(	Find, Context : in String;
