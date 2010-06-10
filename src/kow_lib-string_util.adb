@@ -38,6 +38,7 @@
 -- Ada 2005 --
 --------------
 with Ada.Characters.Handling;	use Ada.Characters.Handling;
+with Ada.Characters.Latin_1;
 with Ada.Containers;		use Ada.Containers;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
@@ -385,7 +386,8 @@ package body KOW_Lib.String_Util is
 		Escape	: String := (
 					 1	=> '\',
 					 2	=> ''',
-					 3	=> '"'
+					 3	=> '"',
+					 4	=> Ada.Characters.Latin_1.LF
 				);
 
 	begin
