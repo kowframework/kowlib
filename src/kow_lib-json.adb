@@ -495,7 +495,7 @@ package body KOW_Lib.Json is
 							end if;
 							if Str( to ) = Last_Quotation  then
 								D.The_Type := Json_String;
-								if To - 1 > From then
+								if To - 1 >= From then
 									D.Str := To_Unbounded_String( Str( From .. To - 1 ) );
 								else
 									D.Str := Null_Unbounded_String;

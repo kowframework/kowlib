@@ -29,7 +29,7 @@ begin
 
 	Put_Line( "Parsing array" );
 	declare
-		B_Array : Array_Type := From_Json( "['a','b',{chave:'valor'}]" );
+		B_Array : Array_Type := From_Json( "['ab','b',{chave:'valor'}]" );
 	begin
 		Put_Line( "Copying array" );
 		A_Array := B_Array;
