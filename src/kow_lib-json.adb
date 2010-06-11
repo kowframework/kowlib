@@ -126,6 +126,27 @@ package body KOW_Lib.Json is
 	end Get_Type;
 
 
+
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String ) ) is
+		procedure It( C : Json_Data_Maps.Cursor ) is
+		begin
+			Iterator.all( To_String( Json_Data_Maps.Key( C ) ) );
+		end It;
+	begin
+		Json_Data_Maps.Iterate( Object.Data, It'Access );
+	end Iterate;
+
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in Unbounded_String ) ) is
+		procedure It( C : Json_Data_Maps.Cursor ) is
+		begin
+			Iterator.all( Json_Data_Maps.Key( C ) );
+		end It;
+	begin
+		Json_Data_Maps.Iterate( Object.Data, It'Access );
+
+	end Iterate;
+
+
 	function From_Json( Str : in String ) return Object_Type is
 		Object		: Object_Type;
 		Char_Index	: Positive := 1;
@@ -348,6 +369,16 @@ package body KOW_Lib.Json is
 		return Data.The_Type;
 	end Get_Type;
 
+
+
+	procedure Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural ) ) is
+		procedure It( C : in Json_Data_Vectors.Cursor ) is
+		begin
+			Iterator.all( Json_Data_Vectors.To_Index( C ) );
+		end It;
+	begin
+		Json_Data_Vectors.Iterate( A.Data, It'Access );
+	end Iterate;
 
 
 

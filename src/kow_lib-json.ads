@@ -64,6 +64,9 @@ package KOW_Lib.Json is
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type;
 
 
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String ) );
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in Unbounded_String ) );
+
 	function From_Json( Str : in String ) return Object_Type;
 	procedure From_Json(
 				Str		: in     String;
@@ -110,6 +113,8 @@ package KOW_Lib.Json is
 	function Get( A : in Array_Type; Index : in Natural ) return Array_Type;
 
 	function Get_Type( A : in Array_Type; Index: in Natural ) return Json_Object_Type;
+
+	procedure Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural ) );
 
 
 	function From_Json( Str : in String ) return Array_Type;
