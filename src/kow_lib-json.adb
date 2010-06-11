@@ -304,7 +304,21 @@ package body KOW_Lib.Json is
 					Object		:= O;
 					return;
 
-				when '{' | ',' =>
+				when '{' =>
+					if Should_Read /= Read_Key then
+						raise SYNTAX_ERROR with "should be ready to read a value and I found a key at " & Positive'Image( char_index );
+					end if;
+					Char_index := Char_Index + 1;
+					Jump_Spaces( Str, Char_Index );
+					if Str( Char_Index ) = '}' then
+						-- empty object
+						Char_Index := Char_Index + 1;
+						return;
+					end if;
+					Read_Key( Str, Char_Index, Last_Key );
+					Should_Read := Read_Value;
+
+				when ',' =>
 					if Should_Read /= Read_Key then
 						raise SYNTAX_ERROR with "should be ready to read a value and I found a key at " & Positive'Image( char_index );
 					end if;
@@ -530,7 +544,22 @@ package body KOW_Lib.Json is
 					Char_index	:= Char_Index + 1;
 					A		:= The_A;
 					return;
-				when '[' | ',' =>
+				when '[' =>
+					Char_Index := Char_Index + 1;
+					Jump_Spaces( Str, Char_Index );
+					if Str( Char_Index ) = ']' then
+						-- empty array
+						Char_Index := Char_Index + 1;
+						return;
+					end if;
+
+					declare
+						Data : Json_Data_Type;
+					begin
+						From_Json( Str, Char_Index, Data );
+						Json_Data_Vectors.Append( The_A.Data, Data );
+					end;
+				when ',' =>
 					Char_Index := Char_Index + 1;
 					Jump_Spaces( Str, Char_Index );
 					declare
@@ -539,6 +568,7 @@ package body KOW_Lib.Json is
 						From_Json( Str, Char_Index, Data );
 						Json_Data_Vectors.Append( The_A.Data, Data );
 					end;
+
 				when others =>
 					raise SYNTAX_ERROR with "(array_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
 			end case;

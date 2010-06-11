@@ -92,7 +92,7 @@ begin
 
 	Put_Line( "Parsing a biger json" );
 	A_object := From_Json(
-"{status:'success',text_contents:[{original_tag:'TECA.ENTITIES.TEXT_CONTENT_ENTITY',id:'1',filter_tags:'',title:'Teste',owner_identity:'teste_aluno1',creation_time:'2010-06-09 03:04:22',update_time:'2010-06-09 03:04:22',content:'<p>Texto de <strong>teste</strong>!</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>Aqui vai mais texto pra testar :)</p>',owner_identity:'teste_aluno1'}],some_integer:1 ,some_other_integer:10}"
+"{status:'success',text_contents:[{original_tag:'TECA.ENTITIES.TEXT_CONTENT_ENTITY',id:'1',filter_tags:'',title:'Teste',owner_identity:'teste_aluno1',creation_time:'2010-06-09 03:04:22',update_time:'2010-06-09 03:04:22',content:'<p>Texto de <strong>teste</strong>!</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>Aqui vai mais texto pra testar :)</p>',owner_identity:'teste_aluno1'}],some_integer:1 ,some_other_integer:10,empty_object:{},empty_array:[]}"
 );
 
 	Put_Line("Printing.." );
@@ -119,7 +119,7 @@ begin
 
 
 	A_Array := From_Json(
-"[{""type"":""user"",""user"":{""username"":""teste_admin"",""first_name"":""Administrador"",""last_name"":""do Colégio de Testes""}},{""type"":""user"",""user"":{""username"":""teste_professor1"",""first_name"":""Marcelo"",""last_name"":""Coraça de Freitas""}},{""type"":""user"",""user"":{""username"":""teste_professor2"",""first_name"":""Jorge"",""last_name"":""Sallum""}},{""type"":""user"",""user"":{""username"":""teste_aluno1"",""first_name"":""Bruno"",""last_name"":""Costa""}},{""type"":""user"",""user"":{""username"":""teste_aluno2"",""first_name"":""Iuri"",""last_name"":""Pereira""}},{""type"":""user"",""user"":{""username"":""teste_aluno3"",""first_name"":""Adélia"",""last_name"":""Barbosa""}},{""type"":""user"",""user"":{""username"":""teste_aluno4"",""first_name"":""Fabio"",""last_name"":""Mantegari""}},{""type"":""textContent"",""textContent"":{""id"":""1"",""title"":""Teste"",""owner_identity"":""teste_aluno1""}}]"
+"[{""type"":""user"",""user"":{""username"":""teste_admin"",""first_name"":""Administrador"",""last_name"":""do Colégio de Testes""}},{""type"":""user"",""user"":{""username"":""teste_professor1"",""first_name"":""Marcelo"",""last_name"":""Coraça de Freitas""}},{""type"":""user"",""user"":{""username"":""teste_professor2"",""first_name"":""Jorge"",""last_name"":""Sallum""}},{""type"":""user"",""user"":{""username"":""teste_aluno1"",""first_name"":""Bruno"",""last_name"":""Costa""}},{""type"":""user"",""user"":{""username"":""teste_aluno2"",""first_name"":""Iuri"",""last_name"":""Pereira""}},{""type"":""user"",""user"":{""username"":""teste_aluno3"",""first_name"":""Adélia"",""last_name"":""Barbosa""}},{""type"":""user"",""user"":{""username"":""teste_aluno4"",""first_name"":""Fabio"",""last_name"":""Mantegari""}},{""type"":""textContent"",""textContent"":{""id"":""1"",""title"":""Teste"",""owner_identity"":""teste_aluno1""}},{type:'trash'}]"
 );
 
 
