@@ -10,6 +10,8 @@ with Ada.Finalization;
 with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
 
 
+-- TODO :: implement support for numeric values
+
 package KOW_Lib.Json is
 
 	SYNTAX_ERROR : Exception;
