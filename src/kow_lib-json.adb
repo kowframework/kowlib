@@ -23,12 +23,6 @@ package body KOW_Lib.Json is
 	-- Helper Methods --
 	--------------------
 
-	procedure Inc( Map : in out Json_Data_Maps.Map; Key : in String; Value : in Json_Data_Type ) is
-	begin
-		Json_Data_Maps.Include( Map, To_Unbounded_String( Key ), Value );
-	end Inc;
-
-	
 	procedure Check( Expected : Json_Object_Type; Received : Json_Object_Type ) is
 	begin
 		if Expected /= Received then
@@ -57,70 +51,152 @@ package body KOW_Lib.Json is
 	end Jump_Spaces;
 
 
+	--------------------
+	-- Json Data Type --
+	--------------------
+	
+	-- int
+	function To_Data( Value : in Integer ) return Json_Data_Type is
+		D : Json_Data_Type;
+	begin
+		D.The_Type := Json_Integer;
+		D.Int := Value;
+		return D;
+	end To_Data;
+	
+	function From_Data( Data : in Json_Data_Type ) return Integer is
+	begin
+		Check( Json_Integer, Data.The_Type );
+		return Data.Int;
+	end From_Data;
+
+	-- string	
+	function To_Data( Value : in String ) return Json_Data_Type is
+	begin
+		return To_Data( To_Unbounded_String( Value ) );
+	end To_Data;
+
+	function From_Data( Data : in Json_Data_Type ) return String is
+	begin
+		return To_String( From_Data( Data ) );
+	end From_Data;
+
+	-- unbounded string
+	function To_Data( Value : in Unbounded_String ) return Json_Data_Type is
+		D : Json_Data_Type;
+	begin
+		D.The_Type := Json_String;
+		D.Str := Value;
+		return D;
+	end To_Data;
+
+	function From_Data( Data : in Json_Data_Type ) return Unbounded_String is
+	begin
+		Check( Data.The_Type, Json_String );
+		return Data.Str;
+	end From_Data;
+
+
 	---------------------
 	-- The Object Type --
 	---------------------
 
 
+	function To_Data( Value : in Object_Type ) return Json_Data_Type is
+		D : Json_Data_Type;
+	begin
+		D.The_Type := Json_Object;
+		D.Object.all := Value;
+		return D;
+	end To_Data;
+
+	function From_Data( Data : in Json_Data_Type ) return Object_Type is
+	begin
+		Check( Json_Object, Data.The_type );
+		return Data.Object.all;
+	end From_Data;
+
 	-- 
 	-- Setters
 	--
 
+	procedure Set( Object : in out Object_Type; Key : in String; Value : in Json_Data_Type ) is
+	begin
+		Json_Data_Maps.Include( Object.Data, To_Unbounded_String( Key ), Value );
+	end Set;
+
+	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Json_Data_Type ) is
+	begin
+		Json_Data_Maps.Include( Object.Data, Key, Value );
+	end Set;
+
+	procedure Set( Object : in out Object_Type; Key : in String; Value : in Integer ) is
+	begin
+		Set( Object, Key, To_Data( Value ) );
+	end Set;
+
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in String ) is
 	begin
-		Set( Object, To_Unbounded_String( Key ), To_Unbounded_String( Value ) );
+		Set( Object, Key, To_Data( Value ) );
 	end Set;
 
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Unbounded_String ) is
 	begin
-		Set( Object, To_Unbounded_String( Key ), Value );
+		Set( Object, Key, To_Data( Value ) );
 	end Set;
 
 	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Unbounded_String ) is
-		Data : Json_Data_Type;
 	begin
-		Data.The_Type := Json_String;
-		Data.Str := Value;
-		Json_Data_Maps.Include( Object.Data, Key, Data );
+		Set( Object, Key, To_Data( Value ) );
 	end Set;
 
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Object_Type ) is
-		Data : Json_Data_Type;
 	begin
-		Data.The_Type := Json_Object;
-		Data.Object.all := Value;
-		Inc( Object.Data, Key, Data );
+		Set( Object, Key, To_Data( Value ) );
 	end Set;
 
 	--
 	-- Getters
 	--
+
+
+	function Get( Object : in Object_Type; Key : in String ) return Json_Data_Type is
+	begin
+		return Get( Object, To_Unbounded_String( key ) );
+	end Get;
+
+	function Get( Object : in Object_Type; Key : in Unbounded_String ) return Json_Data_Type is
+	begin
+		return Json_Data_Maps.Element( Object.Data, Key );
+	end Get;
+
+	function Get( Object : in Object_Type; Key : in String ) return integer is
+	begin
+		return From_Data( Get( Object, Key ) );
+	end Get;
+
 	function Get( Object : in Object_Type; Key : in String ) return String is
 	begin
-		return To_String( Get( Object, To_Unbounded_String( Key ) ) );
+		return From_Data( Get( Object, Key ) );
 	end Get;
 
 	function Get( Object : in Object_Type; Key : in String ) return Unbounded_String is
 	begin
-		return Get( Object, To_Unbounded_String( Key ) );
+		return From_Data( Get( Object, Key ) );
 	end Get;
 
 	function Get( Object : in Object_Type; Key : in Unbounded_String ) return Unbounded_String is
-		Data : Json_Data_Type := Json_Data_Maps.Element( Object.Data, Key );
 	begin
-		Check( Data.The_Type, Json_String );
-		return Data.Str;
+		return From_Data( Get( Object, Key ) );
 	end Get;
 
 	function Get( Object : in Object_Type; Key : in String ) return Object_Type is
-		Data : Json_Data_Type := Json_Data_Maps.Element( Object.Data, To_Unbounded_String( Key ) );
 	begin
-		Check( Data.The_Type, Json_object );
-		return Data.Object.all;
+		return From_Data( Get( Object, Key ) );
 	end Get;
 
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type is
-		Data : Json_Data_type := Json_Data_maps.Element( Object.Data, To_Unbounded_String( Key ) );
+		Data : Json_Data_type := Get( Object, key );
 	begin
 		return Data.The_Type;
 	end Get_Type;
@@ -143,7 +219,24 @@ package body KOW_Lib.Json is
 		end It;
 	begin
 		Json_Data_Maps.Iterate( Object.Data, It'Access );
+	end Iterate;
 
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String; Value : in Json_Data_Type ) ) is
+		procedure It( C : Json_Data_maps.Cursor ) is
+		begin
+			Iterator.all( To_String( Json_Data_Maps.Key( C ) ), Json_Data_Maps.Element( C ) );
+		end It;
+	begin
+		Json_Data_Maps.Iterate( Object.Data, It'Access );
+	end Iterate;
+
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in Unbounded_String; Value : in Json_Data_Type ) ) is
+		procedure It( C : Json_Data_maps.Cursor ) is
+		begin
+			Iterator.all( Json_Data_Maps.Key( C ), Json_Data_Maps.Element( C ) );
+		end It;
+	begin
+		Json_Data_Maps.Iterate( Object.Data, It'Access );
 	end Iterate;
 
 
@@ -269,102 +362,127 @@ package body KOW_Lib.Json is
 	--------------------
 
 
-	--
-	-- Replacers
-	--
-
-	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in String ) is
-	begin
-		Replace( A, Index, To_Unbounded_String( Value ) );
-	end Replace;
-
-	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Unbounded_String ) is
-		Data : Json_Data_Type;
-	begin
-		Data.The_Type := Json_String;
-		Data.Str := Value;
-		Json_Data_Vectors.Replace_Element( A.Data, Index, Data );
-	end Replace;
-
-	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Object_Type ) is
-		Data : Json_Data_Type;
-	begin
-		Data.The_Type := Json_Object;
-		Data.Object.all := Value;
-		Json_Data_Vectors.Replace_Element( A.Data, Index, Data );
-	end Replace;
-
-	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Array_Type ) is
+	function To_Data( Value : in Array_Type ) return Json_Data_Type is
 		Data : Json_Data_Type;
 	begin
 		Data.The_Type := Json_Array;
 		Data.Vector.all := Value;
-		Json_Data_Vectors.Replace_Element( A.Data, Index, Data );
+		return Data;
+	end To_Data;
+
+	function From_Data( Data : in Json_Data_Type ) return Array_Type is
+	begin
+		Check( Json_Array, Data.The_Type );
+		return Data.Vector.all;
+	end From_Data;
+	--
+	-- Replacers
+	--
+
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Json_Data_type ) is
+	begin
+		Json_Data_Vectors.Replace_Element( A.Data, Index, Value );
+	end Replace;
+
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Integer ) is
+	begin
+		Replace( A, Index, To_Data( Value ) );
+	end Replace;
+
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in String ) is
+	begin
+		Replace( A, Index, To_Data( Value ) );
+	end Replace;
+
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Unbounded_String ) is
+	begin
+		Replace( A, Index, To_Data( Value ) );
+	end Replace;
+
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Object_Type ) is
+	begin
+		Replace( A, Index, To_Data( Value ) );
+	end Replace;
+
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Array_Type ) is
+	begin
+		Replace( A, Index, To_Data( Value ) );
 	end Replace;
 
 	-- 
 	-- Appenders
 	--
 
+	procedure Append( A : in out Array_Type; Value : in Json_Data_Type ) is
+	begin
+		Json_Data_Vectors.Append( A.Data, Value );
+	end Append;
+
+	procedure Append( A : in out Array_Type; Value : in Integer ) is
+	begin
+		Append( A, To_Data( Value ) );
+	end Append;
+
 	procedure Append( A : in out Array_Type; Value : in String ) is
 	begin
-		Append( A, To_Unbounded_String( Value ) );
+		Append( A, To_Data( Value ) );
 	end Append;
 
 	procedure Append( A : in out Array_Type; Value : in Unbounded_String ) is
-		Data : Json_Data_Type;
 	begin
-		Data.The_Type := Json_String;
-		Data.Str := Value;
-		Json_Data_Vectors.Append( A.Data, Data );
+		Append( A, To_Data( Value ) );
 	end Append;
 
 	procedure Append( A : in out Array_Type; Value : in Object_Type ) is
-		Data : Json_Data_Type;
 	begin
-		Data.The_Type := Json_Object;
-		Data.Object.all := Value;
-		Json_Data_Vectors.Append( A.Data, Data );
+		Append( A, To_Data( Value ) );
 	end Append;
 
 	procedure Append( A : in out Array_Type; Value : in Array_Type ) is
-		Data : Json_Data_Type;
 	begin
-		Data.The_Type := Json_Array;
-		Data.Vector.all := Value;
-		Json_Data_Vectors.Append( A.Data, Data );
+		Append( A, To_Data( Value ) );
 	end Append;
 
 	
+	--
+	-- Getters
+	--
+
+	function Get( A : in Array_Type; Index : in Natural ) return Json_Data_Type is
+	begin
+		return Json_Data_Vectors.ELement( A.Data, Index );
+	end Get;
+
+
+	function Get( A : in Array_Type; Index : in Natural ) return Integer is
+	begin
+		return From_Data( Get( A, Index ) );
+	end Get;
+
 	function Get( A : in Array_Type; Index : in Natural ) return String is
 	begin
-		return To_String( Get( A, Index ) );
+		return From_Data( Get( A, Index ) );
 	end Get;
 
 	function Get( A : in Array_Type; Index : in Natural ) return Unbounded_String is
-		Data : Json_Data_Type := Json_Data_Vectors.Element( A.Data, Index );
 	begin
-		return Data.Str;
+		return From_Data( Get( A, Index ) );
 	end Get;
 		
 	function Get( A : in Array_Type; Index : in Natural ) return Object_Type is
-		Data : Json_Data_Type := Json_Data_Vectors.Element( A.Data, Index );
 	begin
-		Check( Data.The_Type, Json_Object );
-		return Data.Object.all;
+		return From_Data( Get( A, Index ) );
 	end Get;
 
 	function Get( A : in Array_Type; Index : in Natural ) return Array_Type is
-		Data : Json_Data_Type := Json_Data_Vectors.Element( A.Data, Index );
 	begin
-		Check( Data.The_Type, Json_Array );
-		return Data.Vector.all;
+		return From_Data( Get( A, Index ) );
 	end Get;
 
 
 
 	function Get_Type( A : in Array_Type; Index: in Natural ) return Json_Object_Type is
-		Data : Json_Data_Type := Json_Data_Vectors.Element( A.Data, Index );
+		Data : Json_Data_Type := Get( A, Index );
 	begin
 		return Data.The_Type;
 	end Get_Type;
@@ -381,6 +499,14 @@ package body KOW_Lib.Json is
 	end Iterate;
 
 
+	procedure Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural; Value : in Json_Data_Type ) ) is
+		procedure It( C : in Json_Data_Vectors.Cursor ) is
+		begin
+			Iterator.All( Json_Data_Vectors.To_Index( C ), Json_Data_Vectors.Element( C ) );
+		end It;
+	begin
+		Json_Data_Vectors.Iterate( A.Data, It'Access );
+	end Iterate;
 
 	function From_Json( Str : in String ) return Array_Type is
 		Char_index : positive := 1;
@@ -446,18 +572,13 @@ package body KOW_Lib.Json is
 
 	-- Missing methods for object_Type
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Array_Type ) is
-		Data : Json_Data_Type;
 	begin
-		Data.The_Type := Json_Array;
-		Data.Vector.all := Value;
-		Inc( Object.Data, Key, Data );
+		Json_Data_Maps.Include( Object.Data, To_Unbounded_String( Key ), To_Data( Value ) );
 	end Set;
 
 	function Get( Object : in Object_Type; Key : in String ) return Array_Type is
-		Data : Json_Data_Type := Json_Data_Maps.Element( Object.Data, To_Unbounded_String( Key ) );
 	begin
-		Check( Data.The_Type, Json_Array );
-		return Data.Vector.all;
+		return From_Data( Get( Object, Key ) );
 	end Get;
 
 
@@ -576,6 +697,8 @@ package body KOW_Lib.Json is
 	function To_Json( Data : in Json_Data_Type ) return String is
 	begin
 		case Data.The_Type is
+			when Json_Integer =>
+				return Integer'Image( Data.Int );
 			when Json_String =>
 				return ''' & KOW_Lib.String_Util.Json_Scriptify( To_String( Data.Str ) ) & ''';
 			when Json_Array =>

@@ -17,7 +17,7 @@ package KOW_Lib.Json is
 	SYNTAX_ERROR : Exception;
 	-- the syntax error when parsin a json string
 
-	type Json_Object_Type is ( Json_String, Json_Array, Json_Object );
+	type Json_Object_Type is ( Json_Integer, Json_String, Json_Array, Json_Object );
 	-- the possible json types.
 	-- an array can have string, arrays (in the ada side they are vectors) and objects
 	-- an object can have all of them also, but hold them as a map
@@ -36,8 +36,44 @@ package KOW_Lib.Json is
 	-- 	. string
 
 
+	type Json_Data_Type is new Ada.Finalization.Controlled with private;
+	-- private type to avoid user messing up with it..
+	
+
+	--
+	-- Controlled Methods
+	--
+	overriding
+	procedure Initialize( Object : in out Json_Data_Type );
+
+	overriding
+	procedure Adjust( Object : in out Json_Data_Type );
+		
+	overriding
+	procedure Finalize( Object : in out Json_Data_Type );
 
 
+	--
+	-- Json Conversion
+	--
+	function From_Json( Str : in String ) return Json_Data_Type;
+	procedure From_Json(
+				Str		: in     String;
+				Char_Index	: in out Positive;
+				Data		:    out Json_Data_Type
+			);
+	function To_Json( Data : in Json_Data_Type ) return String;
+
+
+
+	function To_Data( Value : in Integer ) return Json_Data_Type;
+	function From_Data( Data : in Json_Data_Type ) return Integer;
+
+	function To_Data( Value : in String ) return Json_Data_Type;
+	function From_Data( Data : in Json_Data_Type ) return String;
+
+	function To_Data( Value : in Unbounded_String ) return Json_Data_Type;
+	function From_Data( Data : in Json_Data_Type ) return Unbounded_String;
 
 	---------------------
 	-- The Object Type --
@@ -45,10 +81,17 @@ package KOW_Lib.Json is
 	type Object_Type is private;
 	type Object_Ptr is access Object_Type;
 
+
+	function To_Data( Value : in Object_Type ) return Json_Data_Type;
+	function From_Data( Data : in Json_Data_Type ) return Object_Type;
+	
 	--
 	-- setters
 	--
 
+	procedure Set( Object : in out Object_Type; Key : in String; Value : in Json_Data_Type );
+	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Json_Data_Type );
+	procedure Set( Object : in out Object_Type; Key : in String; Value : in Integer );
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in String );
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Unbounded_String );
 	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Unbounded_String );
@@ -58,6 +101,9 @@ package KOW_Lib.Json is
 	-- getters
 	--
 
+	function Get( Object : in Object_Type; Key : in String ) return Json_Data_Type;
+	function Get( Object : in Object_Type; Key : in Unbounded_String ) return Json_Data_Type;
+	function Get( Object : in Object_Type; Key : in String ) return Integer;
 	function Get( Object : in Object_Type; Key : in String ) return String;
 	function Get( Object : in Object_Type; Key : in String ) return Unbounded_String;
 	function Get( Object : in Object_Type; Key : in Unbounded_String ) return Unbounded_String;
@@ -68,6 +114,11 @@ package KOW_Lib.Json is
 
 	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String ) );
 	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in Unbounded_String ) );
+
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in Unbounded_String; Value : in Json_Data_Type ) );
+	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String; Value : in Json_Data_Type ) );
+
+
 
 	function From_Json( Str : in String ) return Object_Type;
 	procedure From_Json(
@@ -86,10 +137,14 @@ package KOW_Lib.Json is
 	type Array_Type is private;
 	type Array_Ptr is access Array_Type;
 
+	function To_Data( Value : in Array_Type ) return Json_Data_Type;
+	function From_Data( Data : in Json_Data_Type ) return Array_Type;
 	--
 	-- Replacers
 	--
 
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Json_Data_type );
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Integer );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in String );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Unbounded_String );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Object_Type );
@@ -99,6 +154,8 @@ package KOW_Lib.Json is
 	-- Appenders
 	--
 
+	procedure Append( A : in out Array_Type; Value : in Json_Data_Type );
+	procedure Append( A : in out Array_Type; Value : in Integer );
 	procedure Append( A : in out Array_Type; Value : in String );
 	procedure Append( A : in out Array_Type; Value : in Unbounded_String );
 	procedure Append( A : in out Array_Type; Value : in Object_Type );
@@ -109,6 +166,8 @@ package KOW_Lib.Json is
 	-- Getters
 	--
 
+	function Get( A : in Array_Type; Index : in Natural ) return Json_Data_Type;
+	function Get( A : in Array_Type; Index : in Natural ) return Integer;
 	function Get( A : in Array_Type; Index : in Natural ) return String;
 	function Get( A : in Array_Type; Index : in Natural ) return Unbounded_String;
 	function Get( A : in Array_Type; Index : in Natural ) return Object_Type;
@@ -117,6 +176,7 @@ package KOW_Lib.Json is
 	function Get_Type( A : in Array_Type; Index: in Natural ) return Json_Object_Type;
 
 	procedure Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural ) );
+	procedure Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural; Value : in Json_Data_Type ) );
 
 
 	function From_Json( Str : in String ) return Array_Type;
@@ -141,29 +201,13 @@ private
 	type Json_Data_Type is new Ada.Finalization.Controlled with record
 		the_type : json_object_type;
 
+		int	: integer;
 		str	: unbounded_string;
 		object	: object_ptr;
 		vector	: array_ptr;
 	end record;
 
 	
-	overriding
-	procedure Initialize( Object : in out Json_Data_Type );
-
-	overriding
-	procedure Adjust( Object : in out Json_Data_Type );
-		
-	overriding
-	procedure Finalize( Object : in out Json_Data_Type );
-
-
-	function From_Json( Str : in String ) return Json_Data_Type;
-	procedure From_Json(
-				Str		: in     String;
-				Char_Index	: in out Positive;
-				Data		:    out Json_Data_Type
-			);
-	function To_Json( Data : in Json_Data_Type ) return String;
 
 
 
