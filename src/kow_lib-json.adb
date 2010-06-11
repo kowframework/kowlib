@@ -31,7 +31,7 @@ package body KOW_Lib.Json is
 	
 	procedure Check( Expected : Json_Object_Type; Received : Json_Object_Type ) is
 	begin
-		if Expected /= Json_String then
+		if Expected /= Received then
 			raise CONSTRAINT_ERROR with
 				"expected " & Json_Object_Type'Image( Expected ) & 
 				" but received " & Json_object_Type'Image( Received );

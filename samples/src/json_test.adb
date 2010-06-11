@@ -49,6 +49,16 @@ begin
 	Put_Line( To_Json( A_Object ) );
 
 
+	declare
+		Str		: String := Get( A_Object, "status" );
+		Contents	: Array_Type := Get( A_object, "text_contents" );
+		First_Tag	: String := Get( Get( Contents, 0 ), "original_tag" );
+	begin
+		Put_Line( First_Tag );
+		Put_Line( Str );
+	end;
+
+
 	Put_Line( "Exiting" );
 end;
 
