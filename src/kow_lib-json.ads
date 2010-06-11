@@ -4,12 +4,11 @@
 -- Ada 2005 --
 --------------
 with Ada.Containers.Ordered_Maps;
+with Ada.Containers.Vectors;
 with Ada.Unchecked_Deallocation;
-with Ada.Finalization.Controlled;
+with Ada.Finalization;
 with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
 
-
--- TODO :: make the object_type into ta controlled type
 
 package KOW_Lib.Json is
 
@@ -42,28 +41,18 @@ package KOW_Lib.Json is
 	type Object_Type is private;
 	type Object_Ptr is access Object_Type;
 
-
 	--
-	-- Controlled Type Methods
-	--
-
-	overriding
-	procedure Adjust( Object : in out Object_Type );
-
-	overriding
-	procedure Finalize( Object : in out Object_Type );
-
-
-	--
-	-- New primitives
+	-- setters
 	--
 
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in String );
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Unbounded_String );
 	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Unbounded_String );
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Object_Type );
---	procedure Set( Object : in out Object_Type; Key : in String; Value : in Array_Type );
---	Note: the set() and get() for array types are declared after the definition..
+
+	--
+	-- getters
+	--
 
 	function Get( Object : in Object_Type; Key : in String ) return String;
 	function Get( Object : in Object_Type; Key : in String ) return Unbounded_String;
@@ -72,8 +61,6 @@ package KOW_Lib.Json is
 
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type;
 
---	function Get( Object : in Object_Type; Key : in String ) return Array_Type;
---	Note: the set() and get() for array types are declared after the definition..
 
 	--------------------
 	-- The Array Type --
@@ -82,63 +69,89 @@ package KOW_Lib.Json is
 	type Array_Type is private;
 	type Array_Ptr is access Array_Type;
 
+	--
+	-- Replacers
+	--
+
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in String );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Unbounded_String );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Object_Type );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Array_Type );
 
+	-- 
+	-- Appenders
+	--
+
 	procedure Append( A : in out Array_Type; Value : in String );
 	procedure Append( A : in out Array_Type; Value : in Unbounded_String );
 	procedure Append( A : in out Array_Type; Value : in Object_Type );
-	procedure Append( A : in out Array_Type; Value : in Object_Type );
+	procedure Append( A : in out Array_Type; Value : in Array_Type );
 
 	
-	function Get( A : in out Array_Type; Index : in Natural ) return String;
-	function Get( A : in out Array_Type; Index : in Natural ) return Unbounded_String;
-	function Get( A : in out Array_Type; Index : in Natural ) return Object_Type;
-	function Get( A : in out Array_Type; Index : in Natural ) return Array_Type;
+	--
+	-- Getters
+	--
+
+	function Get( A : in Array_Type; Index : in Natural ) return String;
+	function Get( A : in Array_Type; Index : in Natural ) return Unbounded_String;
+	function Get( A : in Array_Type; Index : in Natural ) return Object_Type;
+	function Get( A : in Array_Type; Index : in Natural ) return Array_Type;
+
+	function Get_Type( A : in Array_Type; Index: in Natural ) return Json_Object_Type;
 
 
-
+	-- Missing methods for object_Type
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Array_Type );
 	function Get( Object : in Object_Type; Key : in String ) return Array_Type;
 
 
 
 private
-	type Json_Data is new Ada.Finalization.Controlled with record
+	type Json_Data_Type is new Ada.Finalization.Controlled with record
 		the_type : json_object_type;
 
 		str	: unbounded_string;
 		object	: object_ptr;
 		vector	: array_ptr;
 	end record;
-	overriding
-	procedure Adjust( Object : in out Json_Data );
 
 	overriding
-	procedure Finalize( Object : in out Json_Data );
+	procedure Initialize( Object : in out Json_Data_Type );
+
+	overriding
+	procedure Adjust( Object : in out Json_Data_Type );
+		
+	overriding
+	procedure Finalize( Object : in out Json_Data_Type );
 
 
 
-	package Json_Data_Maps is new Ada.Container.Ordered_Maps(
+	package Json_Data_Maps is new Ada.Containers.Ordered_Maps(
 					Key_Type	=> Unbounded_String,
-					Element_Type	=> Json_Data
+					Element_Type	=> Json_Data_Type
 				);
-	package Json_Data_Vectors is new Ada.Container.Vectors(
+	package Json_Data_Vectors is new Ada.Containers.Vectors(
 					Index_Type	=> Natural,
-					Element_Type	=> Json_Data
+					Element_Type	=> Json_Data_Type
 				);
 
 
-	type Object_Type is new Ada.Finalization.Controlled with record
+	type Object_Type is record
 		Data	: Json_Data_Maps.Map;
 	end record;
+	procedure Free is new Ada.Unchecked_Deallocation(
+						Object	=> Object_Type,
+						Name	=> Object_ptr
+					);
 
 
-	type Array_Type is new Ada.Finalization.Controlled with record
+	type Array_Type is record
 		Data	: Json_Data_Vectors.Vector;
 	end record;
+	procedure Free is new Ada.Unchecked_Deallocation(
+						Object	=> Array_Type,
+						Name	=> Array_Ptr
+					);
 
 
 end KOW_Lib.Json;
