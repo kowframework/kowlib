@@ -161,7 +161,11 @@ package body KOW_Lib.Json is
 		end loop;
 
 		Key := To_Unbounded_String( Str( From .. To - 1 ) );
-		Char_Index := To + 1;
+		if str(to) = quotation then
+			Char_Index := To + 1;
+		else
+			Char_Index := To;
+		end if;
 	exception
 		when CONSTRAINT_ERROR =>
 			raise SYNTAX_ERROR with "json string prematurelly ended";
@@ -193,7 +197,7 @@ package body KOW_Lib.Json is
 					Char_index := Char_Index + 1;
 					Read_Key( Str, Char_Index, Last_Key );
 					Should_Read := Read_Value;
-				when ':' | ''' | '"' =>
+				when ':' =>
 					if Should_Read /= Read_Value then
 						raise SYNTAX_ERROR with "should be ready to read a key and I found a value at " & positive'Image( char_index );
 					end if;

@@ -38,6 +38,17 @@ begin
 	Put_Line( To_Json( A_Array ) );
 
 
+	Put_Line( "PArsing a biger json" );
+	A_object := From_Json(
+"{status:'success',text_contents:[{original_tag:'TECA.ENTITIES.TEXT_CONTENT_ENTITY',id:'1',filter_tags:'',title:'Teste',owner_identity:'teste_aluno1',creation_time:'2010-06-09 03:04:22',update_time:'2010-06-09 03:04:22',content:'<p>Texto de <strong>teste</strong>!</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>Aqui vai mais texto pra testar :)</p>',owner_identity:'teste_aluno1'}]}"
+);
+	Put_Line("Printing.." );
+	Put_Line( TO_json( A_object ) );
+	Put_Line("And Reparsing and reprinting" );
+	A_Object := From_Json( To_Json( A_Object ) );
+	Put_Line( To_Json( A_Object ) );
+
+
 	Put_Line( "Exiting" );
 end;
 
