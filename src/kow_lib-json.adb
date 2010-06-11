@@ -634,11 +634,22 @@ package body KOW_Lib.Json is
 				Char_Index	: in out Positive;
 				Data		:    out Json_Data_Type
 			) is
-		D	: Json_Data_Type;
 	begin
 		loop
 			Jump_Spaces( Str, Char_Index );
 			case Str( Char_Index ) is
+				when '0' .. '9' =>
+					declare
+						From	: Positive := Char_Index;
+						To	: Positive := Char_Index;
+					begin
+						while Str( To ) in '0' .. '9' loop
+							To := To + 1;
+						end loop;
+						Data := To_Data( Integer'Value( Str ( From .. To - 1 ) ) );
+						Char_Index := To;
+						return;
+					end;
 				when ''' | '"' =>
 					declare
 						Last_Quotation	: constant Character := Str( Char_Index );
@@ -650,14 +661,12 @@ package body KOW_Lib.Json is
 								raise SYNTAX_ERROR with "string ended prematurely";
 							end if;
 							if Str( to ) = Last_Quotation  then
-								D.The_Type := Json_String;
 								if To - 1 >= From then
-									D.Str := To_Unbounded_String( Str( From .. To - 1 ) );
+									Data := To_Data( Str( From .. To - 1 ) );
 								else
-									D.Str := Null_Unbounded_String;
+									Data := To_Data( "" );
 								end if;
 								Char_Index := To + 1;
-								Data := D;
 								return;
 							elsif Str( to ) = '\' then
 								To := To + 2;
@@ -671,9 +680,7 @@ package body KOW_Lib.Json is
 						A : Array_Type;
 					begin
 						From_Json( Str, Char_Index, A );
-						D.The_Type := Json_Array;
-						D.Vector.all := A;
-						Data := D;
+						Data := To_Data( A );
 						return;
 					end;
 				when '{' =>
@@ -681,9 +688,7 @@ package body KOW_Lib.Json is
 						O : Object_Type;
 					begin
 						From_Json( Str, Char_Index, O );
-						D.The_Type := Json_Object;
-						D.Object.all := O;
-						Data := D;
+						Data := To_Data( O ); 
 						return;
 					end;
 				when others =>

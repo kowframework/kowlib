@@ -21,6 +21,8 @@ procedure Json_Test is
 		Put("[" & json_object_type'image( the_type ) & "] =>" );
 
 		case the_type is
+			when json_integer=>
+				Put_Line( Integer'Image( Get( A_Array, Index ) ) );
 			when json_string =>
 				Put_Line( Ada.Strings.Unbounded.To_String( Get( A_Array, Index ) ) );
 			when json_array =>
@@ -45,6 +47,8 @@ procedure Json_Test is
 		Put('[' & json_object_type'image( the_type ) & "] =>" );
 
 		case the_type is
+			when json_integer=>
+				Put_Line( Integer'Image( Get( A_Object, Key ) ) );
 			when json_string =>
 				Put_Line( Ada.Strings.Unbounded.To_String( Get( A_Object, Key ) ) );
 			when json_array =>
@@ -86,9 +90,9 @@ begin
 	Put_Line( To_Json( A_Array ) );
 
 
-	Put_Line( "PArsing a biger json" );
+	Put_Line( "Parsing a biger json" );
 	A_object := From_Json(
-"{status:'success',text_contents:[{original_tag:'TECA.ENTITIES.TEXT_CONTENT_ENTITY',id:'1',filter_tags:'',title:'Teste',owner_identity:'teste_aluno1',creation_time:'2010-06-09 03:04:22',update_time:'2010-06-09 03:04:22',content:'<p>Texto de <strong>teste</strong>!</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>Aqui vai mais texto pra testar :)</p>',owner_identity:'teste_aluno1'}]}"
+"{status:'success',text_contents:[{original_tag:'TECA.ENTITIES.TEXT_CONTENT_ENTITY',id:'1',filter_tags:'',title:'Teste',owner_identity:'teste_aluno1',creation_time:'2010-06-09 03:04:22',update_time:'2010-06-09 03:04:22',content:'<p>Texto de <strong>teste</strong>!</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>Aqui vai mais texto pra testar :)</p>',owner_identity:'teste_aluno1'}],some_integer:1 ,some_other_integer:10}"
 );
 	Put_Line("Printing.." );
 	Put_Line( TO_json( A_object ) );
