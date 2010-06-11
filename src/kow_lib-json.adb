@@ -182,22 +182,18 @@ package body KOW_Lib.Json is
 			Jump_Spaces( Str, Char_Index );
 			case Str( Char_Index ) is
 				when '}' =>
-					put_line("fecha_objeto");
 					Char_Index	:= Char_Index + 1;
 					Object		:= O;
 					return;
 
 				when '{' | ',' =>
-					put_line("novo item");
 					if Should_Read /= Read_Key then
 						raise SYNTAX_ERROR with "should be ready to read a value and I found a key at " & Positive'Image( char_index );
 					end if;
 					Char_index := Char_Index + 1;
 					Read_Key( Str, Char_Index, Last_Key );
-					put_line("leu a chave " & to_string(last_key) );
 					Should_Read := Read_Value;
 				when ':' | ''' | '"' =>
-					put_line("pega valor" );
 					if Should_Read /= Read_Value then
 						raise SYNTAX_ERROR with "should be ready to read a key and I found a value at " & positive'Image( char_index );
 					end if;
@@ -210,11 +206,9 @@ package body KOW_Lib.Json is
 					begin
 						From_Json( Str, Char_Index, Data );
 						Json_Data_Maps.Include( O.Data, Last_Key, Data );
-						put_line( "leu o valor " & to_json( data ) );
 					end;
 					Should_Read := Read_Key;
 				when others =>
-					put_line( "oops.." );
 					raise SYNTAX_ERROR with "(object_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
 			end case;
 		end loop;
@@ -354,10 +348,11 @@ package body KOW_Lib.Json is
 
 
 	function From_Json( Str : in String ) return Array_Type is
-		Data : Json_Data_type := From_Json( Str );
+		Char_index : positive := 1;
+		A : Array_Type;
 	begin
-		Check( Json_Array, Data.The_Type );
-		return Data.Vector.all;
+		From_Json( Str, Char_Index, A );
+		return A;
 	end From_Json;
 
 	procedure From_Json(
@@ -375,6 +370,8 @@ package body KOW_Lib.Json is
 					A		:= The_A;
 					return;
 				when '[' | ',' =>
+					Char_Index := Char_Index + 1;
+					Jump_Spaces( Str, Char_Index );
 					declare
 						Data : Json_Data_Type;
 					begin
@@ -389,7 +386,7 @@ package body KOW_Lib.Json is
 
 
 	function To_Json( A : in Array_type ) return String is
-		Is_First	: Boolean	:= False;
+		Is_First	: Boolean	:= True;
 		Buf		: Unbounded_String;
 
 		procedure Iterator( C : Json_Data_Vectors.Cursor ) is
@@ -547,9 +544,9 @@ package body KOW_Lib.Json is
 			when Json_String =>
 				return ''' & KOW_Lib.String_Util.Json_Scriptify( To_String( Data.Str ) ) & ''';
 			when Json_Array =>
-				return To_Json( Data.Object.All );
-			when Json_Object =>
 				return To_Json( Data.Vector.All );
+			when Json_Object =>
+				return To_Json( Data.Object.All );
 		end case;
 	end To_Json;
 
