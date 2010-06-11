@@ -16,7 +16,7 @@ begin
 
 	Put_line( "Parsing object" );
 	declare
-		B_Object : Object_Type := From_Json( "{chave:'valor',chave:['um','vetor']}" );
+		B_Object : Object_Type := From_Json( "{chave:'valor','outra_chave':['um','vetor']}" );
 	begin
 		Put_Line( "Copying object" );
 		A_Object := B_Object;

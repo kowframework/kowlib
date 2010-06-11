@@ -1,5 +1,7 @@
 
 
+with ada.text_io;		use ada.text_io;
+
 --------------
 -- Ada 2005 --
 --------------
@@ -126,7 +128,7 @@ package body KOW_Lib.Json is
 
 	function From_Json( Str : in String ) return Object_Type is
 		Object		: Object_Type;
-		Char_Index	: Positive := 11;
+		Char_Index	: Positive := 1;
 	begin
 		From_Json( Str, Char_Index, Object );
 		return Object;
@@ -140,20 +142,21 @@ package body KOW_Lib.Json is
 		from		: positive;
 		to		: positive := char_index;
 	begin
-		if str( char_index ) = ''' OR str(char_index) = '"' then
+		if str( to ) = ''' OR str( to ) = '"' then
 			use_quotation := true;
-			quotation := str( char_index );
-			char_index := char_index + 1;
-			from := char_index;
+			quotation := str( to );
+			to := to + 1;
+			from := to;
 		else
 			-- look for the string start..
-			jump_spaces( str, char_index );
-			from := char_index;
+			jump_spaces( str, to );
+			from := to;
 		end if;
 
 		loop
 			exit when use_quotation and then str( to ) = quotation;
 			exit when not use_quotation and then is_space( str( to ) );
+			exit when not use_quotation and then str( to ) = ':';
 			to := to + 1;
 		end loop;
 
@@ -179,30 +182,40 @@ package body KOW_Lib.Json is
 			Jump_Spaces( Str, Char_Index );
 			case Str( Char_Index ) is
 				when '}' =>
+					put_line("fecha_objeto");
 					Char_Index	:= Char_Index + 1;
 					Object		:= O;
 					return;
 
 				when '{' | ',' =>
+					put_line("novo item");
 					if Should_Read /= Read_Key then
 						raise SYNTAX_ERROR with "should be ready to read a value and I found a key at " & Positive'Image( char_index );
 					end if;
+					Char_index := Char_Index + 1;
 					Read_Key( Str, Char_Index, Last_Key );
+					put_line("leu a chave " & to_string(last_key) );
 					Should_Read := Read_Value;
-				when ':' =>
+				when ':' | ''' | '"' =>
+					put_line("pega valor" );
 					if Should_Read /= Read_Value then
 						raise SYNTAX_ERROR with "should be ready to read a key and I found a value at " & positive'Image( char_index );
 					end if;
-					Char_Index := Char_Index + 1;
+					if Str( Char_Index ) = ':' then
+						Char_Index := Char_Index + 1;
+					end if;
 					Jump_Spaces( Str, Char_Index );
 					declare
 						Data : Json_Data_Type;
 					begin
 						From_Json( Str, Char_Index, Data );
 						Json_Data_Maps.Include( O.Data, Last_Key, Data );
+						put_line( "leu o valor " & to_json( data ) );
 					end;
+					Should_Read := Read_Key;
 				when others =>
-					raise SYNTAX_ERROR with "unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
+					put_line( "oops.." );
+					raise SYNTAX_ERROR with "(object_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
 			end case;
 		end loop;
 	end From_Json;
@@ -369,7 +382,7 @@ package body KOW_Lib.Json is
 						Json_Data_Vectors.Append( The_A.Data, Data );
 					end;
 				when others =>
-					raise SYNTAX_ERROR with "unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
+					raise SYNTAX_ERROR with "(array_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
 			end case;
 		end loop;
 	end From_Json;
@@ -521,7 +534,7 @@ package body KOW_Lib.Json is
 						return;
 					end;
 				when others =>
-					raise SYNTAX_ERROR with "unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
+					raise SYNTAX_ERROR with "(json_data_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
 			end case;
 		end loop;
 	end From_Json;
