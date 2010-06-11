@@ -215,6 +215,19 @@ private
 					Key_Type	=> Unbounded_String,
 					Element_Type	=> Json_Data_Type
 				);
+	-- notice:
+	-- 	using ordered_maps will change the order of the elements in the map..
+	-- 	they aren't iterated in the same sequence they are inserted.
+	--
+	-- 	this is kind of a problem, but not really a BIG issue.
+	--
+	-- 	Hashed_Maps contains the same problem, so the best solution
+	-- 	perhaps would be implementing other container structure. But
+	-- 	then searching could be slow.
+	--
+	-- 	Instead I decided to use Ordered_Maps. They tend to be faster
+	-- 	for smaller maps and are easy to use. Also the ordering
+	-- 	will be evident to the user...
 	package Json_Data_Vectors is new Ada.Containers.Vectors(
 					Index_Type	=> Natural,
 					Element_Type	=> Json_Data_Type
