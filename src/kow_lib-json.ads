@@ -12,6 +12,8 @@ with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
 
 package KOW_Lib.Json is
 
+	SYNTAX_ERROR : Exception;
+	-- the syntax error when parsin a json string
 
 	type Json_Object_Type is ( Json_String, Json_Array, Json_Object );
 	-- the possible json types.
@@ -62,6 +64,16 @@ package KOW_Lib.Json is
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type;
 
 
+	function From_Json( Str : in String ) return Object_Type;
+	procedure From_Json(
+				Str		: in     String;
+				Char_Index	: in out Positive;
+				Object		:    out object_type
+			);
+
+
+	function To_Json( Object : in Object_Type ) return String;
+
 	--------------------
 	-- The Array Type --
 	--------------------
@@ -100,6 +112,18 @@ package KOW_Lib.Json is
 	function Get_Type( A : in Array_Type; Index: in Natural ) return Json_Object_Type;
 
 
+	function From_Json( Str : in String ) return Array_Type;
+
+	procedure From_Json(
+				Str		: in     String;
+				Char_Index	: in out Positive;
+				A		:    out Array_Type
+			);
+
+
+	function To_Json( A : in Array_type ) return String;
+
+
 	-- Missing methods for object_Type
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Array_Type );
 	function Get( Object : in Object_Type; Key : in String ) return Array_Type;
@@ -115,6 +139,7 @@ private
 		vector	: array_ptr;
 	end record;
 
+	
 	overriding
 	procedure Initialize( Object : in out Json_Data_Type );
 
@@ -123,6 +148,15 @@ private
 		
 	overriding
 	procedure Finalize( Object : in out Json_Data_Type );
+
+
+	function From_Json( Str : in String ) return Json_Data_Type;
+	procedure From_Json(
+				Str		: in     String;
+				Char_Index	: in out Positive;
+				Data		:    out Json_Data_Type
+			);
+	function To_Json( Data : in Json_Data_Type ) return String;
 
 
 
