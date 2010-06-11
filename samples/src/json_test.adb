@@ -94,6 +94,7 @@ begin
 	A_object := From_Json(
 "{status:'success',text_contents:[{original_tag:'TECA.ENTITIES.TEXT_CONTENT_ENTITY',id:'1',filter_tags:'',title:'Teste',owner_identity:'teste_aluno1',creation_time:'2010-06-09 03:04:22',update_time:'2010-06-09 03:04:22',content:'<p>Texto de <strong>teste</strong>!</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>Aqui vai mais texto pra testar :)</p>',owner_identity:'teste_aluno1'}],some_integer:1 ,some_other_integer:10}"
 );
+
 	Put_Line("Printing.." );
 	Put_Line( TO_json( A_object ) );
 	Put_Line("And Reparsing and reprinting" );
@@ -111,8 +112,37 @@ begin
 	end;
 
 
+
 	Put_Line( "Iterating..." );
 	Iterate( A_Object, Object_Iterator'Access );
+
+
+
+	A_Array := From_Json(
+"[{""type"":""user"",""user"":{""username"":""teste_admin"",""first_name"":""Administrador"",""last_name"":""do Colégio de Testes""}},{""type"":""user"",""user"":{""username"":""teste_professor1"",""first_name"":""Marcelo"",""last_name"":""Coraça de Freitas""}},{""type"":""user"",""user"":{""username"":""teste_professor2"",""first_name"":""Jorge"",""last_name"":""Sallum""}},{""type"":""user"",""user"":{""username"":""teste_aluno1"",""first_name"":""Bruno"",""last_name"":""Costa""}},{""type"":""user"",""user"":{""username"":""teste_aluno2"",""first_name"":""Iuri"",""last_name"":""Pereira""}},{""type"":""user"",""user"":{""username"":""teste_aluno3"",""first_name"":""Adélia"",""last_name"":""Barbosa""}},{""type"":""user"",""user"":{""username"":""teste_aluno4"",""first_name"":""Fabio"",""last_name"":""Mantegari""}},{""type"":""textContent"",""textContent"":{""id"":""1"",""title"":""Teste"",""owner_identity"":""teste_aluno1""}}]"
+);
+
+
+	Put_line( "Iterating users.." );
+	declare
+		procedure The_Iterator( index : in natural; value : in json_data_type ) is
+			Object		: Object_Type := From_Data( Value );
+			The_Type	: String := Get( Object, "type" );
+			Contained	: Object_Type;
+		begin
+			if The_Type = "user" then
+				Contained := Get( Object, "user" );
+				Put_Line( "  * [user] " & Get( Contained, "username" )  );
+			elsif The_Type = "textContent" then
+				Contained := Get( Object, "textContent" );
+				Put_Line( "  * [textContent] " & Get( Contained, "title" ) );
+			else
+				Put_line( "  * unknonw type :: '" & The_Type & ''' );
+			end if;
+		end The_Iterator;
+	begin
+		Iterate( A_Array, The_Iterator'Access );
+	end;
 
 
 	Put_Line( "Exiting" );
