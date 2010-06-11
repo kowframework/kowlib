@@ -122,7 +122,7 @@ package body KOW_Lib.Json is
 
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Json_Data_Type ) is
 	begin
-		Json_Data_Maps.Include( Object.Data, To_Unbounded_String( Key ), Value );
+		Set( Object, To_Unbounded_String( Key ), Value );
 	end Set;
 
 	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Json_Data_Type ) is
