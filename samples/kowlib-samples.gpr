@@ -27,7 +27,8 @@ project KOWlib.Samples is
 			"log_test",
 			"regular_expressions_test",
 			"string_util_test",
-			"wide_string_util_test"
+			"wide_string_util_test",
+			"json_test"
 		);
 
 
