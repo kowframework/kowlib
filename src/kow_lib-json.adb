@@ -21,7 +21,7 @@ package body KOW_Lib.Json is
 	end Inc;
 
 	
-	procedure Check( Expected : Json_Object_Type; Received : Json_Data_Type ) is
+	procedure Check( Expected : Json_Object_Type; Received : Json_Object_Type ) is
 	begin
 		if Expected /= Json_String then
 			raise CONSTRAINT_ERROR with
@@ -55,7 +55,7 @@ package body KOW_Lib.Json is
 	begin
 		Data.The_Type := Json_String;
 		Data.Str := Value;
-		Json_Data_Maps.Include( Object.Data, Key, Value );
+		Json_Data_Maps.Include( Object.Data, Key, Data );
 	end Set;
 
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Object_Type ) is
@@ -211,10 +211,15 @@ package body KOW_Lib.Json is
 	begin
 		Data.The_Type := Json_Array;
 		Data.Vector.all := Value;
-		Inc( Object.Data, To_Unbounded_String( Key ), Data );
+		Inc( Object.Data, Key, Data );
 	end Set;
 
-	function Get( Object : in Object_Type; Key : in String ) return Array_Type;
+	function Get( Object : in Object_Type; Key : in String ) return Array_Type is
+		Data : Json_Data_Type := Json_Data_Maps.Element( Object.Data, To_Unbounded_String( Key ) );
+	begin
+		Check( Data.The_Type, Json_Array );
+		return Data.Vector.all;
+	end Get;
 
 
 
@@ -235,8 +240,8 @@ package body KOW_Lib.Json is
 
 	overriding
 	procedure Adjust( Object : in out Json_Data_Type ) is
-		new_object	: object_ptr := new object_type'( object.object );
-		new_vector	: array_ptr := new object_type'( object.vector );
+		new_object	: object_ptr := new object_type'( object.object.all );
+		new_vector	: array_ptr := new array_type'( object.vector.all );
 	begin
 		Object.Object	:= New_Object;
 		Object.Vector	:= New_Vector;
