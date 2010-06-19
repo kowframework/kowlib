@@ -109,6 +109,10 @@ package KOW_Lib.Json is
 	function Get( Object : in Object_Type; Key : in Unbounded_String ) return Unbounded_String;
 	function Get( Object : in Object_Type; Key : in String ) return Object_Type;
 
+	function Contains( Object : in Object_Type; Key : in String ) return Boolean;
+	function Contains( Object : in Object_Type; Key : in Unbounded_String ) return Boolean;
+
+
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type;
 
 

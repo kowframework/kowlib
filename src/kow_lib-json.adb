@@ -195,6 +195,17 @@ package body KOW_Lib.Json is
 		return From_Data( Get( Object, Key ) );
 	end Get;
 
+
+	function Contains( Object : in Object_Type; Key : in String ) return Boolean is
+	begin
+		return Contains( Object, To_Unbounded_String( Key ) );
+	end Contains;
+
+	function Contains( Object : in Object_Type; Key : in Unbounded_String ) return Boolean is
+	begin
+		return Json_Data_maps.Contains( Object.Data, Key );
+	end Contains;
+
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type is
 		Data : Json_Data_type := Get( Object, key );
 	begin
