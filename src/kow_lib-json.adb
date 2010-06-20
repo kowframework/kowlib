@@ -796,12 +796,15 @@ package body KOW_Lib.Json is
 				when 't' | 'T' => -- true
 					Data := To_Data( Boolean'Value( Str( Char_Index .. Char_Index + 3 ) ) );
 					Char_index := Char_Index + 4;
+					return;
 				when 'f' | 'F' => -- false
 					Data := To_Data( Boolean'Value( Str( Char_Index .. Char_Index + 4 ) ) );
 					Char_Index := Char_Index + 5;
+					return;
 				when 'n' | 'N' => -- null
 					if Ada.Characters.Handling.To_Lower( Str( Char_Index .. Char_Index + 3 ) ) = "null" then
 						Char_Index := Char_Index + 4;
+						return;
 					else
 						raise SYNTAX_ERROR with "(json_data_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
 					end if;
