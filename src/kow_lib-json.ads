@@ -75,6 +75,9 @@ package KOW_Lib.Json is
 	function To_Data( Value : in Unbounded_String ) return Json_Data_Type;
 	function From_Data( Data : in Json_Data_Type ) return Unbounded_String;
 
+
+	function Get_Type( Data : in Json_Data_Type ) return Json_Object_Type;
+
 	---------------------
 	-- The Object Type --
 	---------------------

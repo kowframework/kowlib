@@ -97,6 +97,11 @@ package body KOW_Lib.Json is
 	end From_Data;
 
 
+	function Get_Type( Data : in Json_Data_Type ) return Json_Object_Type is
+	begin
+		return Data.The_Type;
+	end Get_Type;
+
 	---------------------
 	-- The Object Type --
 	---------------------
