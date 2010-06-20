@@ -71,6 +71,22 @@ package body KOW_Lib.Json is
 		return Data.Int;
 	end From_Data;
 
+
+	-- float
+	function To_Data( Value : in Float ) return Json_Data_Type is
+		D : Json_Data_Type;
+	begin
+		D.The_Type := Json_Float;
+		D.Fl := Value;
+		return D;
+	end To_Data;
+		
+	function From_Data( Data : in Json_Data_Type ) return Float is
+	begin
+		Check( Json_Float, Data.The_Type );
+		return Data.Fl;
+	end From_Data;
+
 	-- string	
 	function To_Data( Value : in String ) return Json_Data_Type is
 	begin
@@ -156,6 +172,11 @@ package body KOW_Lib.Json is
 		Set( Object, Key, To_Data( Value ) );
 	end Set;
 
+	procedure Set( Object : in out Object_Type; Key : in String; Value : in Float ) is
+	begin
+		Set( Object, Key, To_Data( Value ) );
+	end Set;
+
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in String ) is
 	begin
 		Set( Object, Key, To_Data( Value ) );
@@ -197,6 +218,11 @@ package body KOW_Lib.Json is
 	end Get;
 
 	function Get( Object : in Object_Type; Key : in String ) return integer is
+	begin
+		return From_Data( Get( Object, Key ) );
+	end Get;
+
+	function Get( Object : in Object_Type; Key : in String ) return Float is
 	begin
 		return From_Data( Get( Object, Key ) );
 	end Get;
@@ -453,6 +479,11 @@ package body KOW_Lib.Json is
 		Replace( A, Index, To_Data( Value ) );
 	end Replace;
 
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Float ) is
+	begin
+		Replace( A, Index, TO_Data( Value ) );
+	end Replace;
+
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in String ) is
 	begin
 		Replace( A, Index, To_Data( Value ) );
@@ -489,6 +520,11 @@ package body KOW_Lib.Json is
 	end Append;
 
 	procedure Append( A : in out Array_Type; Value : in Integer ) is
+	begin
+		Append( A, To_Data( Value ) );
+	end Append;
+
+	procedure Append( A : in out Array_Type; Value : in Float ) is
 	begin
 		Append( A, To_Data( Value ) );
 	end Append;
@@ -531,6 +567,11 @@ package body KOW_Lib.Json is
 
 
 	function Get( A : in Array_Type; Index : in Natural ) return Integer is
+	begin
+		return From_Data( Get( A, Index ) );
+	end Get;
+
+	function Get( A : in Array_Type; Index : in Natural ) return Float is
 	begin
 		return From_Data( Get( A, Index ) );
 	end Get;
@@ -744,11 +785,24 @@ package body KOW_Lib.Json is
 					declare
 						From	: Positive := Char_Index;
 						To	: Positive := Char_Index;
+						Is_Int	: Boolean  := True;
 					begin
-						while Str( To ) in '0' .. '9' loop
+						while Str( To ) in '0' .. '9' or
+							Str( To ) = '.' or 
+							Str( To ) = 'e' or
+							Str( To ) = '+' loop
+							if Str( To ) = '.' then
+								Is_Int := False;
+							end if;
+
 							To := To + 1;
 						end loop;
-						Data := To_Data( Integer'Value( Str ( From .. To - 1 ) ) );
+
+						if Is_Int then
+							Data := To_Data( Integer'Value( Str ( From .. To - 1 ) ) );
+						else
+							Data := To_Data( Float'Value( Str( From .. To - 1 ) ) );
+						end if;
 						Char_Index := To;
 						return;
 					end;
@@ -822,6 +876,8 @@ package body KOW_Lib.Json is
 		case Data.The_Type is
 			when Json_Integer =>
 				return Integer'Image( Data.Int );
+			when Json_Float =>
+				return Float'Image( Data.Fl );
 			when Json_String =>
 				return ''' & KOW_Lib.String_Util.Json_Scriptify( To_String( Data.Str ) ) & ''';
 			when Json_Boolean =>
