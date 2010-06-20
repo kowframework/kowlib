@@ -5,6 +5,7 @@ with ada.text_io;		use ada.text_io;
 --------------
 -- Ada 2005 --
 --------------
+with Ada.Characters.Handling;
 with Ada.Characters.Latin_1;
 with Ada.Containers.Ordered_Maps;
 with Ada.Unchecked_Deallocation;
@@ -97,6 +98,21 @@ package body KOW_Lib.Json is
 	end From_Data;
 
 
+	function TO_Data( Value : in Boolean ) return Json_Data_Type is
+		D : Json_Data_Type;
+	begin
+		D.The_Type := Json_Boolean;
+		D.Bool := Value;
+		return D;
+	end TO_Data;
+
+	function From_Data( Data : in Json_Data_Type ) return Boolean is
+	begin
+		Check( Data.The_Type, Json_Boolean );
+		return Data.Bool;
+	end From_Data;
+
+
 	function Get_Type( Data : in Json_Data_Type ) return Json_Object_Type is
 	begin
 		return Data.The_Type;
@@ -155,6 +171,11 @@ package body KOW_Lib.Json is
 		Set( Object, Key, To_Data( Value ) );
 	end Set;
 
+	procedure Set( Object : in out Object_Type; Key : in String; Value : in Boolean ) is
+	begin
+		Set( OBject, Key, To_Data( Value ) );
+	end Set;
+
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Object_Type ) is
 	begin
 		Set( Object, Key, To_Data( Value ) );
@@ -195,11 +216,15 @@ package body KOW_Lib.Json is
 		return From_Data( Get( Object, Key ) );
 	end Get;
 
-	function Get( Object : in Object_Type; Key : in String ) return Object_Type is
+	function Get( Object : in Object_Type; Key : in String ) return Boolean is
 	begin
 		return From_Data( Get( Object, Key ) );
 	end Get;
 
+	function Get( Object : in Object_Type; Key : in String ) return Object_Type is
+	begin
+		return From_Data( Get( Object, Key ) );
+	end Get;
 
 	function Contains( Object : in Object_Type; Key : in String ) return Boolean is
 	begin
@@ -438,6 +463,12 @@ package body KOW_Lib.Json is
 		Replace( A, Index, To_Data( Value ) );
 	end Replace;
 
+
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Boolean ) is
+	begin
+		Replace( A, Index, To_Data( Value ) );
+	end Replace;
+
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Object_Type ) is
 	begin
 		Replace( A, Index, To_Data( Value ) );
@@ -468,6 +499,12 @@ package body KOW_Lib.Json is
 	end Append;
 
 	procedure Append( A : in out Array_Type; Value : in Unbounded_String ) is
+	begin
+		Append( A, To_Data( Value ) );
+	end Append;
+
+
+	procedure Append( A : in out Array_Type; Value : in Boolean ) is
 	begin
 		Append( A, To_Data( Value ) );
 	end Append;
@@ -504,6 +541,12 @@ package body KOW_Lib.Json is
 	end Get;
 
 	function Get( A : in Array_Type; Index : in Natural ) return Unbounded_String is
+	begin
+		return From_Data( Get( A, Index ) );
+	end Get;
+
+
+	function Get( A : in Array_Type; Index : in Natural ) return Boolean is
 	begin
 		return From_Data( Get( A, Index ) );
 	end Get;
@@ -750,6 +793,19 @@ package body KOW_Lib.Json is
 						Data := To_Data( O ); 
 						return;
 					end;
+				when 't' | 'T' => -- true
+					Data := To_Data( Boolean'Value( Str( Char_Index .. Char_Index + 3 ) ) );
+					Char_index := Char_Index + 4;
+				when 'f' | 'F' => -- false
+					Data := To_Data( Boolean'Value( Str( Char_Index .. Char_Index + 4 ) ) );
+					Char_Index := Char_Index + 5;
+				when 'n' | 'N' => -- null
+					if Ada.Characters.Handling.To_Lower( Str( Char_Index .. Char_Index + 3 ) ) = "null" then
+						Char_Index := Char_Index + 4;
+					else
+						raise SYNTAX_ERROR with "(json_data_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
+					end if;
+						
 				when others =>
 					raise SYNTAX_ERROR with "(json_data_type) unexpected character '" & str(Char_Index) & "' at " & positive'image( char_index );
 			end case;
@@ -765,6 +821,8 @@ package body KOW_Lib.Json is
 				return Integer'Image( Data.Int );
 			when Json_String =>
 				return ''' & KOW_Lib.String_Util.Json_Scriptify( To_String( Data.Str ) ) & ''';
+			when Json_Boolean =>
+				return Boolean'Image( Data.Bool );
 			when Json_Array =>
 				return To_Json( Data.Vector.All );
 			when Json_Object =>

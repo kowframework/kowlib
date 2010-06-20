@@ -17,7 +17,7 @@ package KOW_Lib.Json is
 	SYNTAX_ERROR : Exception;
 	-- the syntax error when parsin a json string
 
-	type Json_Object_Type is ( Json_Integer, Json_String, Json_Array, Json_Object );
+	type Json_Object_Type is ( Json_Integer, Json_String, Json_Boolean, Json_Array, Json_Object );
 	-- the possible json types.
 	-- an array can have string, arrays (in the ada side they are vectors) and objects
 	-- an object can have all of them also, but hold them as a map
@@ -75,6 +75,8 @@ package KOW_Lib.Json is
 	function To_Data( Value : in Unbounded_String ) return Json_Data_Type;
 	function From_Data( Data : in Json_Data_Type ) return Unbounded_String;
 
+	function TO_Data( Value : in Boolean ) return Json_Data_Type;
+	function From_Data( Data : in Json_Data_Type ) return Boolean;
 
 	function Get_Type( Data : in Json_Data_Type ) return Json_Object_Type;
 
@@ -98,6 +100,7 @@ package KOW_Lib.Json is
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in String );
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Unbounded_String );
 	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Unbounded_String );
+	procedure Set( Object : in out Object_Type; Key : in String; Value : in Boolean );
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Object_Type );
 
 	--
@@ -110,6 +113,7 @@ package KOW_Lib.Json is
 	function Get( Object : in Object_Type; Key : in String ) return String;
 	function Get( Object : in Object_Type; Key : in String ) return Unbounded_String;
 	function Get( Object : in Object_Type; Key : in Unbounded_String ) return Unbounded_String;
+	function Get( Object : in Object_Type; Key : in String ) return Boolean;
 	function Get( Object : in Object_Type; Key : in String ) return Object_Type;
 
 	function Contains( Object : in Object_Type; Key : in String ) return Boolean;
@@ -157,6 +161,7 @@ package KOW_Lib.Json is
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Integer );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in String );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Unbounded_String );
+	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Boolean );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Object_Type );
 	procedure Replace( A : in out Array_Type; Index : in Natural; Value : in Array_Type );
 
@@ -168,6 +173,7 @@ package KOW_Lib.Json is
 	procedure Append( A : in out Array_Type; Value : in Integer );
 	procedure Append( A : in out Array_Type; Value : in String );
 	procedure Append( A : in out Array_Type; Value : in Unbounded_String );
+	procedure Append( A : in out Array_Type; Value : in Boolean );
 	procedure Append( A : in out Array_Type; Value : in Object_Type );
 	procedure Append( A : in out Array_Type; Value : in Array_Type );
 
@@ -180,6 +186,7 @@ package KOW_Lib.Json is
 	function Get( A : in Array_Type; Index : in Natural ) return Integer;
 	function Get( A : in Array_Type; Index : in Natural ) return String;
 	function Get( A : in Array_Type; Index : in Natural ) return Unbounded_String;
+	function Get( A : in Array_Type; Index : in Natural ) return Boolean;
 	function Get( A : in Array_Type; Index : in Natural ) return Object_Type;
 	function Get( A : in Array_Type; Index : in Natural ) return Array_Type;
 
@@ -217,6 +224,7 @@ private
 
 		int	: integer;
 		str	: unbounded_string;
+		bool	: boolean;
 		object	: object_ptr;
 		vector	: array_ptr;
 	end record;
