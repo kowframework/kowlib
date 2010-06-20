@@ -115,6 +115,9 @@ package KOW_Lib.Json is
 	function Contains( Object : in Object_Type; Key : in String ) return Boolean;
 	function Contains( Object : in Object_Type; Key : in Unbounded_String ) return Boolean;
 
+	function Count( Object : in Object_Type ) return Natural;
+	-- count how many attributes there is in this object
+
 
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type;
 
@@ -179,6 +182,10 @@ package KOW_Lib.Json is
 	function Get( A : in Array_Type; Index : in Natural ) return Unbounded_String;
 	function Get( A : in Array_Type; Index : in Natural ) return Object_Type;
 	function Get( A : in Array_Type; Index : in Natural ) return Array_Type;
+
+
+	function Count( A : in Array_Type ) return Natural;
+	-- count how many elements there is in this array
 
 	function Get_Type( A : in Array_Type; Index: in Natural ) return Json_Object_Type;
 

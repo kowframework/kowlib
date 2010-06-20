@@ -211,6 +211,15 @@ package body KOW_Lib.Json is
 		return Json_Data_maps.Contains( Object.Data, Key );
 	end Contains;
 
+
+
+	function Count( Object : in Object_Type ) return Natural is
+		-- count how many attributes there is in this object
+	begin
+		return Natural( Json_Data_Maps.Length( Object.Data ) );
+	end Count;
+
+
 	function Get_Type( Object : in Object_Type; Key : in String ) return Json_Object_Type is
 		Data : Json_Data_type := Get( Object, key );
 	begin
@@ -510,6 +519,10 @@ package body KOW_Lib.Json is
 	end Get;
 
 
+	function Count( A : in Array_Type ) return Natural is
+	begin
+		return Natural( Json_Data_Vectors.Length( A.Data ) );
+	end Count;
 
 	function Get_Type( A : in Array_Type; Index: in Natural ) return Json_Object_Type is
 		Data : Json_Data_Type := Get( A, Index );
