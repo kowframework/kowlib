@@ -215,6 +215,9 @@ package body KOW_Lib.Json is
 	function Get( Object : in Object_Type; Key : in Unbounded_String ) return Json_Data_Type is
 	begin
 		return Json_Data_Maps.Element( Object.Data, Key );
+	exception
+		when CONSTRAINT_ERROR =>
+			raise CONSTRAINT_ERROR with "there is no property called " & To_String( Key ) & " in this object";
 	end Get;
 
 	function Get( Object : in Object_Type; Key : in String ) return integer is
