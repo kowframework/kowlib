@@ -881,7 +881,11 @@ package body KOW_Lib.Json is
 			when Json_String =>
 				return ''' & KOW_Lib.String_Util.Json_Scriptify( To_String( Data.Str ) ) & ''';
 			when Json_Boolean =>
-				return Boolean'Image( Data.Bool );
+				if Data.Bool then	-- has got to be lowercase
+					return "true";
+				else
+					return "false";
+				end if;
 			when Json_Array =>
 				return To_Json( Data.Vector.All );
 			when Json_Object =>
