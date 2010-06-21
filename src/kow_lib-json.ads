@@ -10,7 +10,7 @@ with Ada.Finalization;
 with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
 
 
--- TODO :: implement support for numeric values
+-- TODO :: implement the Dir function (pretty printer for json)
 
 package KOW_Lib.Json is
 
