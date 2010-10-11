@@ -46,7 +46,7 @@ package body KOW_Lib.Json is
 
 	procedure Jump_spaces( Str : in String; Char_index : in out Positive ) is
 	begin
-		while is_space( Str( Char_Index ) ) loop
+		while Char_Index < Str'Last and then is_space( Str( Char_Index ) ) loop
 			Char_index := Char_index + 1;
 		end loop;
 	end Jump_Spaces;
@@ -321,7 +321,7 @@ package body KOW_Lib.Json is
 
 	function From_Json( Str : in String ) return Object_Type is
 		Object		: Object_Type;
-		Char_Index	: Positive := 1;
+		Char_Index	: Positive := Str'First;
 	begin
 		From_Json( Str, Char_Index, Object );
 		return Object;
@@ -375,7 +375,7 @@ package body KOW_Lib.Json is
 		type Read_Type is ( Read_Key, Read_Value );
 		Should_Read : Read_Type := Read_Key;
 	begin
-		loop
+		while Char_Index in Str'range loop
 			Jump_Spaces( Str, Char_Index );
 			case Str( Char_Index ) is
 				when '}' =>
