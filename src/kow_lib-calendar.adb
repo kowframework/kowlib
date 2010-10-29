@@ -45,7 +45,6 @@ with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
 with Ada.Characters.Handling;	use Ada.Characters.Handling;
 
 with KOW_Lib.Locales;		use KOW_Lib.Locales;
-with KOW_Lib.Replacer;--		use KOW_Lib.Replacer;
 
 
 
@@ -133,42 +132,6 @@ package body KOW_Lib.Calendar is
 	end To_Time;
 
 
-	function Date( Formato: in Unbounded_String; Hora: in Timestamp)
-		return Unbounded_String is
-
-		Str : Unbounded_String := Formato;
-	begin
-		Date(Str, Hora);
-		return Str;
-	end Date;
-
-
-	procedure Date( Formato: in out Unbounded_String; Hora: in Timestamp) is
-		Str_Pos : Integer;
-		Str		: Unbounded_String;
-		Str_New : Unbounded_String;
-		Str_Len : Integer;
-		Comeco  : Unbounded_String;
-		Fim		: Unbounded_String;
-	begin
-		loop
-			KOW_Lib.Replacer.Get_Variable(Formato, 1, Str_Pos, Str_Len, Str);
-			
-			exit when Str_Len = 0;
-			--Put(Str_Pos); Put(Str_Len); Put(To_String(Str));
-		
-			Str_New := get(Hora, Element(Str,1));
-			New_Line;
-			Put(To_String(Str_New));
-			Replace_Slice(	Formato, Positive(Str_Pos),
-			Natural(Str_Len + Str_Pos),
-			To_String(Str_New));
-			Str_Len := 0;
-
-			exit when Str_Len = 0;
-		end loop;		
-
-	end Date;
 
 
 

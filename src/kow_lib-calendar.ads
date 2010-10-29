@@ -39,7 +39,6 @@
 
 with Ada.Calendar;			use Ada.Calendar; 
 with Ada.Strings.Unbounded; 		use Ada.Strings.Unbounded;
---with KOW_Lib.Replacer;			use KOW_Lib.Replacer;
 with KOW_Lib.Locales; 			use KOW_Lib.Locales;
 with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 
@@ -78,13 +77,6 @@ package KOW_Lib.Calendar is
 
 	function To_Time( Hora: in Timestamp) return Time;
 	-- Retorna o Time dado um Timestamp;
-
-        function Date( Formato: in Unbounded_String; Hora: in Timestamp)
-		return Unbounded_String;
-	-- Funcao que Coloca horarios e Datas num formato dado pela string
-
-	procedure Date( Formato: in out Unbounded_String; Hora: in Timestamp);
-	-- Coloca os horarios e datas na propria string;
 
 
 	------------------------------
