@@ -10,8 +10,6 @@ with KOW_Lib.UString_Vectors;
 package KOW_Lib.Regular_Expressions is
 
 
-	Replace_Pattern	: constant Pattern_Matcher := Compile( "(\\\d+)" );
-
 
 	type Replace_Method_Type is ( Group_Only, Entire_String );
 	-- should the replace procedures return the entire string with

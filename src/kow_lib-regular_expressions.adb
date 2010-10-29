@@ -24,6 +24,11 @@ package body KOW_Lib.Regular_Expressions is
 		end if;
 	end Get_Match;
 
+
+
+	Replace_Pattern	: constant Pattern_Matcher := Compile( "(\\\d+)" );
+
+
 	function Replace(
 			Subject		: in String;
 			Pattern		: in Pattern_Matcher;
