@@ -55,7 +55,7 @@ project KOWlib is
 		case target is
 			when "Windows_NT" =>
 			when others =>
-				for Default_Switches ("ada") use ("-ldl");
+				for Linker_Options use ("-ldl");
 		end case;
 	end Linker;
 end KOWlib;
