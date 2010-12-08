@@ -1,22 +1,22 @@
 ------------------------------------------------------------------------------
 --                                                                          --
---                          Ada Works :: Library                            --
+--                        KOW Framework :: Library                          --
 --                                                                          --
---                                Ada Works                                 --
+--                              KOW Framework                               --
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---               Copyright (C) 2007-2009, Ada Works Project                 --
+--               Copyright (C) 2007-2011, KOW Framework Project             --
 --                                                                          --
 --                                                                          --
--- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
+-- KOWLib is free software; you can redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
 -- ware  Foundation;  either version 2,  or (at your option) any later ver- --
--- sion. KOW_Lib is distributed in the hope that it will be useful, but WITH---
+-- sion. KOWLib is distributed in the hope that it will be useful, but WITH---
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
 -- for  more details.  You should have  received  a copy of the GNU General --
--- Public License  distributed with KOW_Lib; see file COPYING. If not, write --
+-- Public License distributed with KOWLib; see file COPYING.  If not, write --
 -- to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
 -- MA 02111-1307, USA.                                                      --
 --                                                                          --
@@ -26,16 +26,8 @@
 -- covered  by the  GNU  General  Public  License.  This exception does not --
 -- however invalidate  any other reasons why  the executable file  might be --
 -- covered by the  GNU Public License.                                      --
-------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------
--- This is the KOW_Lib.Locales package                                  	    --
 --                                                                          --
--- Provides functions to get patterns that describe dates or times and      --
--- functions that return a formatted number, date or name according to      --
--- a specific Locale                                                        --
 ------------------------------------------------------------------------------
-
 
 with Ada.Containers.Hashed_Maps;	use Ada.Containers; 
 with Ada.Calendar; 			use Ada.Calendar;
