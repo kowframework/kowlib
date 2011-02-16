@@ -683,6 +683,10 @@ package body KOW_Lib.Json is
 			) is
 		The_A : Array_Type;
 	begin
+		if Str = "" then
+			raise SYNTAX_ERROR with "empty string is not an array";
+		end if;
+
 		loop
 			Jump_Spaces( Str, Char_Index );
 			case Str( Char_Index ) is
