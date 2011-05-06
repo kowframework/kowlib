@@ -101,6 +101,10 @@ package body KOW_Lib.String_Util is
 		ini, fim: Natural := 1;
 	
 	begin
+		if Str = Null_Unbounded_String then
+			return Vect;
+		end if;
+
 		while fim <= Length( Str )
 		loop
 
