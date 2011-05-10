@@ -397,5 +397,14 @@ package body KOW_Lib.String_Util is
 		return To_String( The_Str );
 	end JSon_Scriptify;
 
+
+
+	procedure Copy( To : in out String; From : in String ) is
+	begin
+		To( To'First .. To'First + From'Length - 1 )	:= From;
+		To( To'First + From'Length .. To'Last )		:= ( others => ' ' );
+	end Copy;
+
+
 end KOW_Lib.String_Util;
 
