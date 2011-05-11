@@ -88,7 +88,7 @@ package KOW_Lib.File_System is
 	-- return L & Separator & R
 
 
-	procedure Copy_Directory(
+	procedure Copy_Tree(
 				Source_Name	: in String;
 				Target_Name	: in String;
 				Form		: in String := ""

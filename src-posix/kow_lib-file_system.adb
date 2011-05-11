@@ -243,7 +243,7 @@ package body KOW_Lib.File_System is
 
 
 
-	procedure Copy_Directory(
+	procedure Copy_Tree(
 				Source_Name	: in String;
 				Target_Name	: in String;
 				Form		: in String := ""
@@ -275,7 +275,7 @@ package body KOW_Lib.File_System is
 			if SName = "." or else SName = ".." then
 				return;
 			end if;
-			Copy_Directory(
+			Copy_Tree(
 					Source_Name	=> Source_Name / SName,
 					Target_Name	=> Target_Name / SName,
 					Form		=> Form
@@ -294,7 +294,7 @@ package body KOW_Lib.File_System is
 			);
 
 		UString_Vectors.Iterate( Childs, Copy_Childs'Access );
-	end Copy_Directory;
+	end Copy_Tree;
 end KOW_Lib.File_System;
 
 

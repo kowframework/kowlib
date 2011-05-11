@@ -118,6 +118,6 @@ begin
 	end if;
 
 	Put_Line( "Copying the current folder to subdirectory """ & demo_target & """" );
-	Copy_Directory( Source_Name => ".", Target_Name => demo_target, Form => "" );
+	Copy_Tree( Source_Name => ".", Target_Name => demo_target, Form => "" );
 
 end fs_tests;
