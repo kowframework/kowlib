@@ -87,4 +87,13 @@ package KOW_Lib.File_System is
 	function "/"( L,R : in String ) return String;
 	-- return L & Separator & R
 
+
+	procedure Copy_Directory(
+				Source_Name	: in String;
+				Target_Name	: in String;
+				Form		: in String := ""
+			);
+	-- copy the directory and all it's files from Source_Name to Target_Name
+	-- ignore special files
+
 end KOW_Lib.File_System;

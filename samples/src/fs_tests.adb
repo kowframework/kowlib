@@ -40,7 +40,7 @@ with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;		use Ada.Text_IO;
 
 with Ada.Integer_Text_IO;	use Ada.Integer_text_IO;
-
+with Ada.Directories;
 with Ada.Environment_Variables;	use Ada.Environment_Variables;
 
 with KOW_Lib.File_System;	use KOW_Lib.File_System;
@@ -66,46 +66,58 @@ procedure fs_tests is
 	Path: String := Ada.Environment_Variables.Value( "PATH" );
 	
 	
-	begin
-		
-	   New_Line;
-
-	   Put_Line( "MY home directory is " & Get_Home );
+	Demo_Target : constant String := ".." / "demo_target";
+begin
 	
-	   New_Line;
+	New_Line;
 
-	   Put_Line( "My Path currently is");
-	   Put_Line( Path );
-	   Put_Line( "Which after been split becomes" );
-	   Iterate( To_Vector( Path ), Vector_Iterator'Access );
+	Put_Line( "MY home directory is " & Get_Home );
 
-	   New_Line;
+	New_Line;
 
-		for i in Path_String'Range loop
-			Put( "   " & To_String( Path_String( i ) ) & "  =>  " );
-			Put_Line( Get_Absolute_Path( To_String( Path_String( i ) ) ) );
-		end loop;
+	Put_Line( "My Path currently is");
+	Put_Line( Path );
+	Put_Line( "Which after been split becomes" );
+	Iterate( To_Vector( Path ), Vector_Iterator'Access );
 
-	   New_Line;
+	New_Line;
 
-	   Put_Line( "A local configuration file for FS_Tests: " & Get_Config_Dir( "FS_Tests" ) );
-	   Put_Line( "A global configuration file for FS_Tests: " & Get_Global_Config_Dir( "FS_Tests" ) );
+	for i in Path_String'Range loop
+		Put( "   " & To_String( Path_String( i ) ) & "  =>  " );
+		Put_Line( Get_Absolute_Path( To_String( Path_String( i ) ) ) );
+	end loop;
 
-	   New_Line;
+	New_Line;
 
-	   Put( "Does the file ''~/oopzy.lol'' exist? " );
+	Put_Line( "A local configuration file for FS_Tests: " & Get_Config_Dir( "FS_Tests" ) );
+	Put_Line( "A global configuration file for FS_Tests: " & Get_Global_Config_Dir( "FS_Tests" ) );
+
+	New_Line;
+
+	Put( "Does the file ''~/oopzy.lol'' exist? " );
 	--   if Is_File( "~/oopzy.lol" ) then
 	--	   Put_Line( "YES!" );
 	--  else
 	--	   Put_Line( "NO!" );
 	--   end if;
 
-	   New_Line;
+	New_Line;
 
-	   Put("The name of the /lol/file.ads is: ");
-	   Put_Line(Get_File_Name("/lol/file.ads"));
+	Put("The name of the /lol/file.ads is: ");
+	Put_Line(Get_File_Name("/lol/file.ads"));
 
-	   Put("The complete path for the dir of the file ~/oopzy.lol is ");
-	   Put_Line(Get_Dir_Name("~/oopzy.lol"));
+	Put("The complete path for the dir of the file ~/oopzy.lol is ");
+	Put_Line(Get_Dir_Name("~/oopzy.lol"));
+
+
+	New_Line;
+
+	if Ada.Directories.Exists( demo_target ) then
+		Put_Line( "Removing "" " & demo_target & """.." );
+		Ada.Directories.Delete_Tree( demo_target );
+	end if;
+
+	Put_Line( "Copying the current folder to subdirectory """ & demo_target & """" );
+	Copy_Directory( Source_Name => ".", Target_Name => demo_target, Form => "" );
 
 end fs_tests;

@@ -23,6 +23,10 @@ procedure Json_Test is
 		case the_type is
 			when json_integer=>
 				Put_Line( Integer'Image( Get( A_Array, Index ) ) );
+			when json_float =>
+				Put_Line( Float'Image( Get( A_Array, index ) ) );
+			when Json_boolean =>
+				Put_Line( Boolean'Image( Get( A_Array, index ) ) );
 			when json_string =>
 				Put_Line( Ada.Strings.Unbounded.To_String( Get( A_Array, Index ) ) );
 			when json_array =>
@@ -49,6 +53,10 @@ procedure Json_Test is
 		case the_type is
 			when json_integer=>
 				Put_Line( Integer'Image( Get( A_Object, Key ) ) );
+			when json_float =>
+				Put_Line( Float'Image( Get( A_Object, Key ) ) );
+			when json_boolean =>
+				Put_line( Boolean'Image( Get( A_Object, Key ) ) );
 			when json_string =>
 				Put_Line( Ada.Strings.Unbounded.To_String( Get( A_Object, Key ) ) );
 			when json_array =>

@@ -102,7 +102,6 @@ begin
 	Ada.Text_IO.Put_Line("");
 	Ada.Text_IO.Put_Line("Texto 1 ....");
 	Ada.Text_IO.Put_Line(To_String(Src));
-	Ada.Text_IO.Put_Line(To_String(Date(Src, Hora)));
 end Calendar_Test;
 
 

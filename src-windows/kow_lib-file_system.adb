@@ -272,6 +272,58 @@ package body KOW_Lib.File_System is
 		return L & '\' & R;
 	end "/";
 
+	procedure Copy_Directory(
+				Source_Name	: in String;
+				Target_Name	: in String;
+				Form		: in String := ""
+			) is
+		use Ada.Directories;
+		-- copy the directory and all it's files from Source_Name to Target_Name
+		-- ignore special files
+
+		Childs : UString_Vectors.Vector;
+
+		procedure Process_All( D : in Directory_Entry_Type ) is
+		begin
+			case Kind( D ) is
+				when Directory =>
+					UString_Vectors.Append( Childs, To_Unbounded_String( Simple_Name( D  ) ) );
+				when Ordinary_File =>
+						Copy_File(
+								Source_name	=> Full_Name( D ),
+								Target_Name	=> Target_Name / Simple_Name( D ),
+								Form		=> Form
+							);
+				when Special_File => null;
+			end case;
+		end Process_All;
+
+		procedure Copy_Childs( C : in UString_Vectors.Cursor ) is
+			SName : constant String := To_String( UString_Vectors.Element( C ) );
+		begin
+			if SName = "." or else SName = ".." then
+				return;
+			end if;
+			Copy_Directory(
+					Source_Name	=> Source_Name / SName,
+					Target_Name	=> Target_Name / SName,
+					Form		=> Form
+				);
+		end Copy_Childs;
+
+	begin
+		Create_Path(
+				New_Directory	=> Target_Name,
+				Form		=> Form
+			);
+		Search(
+				Directory	=> Source_Name,
+				Pattern		=> "",
+				Process		=> Process_All'Access
+			);
+
+		UString_Vectors.Iterate( Childs, Copy_Childs'Access );
+	end Copy_Directory;
 
 end KOW_Lib.File_System;
 
