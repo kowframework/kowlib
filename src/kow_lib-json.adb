@@ -40,6 +40,8 @@ with Ada.Characters.Latin_1;
 with Ada.Containers.Ordered_Maps;
 with Ada.Unchecked_Deallocation;
 with Ada.Finalization;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;		use Ada.Strings.Unbounded;
 
 
@@ -910,13 +912,23 @@ package body KOW_Lib.Json is
 
 	function To_Json( Data : in Json_Data_Type ) return String is
 	begin
+		if Data.The_Type = Json_String then
+			return ''' & KOW_Lib.String_Util.Json_Scriptify( To_String( Data ) ) & ''';
+		else
+			return To_String( Data );
+		end if;
+	end To_Json;
+
+	function To_String( Data : in Json_Data_type ) return String is
+		-- convert the given type into string representation
+	begin
 		case Data.The_Type is
 			when Json_Integer =>
-				return Integer'Image( Data.Int );
+				return Ada.Strings.Fixed.Trim( Integer'Image( Data.Int ), Ada.Strings.Both );
 			when Json_Float =>
-				return Float'Image( Data.Fl );
+				return Ada.Strings.Fixed.Trim( Float'Image( Data.Fl ), Ada.Strings.Both );
 			when Json_String =>
-				return ''' & KOW_Lib.String_Util.Json_Scriptify( To_String( Data.Str ) ) & ''';
+				return To_String( Data.Str );
 			when Json_Boolean =>
 				if Data.Bool then	-- has got to be lowercase
 					return "true";
@@ -928,7 +940,6 @@ package body KOW_Lib.Json is
 			when Json_Object =>
 				return To_Json( Data.Object.All );
 		end case;
-	end To_Json;
-
+	end To_String;
 
 end KOW_Lib.Json;

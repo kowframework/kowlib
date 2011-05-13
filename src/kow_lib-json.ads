@@ -100,6 +100,9 @@ package KOW_Lib.Json is
 				Data		:    out Json_Data_Type
 			);
 	function To_Json( Data : in Json_Data_Type ) return String;
+	-- convert the given type into json representation, including ' when needed
+	function To_String( Data : in Json_Data_type ) return String;
+	-- convert the given type into string representation
 
 
 
