@@ -399,6 +399,25 @@ package body KOW_Lib.String_Util is
 
 
 
+
+	function Texify( Str : in String ) return String is
+		-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
+		The_Str : Unbounded_String := To_Unbounded_String( Str );
+
+		Escape	: String := (
+					 1	=> '\'
+				);
+
+	begin
+		for i in Escape'Range loop
+			Str_Replace( From => Escape( i .. i ), To => '\' & Escape( i ), Str => The_Str );
+		end loop;
+		Str_Replace( From => "" & Ada.Characters.Latin_1.CR, To => "" , Str => The_Str );
+
+		return To_String( The_Str );
+	end Texify;
+
+
 	procedure Copy( To : in out String; From : in String ) is
 	begin
 		To( To'First .. To'First + From'Length - 1 )	:= From;

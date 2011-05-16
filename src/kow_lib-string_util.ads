@@ -118,6 +118,10 @@ package KOW_Lib.String_Util is
 	-- replace \ by \\, " by \" and ' by \' (and so on) for sending to external resources as a single string
 
 
+	function Texify( Str : in String ) return String;
+	-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
+
+
 	procedure Copy( To : in out String; From : in String );
 	-- copy the values from a string to another leaving the remaining chars of the To string ' '
 private
