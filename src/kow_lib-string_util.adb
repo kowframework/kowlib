@@ -418,6 +418,16 @@ package body KOW_Lib.String_Util is
 	end Texify;
 
 
+	function Cfgify( Str : in String ) return String is
+		-- process the string so it's safe to put as a value in our own config file syntax..
+		The_Str : Unbounded_String := To_Unbounded_String( Str );
+	begin
+		Str_Replace( From => """", To => """""", Str => The_Str );
+		Str_Replace( From => "" & Ada.Characters.Latin_1.CR, To => "" , Str => The_Str );
+
+		return To_String( The_Str );
+	end Cfgify;
+
 	procedure Copy( To : in out String; From : in String ) is
 	begin
 		To( To'First .. To'First + From'Length - 1 )	:= From;

@@ -122,6 +122,9 @@ package KOW_Lib.String_Util is
 	-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
 
 
+	function Cfgify( Str : in String ) return String;
+	-- process the string so it's safe to put as a value in our own config file syntax..
+
 	procedure Copy( To : in out String; From : in String );
 	-- copy the values from a string to another leaving the remaining chars of the To string ' '
 private
