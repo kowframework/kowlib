@@ -135,7 +135,7 @@ package body KOW_Lib.Json is
 		D : Json_Data_Type;
 	begin
 		D.The_Type := Json_String;
-		D.Str := Value;
+		D.Str := KOW_Lib.String_Util.Json_Unescriptify( Value );
 		return D;
 	end To_Data;
 

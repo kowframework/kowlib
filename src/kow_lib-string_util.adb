@@ -397,22 +397,57 @@ package body KOW_Lib.String_Util is
 		return To_String( The_Str );
 	end JSon_Scriptify;
 
+	function Json_Unescriptify( Str : in String ) return String is
+		-- inverse of json_scriptfy
+	begin
+		return To_String( Json_Unescriptify( To_Unbounded_String( Str ) ) );
+	end Json_Unescriptify;
 
-
-
-	function Texify( Str : in String ) return String is
-		-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
-		The_Str : Unbounded_String := To_Unbounded_String( Str );
+	function Json_Unescriptify( Str : in Unbounded_String ) return Unbounded_String is
+		-- inverse of json_scriptfy
+		The_Str : Unbounded_String := Str;
 
 		Escape	: String := (
-					 1	=> '\'
+					 1	=> '\',
+					 2	=> ''',
+					 3	=> '"',
+					 4	=> Ada.Characters.Latin_1.LF
 				);
 
 	begin
 		for i in Escape'Range loop
+			Str_Replace( From => '\' & Escape( i ), To => Escape( i .. i ), Str => The_Str );
+		end loop;
+
+		return The_Str;
+	end Json_Unescriptify;
+
+
+	function Texify( Str : in String ) return String is
+		-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
+
+		-- process a string so it is safe to send to LaTeX.
+		-- notice all commands are removed when calling this
+
+		use KOW_Lib.String_Util;
+
+		The_Str : Unbounded_String := To_Unbounded_String( Str );
+
+		Escape	: String := (
+					1	=> '\',
+					2	=> '$',
+					3	=> '{',  4	=> '}',
+					5	=> '&',
+					6	=> '#',
+					7	=> '%'
+--					8	=> '_'
+--					7	=> '[',  8	=> ']'
+--					NOTE :: as far as I know there is no need for escaping []... actually I got some erros thanks to this..
+				);
+	begin
+		for i in Escape'Range loop
 			Str_Replace( From => Escape( i .. i ), To => '\' & Escape( i ), Str => The_Str );
 		end loop;
-		Str_Replace( From => "" & Ada.Characters.Latin_1.CR, To => "" , Str => The_Str );
 
 		return To_String( The_Str );
 	end Texify;

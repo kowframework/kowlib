@@ -113,10 +113,18 @@ package KOW_Lib.String_Util is
 	-- replace \ by \\, " by \" and ' by \' (and so on) for sending to external resources as a single string
 
 
+
 	function JSon_Scriptify( Str : in String ) return String;
 	-- process any string setting it safe to directly send to JSon script environments such as bash
 	-- replace \ by \\, " by \" and ' by \' (and so on) for sending to external resources as a single string
 
+
+	function Json_Unescriptify( Str : in String ) return String;
+	-- inverse of json_scriptfy
+
+
+	function Json_Unescriptify( Str : in Unbounded_String ) return Unbounded_String;
+	-- inverse of json_scriptfy
 
 	function Texify( Str : in String ) return String;
 	-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
