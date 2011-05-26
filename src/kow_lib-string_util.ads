@@ -126,8 +126,9 @@ package KOW_Lib.String_Util is
 	function Json_Unescriptify( Str : in Unbounded_String ) return Unbounded_String;
 	-- inverse of json_scriptfy
 
-	function Texify( Str : in String ) return String;
+	function Texify( Str : in String; Fix_Underscore : Boolean := False ) return String;
 	-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
+	-- if Fix_Underscore then replace _ to \_
 
 
 	function Cfgify( Str : in String ) return String;

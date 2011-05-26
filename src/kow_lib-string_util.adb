@@ -423,7 +423,10 @@ package body KOW_Lib.String_Util is
 	end Json_Unescriptify;
 
 
-	function Texify( Str : in String ) return String is
+	function Texify( Str : in String; Fix_Underscore : Boolean := False ) return String is
+		-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
+		-- if Fix_Underscore then replace _ to \_
+
 		-- process the string so it's safe to run with TeX :: doesn't take into account the encoding!
 
 		-- process a string so it is safe to send to LaTeX.
@@ -439,13 +442,19 @@ package body KOW_Lib.String_Util is
 					3	=> '{',  4	=> '}',
 					5	=> '&',
 					6	=> '#',
-					7	=> '%'
---					8	=> '_'
---					7	=> '[',  8	=> ']'
---					NOTE :: as far as I know there is no need for escaping []... actually I got some erros thanks to this..
+					7	=> '%',
+					8	=> '_'
 				);
+		function Last return integer is
+		begin
+			if Fix_Underscore then
+				return Escape'Last;
+			else
+				return Escape'Last - 1;
+			end if;
+		end Last;
 	begin
-		for i in Escape'Range loop
+		for i in Escape'First .. Last loop
 			Str_Replace( From => Escape( i .. i ), To => '\' & Escape( i ), Str => The_Str );
 		end loop;
 
