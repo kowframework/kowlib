@@ -458,6 +458,10 @@ package body KOW_Lib.String_Util is
 			Str_Replace( From => Escape( i .. i ), To => '\' & Escape( i ), Str => The_Str );
 		end loop;
 
+
+		Str_Replace( From => Character'Val( 16#c2# ) &  Character'Val( 16#a0# ), To => " ", Str => The_Str );
+		-- LaTeX doesn't like the NO-BREAK SPACE unicode character..
+
 		return To_String( The_Str );
 	end Texify;
 
