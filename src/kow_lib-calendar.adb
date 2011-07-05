@@ -327,7 +327,17 @@ package body KOW_Lib.Calendar is
 		P : Positive := Picture'First;
 
 		begin
-			Split (Date, Year, Month, Day, Hour, Minute, Second, Sub_Second);
+			Ada.Calendar.Formatting.Split(
+					Date		=> Date,
+					Year		=> Year,
+					Month		=> Month,
+					Day		=> Day,
+					Hour		=> Hour,
+					Minute		=> Minute,
+					Second		=> Second,
+					Sub_Second	=> Sub_Second,
+					Time_Zone	=> Ada.Calendar.Time_Zones.UTC_Time_Offset( Ada.Calendar.Clock ) -- so we get the local timezone TODO :: rely on timezones
+				);
 
 		loop
 			--  A directive has the following format "%[-_]."
