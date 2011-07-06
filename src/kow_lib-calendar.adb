@@ -336,7 +336,7 @@ package body KOW_Lib.Calendar is
 					Minute		=> Minute,
 					Second		=> Second,
 					Sub_Second	=> Sub_Second,
-					Time_Zone	=> Ada.Calendar.Time_Zones.UTC_Time_Offset( Ada.Calendar.Clock ) -- so we get the local timezone TODO :: rely on timezones
+					Time_Zone	=> Ada.Calendar.Time_Zones.UTC_Time_Offset( Date ) 
 				);
 
 		loop
