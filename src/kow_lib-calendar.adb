@@ -135,21 +135,6 @@ package body KOW_Lib.Calendar is
 	---------- FORMATTER ----------
 	-------------------------------
 	
-	function Get_Date return Time is
-		
-		A_Time : Ada.Calendar.Time := Ada.Calendar.Clock;
-		-- Gets a value indicating the current time
-
-		UTC_Adjustment : Ada.Calendar.Time_Zones.Time_Offset :=
-			Ada.Calendar.Time_Zones.UTC_Time_Offset (A_Time); 
-		-- Gets the difference between the time zone of the function call and
-		-- UTC (Coordinate Universal Time) - this is close but not quite the
-		-- same as GMT (Greenwich Mean Time). This difference includes local
-		-- time changes as daylight saving.
-	begin	
-		return A_Time + Duration(UTC_Adjustment * 60);
-	end Get_Date;
-
 
 	function Get_Formatter(Pattern : Unbounded_String) return Formatter is
 		F : Formatter;
@@ -295,19 +280,13 @@ package body KOW_Lib.Calendar is
 	-- END OF LOCAL SUBPROGRAMS --
 	------------------------------
 
-
-
-	function Format( F: Formatter; Date : Time ) return String is 
-	begin
-		-- Call Format using the date and the ISO Locale.  
-		return Format(Get_Locale("ISO"), F, date);
-	end format;
-
-
-	function Format (	L		: Locale;
-						F 		: Formatter;
-						Date 	: Ada.Calendar.Time ) return String is
-		-- returns the date formatted according to Formatter's Pattern and Locale.
+	function Format(
+				L		: in Locale;
+				F		: in Formatter; 
+				date		: in Time;
+				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String is
+		-- returns the date formatted according to Formatter's Pattern, Locale and time zone. 
 
 		Picture : String := To_String(F.Pattern);
 		
@@ -336,7 +315,7 @@ package body KOW_Lib.Calendar is
 					Minute		=> Minute,
 					Second		=> Second,
 					Sub_Second	=> Sub_Second,
-					Time_Zone	=> Ada.Calendar.Time_Zones.UTC_Time_Offset( Date ) 
+					Time_Zone	=> Time_Zone
 				);
 
 		loop
@@ -592,24 +571,60 @@ package body KOW_Lib.Calendar is
 
 		return To_String (Result);
 	end Format;
-	
-	function Format( L : in Locale; Date : in Time ) return String is
-		-- format the date using the default date formater for the given locale
+
+
+
+	function Format(
+				L		: in Locale;
+				Date		: in Time;
+				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String is
+		-- format the date using the default date formater for the given locale in the local time zone
 	begin
 		return Format(
-				L,
-				Get_Formatter(
-						KOW_Lib.Locales.Get_Default_Date_Pattern( L )
-					),
-				Date
+				L		=> L,
+				F		=> Get_Formatter(
+								KOW_Lib.Locales.Get_Default_Date_Pattern( L )
+							),
+				Date		=> Date,
+				Time_Zone	=> Time_Zone
 			);
 	end Format;
 
-	function Format( Date : in Time ) return String is
-		-- format the date using the default date formater for the default locale
+
+
+	function Format(
+				Date		: in Time;
+				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String is
+		-- format the date using the default date formater for the default locale in local time zone
 	begin
-		return Format( KOW_Lib.Locales.DEFAULT_LOCALE, Date );
+		return Format(
+				L		=> KOW_Lib.Locales.DEFAULT_LOCALE,
+				Date		=> Date,
+				Time_Zone	=> Time_Zone
+			);
 	end Format;
+
+
+
+
+	function Format(
+				F		: in Formatter;
+				Date		: in Time;
+				Time_zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String is
+		--  Format the date using the ISO Locale at the give time zone
+	begin
+		return Format(
+				L		=> Get_Locale("ISO"),
+				F		=> F,
+				Date		=> Date,
+				Time_Zone	=> Time_Zone
+			);
+	end Format;
+
+
 
 end KOW_Lib.Calendar;
 

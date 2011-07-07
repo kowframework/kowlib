@@ -38,10 +38,19 @@
 
 
 
+--------------
+-- Ada 2005 --
+--------------
 with Ada.Calendar;			use Ada.Calendar; 
+with Ada.Calendar.Time_Zones;
 with Ada.Strings.Unbounded; 		use Ada.Strings.Unbounded;
-with KOW_Lib.Locales; 			use KOW_Lib.Locales;
 with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
+
+
+-------------------
+-- KOW Framework --
+-------------------
+with KOW_Lib.Locales; 			use KOW_Lib.Locales;
 
 package KOW_Lib.Calendar is
 
@@ -137,23 +146,35 @@ package KOW_Lib.Calendar is
 	-- returns a Formatter for a String Pattern.
 	
 
-	function Format(L: Locale; F: Formatter; date: Time) 
-		return String;
-	-- returns the date formatted according to Formatter's Pattern and Locale.
+	function Format(
+				L		: in Locale;
+				F		: in Formatter; 
+				date		: in Time;
+				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String;
+	-- returns the date formatted according to Formatter's Pattern, Locale and time zone. 
 
 
-	function Format( L : in Locale; Date : in Time ) return String;
-	-- format the date using the default date formater for the given locale
+	function Format(
+				L		: in Locale;
+				Date		: in Time;
+				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String;
+	-- format the date using the default date formater for the given locale in the local time zone
 	
-	function Format( Date : in Time ) return String;
-	-- format the date using the default date formater for the default locale
+	function Format(
+				Date		: in Time;
+				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String;
+	-- format the date using the default date formater for the default locale in local time zone
 
-	function Format(F : Formatter; Date : Time) return String;
-	--  Format the date using the ISO Locale.  
+	function Format(
+				F		: in Formatter;
+				Date		: in Time;
+				Time_zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+			) return String;
+	--  Format the date using the ISO Locale at the give time zone
 	
-	function Get_Date return Time;
-	-- returns the current time.
-
 end KOW_Lib.Calendar;
 
 

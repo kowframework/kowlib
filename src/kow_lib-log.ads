@@ -94,7 +94,7 @@ package KOW_Lib.Log is
 	procedure Log(	Logger	: in Logger_Type;
 			Level	: in Log_Level;
 			Message	: in String);
-	-- logs a message in an active logger
+	-- logs a message in an active logger in the UTC
 
 private
 	type Logger_Type is record

@@ -30,12 +30,14 @@
 ------------------------------------------------------------------------------
 
 
+
+--------------
+-- Ada 2005 --
+--------------
+with Ada.Calendar;
+with Ada.Calendar.Formatting;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;		use Ada.Text_IO;
-
-
-
-with KOW_Lib.Calendar;
 
 package body KOW_Lib.Log is
 
@@ -65,10 +67,6 @@ package body KOW_Lib.Log is
 
 
 
-
-	Fmter : constant KOW_Lib.Calendar.Formatter := KOW_Lib.Calendar.Get_Formatter( "%Y-%m-%d %H:%M:%S" );
-
-
 	procedure Log(	Logger	: in Logger_Type;
 			Level	: in Log_Level;
 			Message	: in String) is
@@ -82,9 +80,14 @@ package body KOW_Lib.Log is
 
 			function Now_Str return String is
 				pragma Inline( Now_Str );
-				use KOW_Lib.Calendar;
 			begin
-				return '[' & Format( Fmter, Get_Date ) & ']';
+				return '[' &
+						Ada.Calendar.Formatting.Image(
+								Date			=> Ada.Calendar.Clock,
+								Include_Time_Fraction	=> True,
+								Time_Zone		=> 0	-- the log is in the UTC
+							) &
+						']';
 			end Now_Str;
 
 			Log_String: String := Now_Str &
