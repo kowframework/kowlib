@@ -48,21 +48,22 @@ with Ada.Text_IO;
 package KOW_Lib.Log is
 
 	type Log_Level is (
-		Level_Nul,		-- use the default level
-		Level_Off,		-- disable the logging for this component
-		Level_Error,		-- show error messages only
-		Level_Warning,		-- show error and warning messages only
-		Level_Info,		-- show error, warning and info messages only
-		Level_Debug		-- show all kind of messages!
+			Level_Nul,		-- use the default level
+			Level_Off,		-- disable the logging for this component
+			Level_Error,		-- show error messages only
+			Level_Warning,		-- show error and warning messages only
+			Level_Info,		-- show error, warning and info messages only
+			Level_Debug		-- show all kind of messages!
 		);	
 
 	for Log_Level use (
-		Level_Nul	=> -1,
-		Level_Off	=> 0,
-		Level_Error	=> 1,
-		Level_Warning	=> 7,
-		Level_Info	=> 14,
-		Level_Debug	=> 20 );
+			Level_Nul	=> -1,
+			Level_Off	=> 0,
+			Level_Error	=> 1,
+			Level_Warning	=> 7,
+			Level_Info	=> 14,
+			Level_Debug	=> 20
+		);
 
 
 	type Log_File_Type is not null access Ada.Text_IO.File_Type;
