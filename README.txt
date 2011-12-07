@@ -1,4 +1,4 @@
-	KOW Framework :: Lib
+KOW Framework :: Lib
 
 
 
