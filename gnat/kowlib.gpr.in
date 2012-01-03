@@ -13,20 +13,33 @@ project KOWlib is
 
 	version	:= $version;
 	
+	type Yes_No is ("yes", "no" );
 	type Supported_OS is ("Windows_NT", "GNU/Linux", "Darwin" );
 
 
 	-- the default is GNU/Linux
-	target : Supported_OS := external( "OS", "GNU/Linux" );
+	OS	: Supported_OS	:= external( "OS", "GNU/Linux" );
+	Debug	: Yes_No	:= external( "DEBUG", "no" );
 
 
 
-	for Source_Dirs use ( $include_path );
+	for Source_Dirs use ( "../../src/kowlib/" );
+	for Library_Name use $project;
+	for Library_kind use external( "LIBRARY_KIND", "static" );
 
 	-- LIBRARY
-	for Library_Dir use $lib_path;
-	for Library_Name use "kowlib";
-	case target is
+
+	case Debug is
+		when "yes" =>
+			for Library_Dir use "../kowlib-debug/" & Project'Library_Kind;
+		when "no" =>
+			for Library_Dir use "../kowlib/" & Project'Library_Kind;
+	end case;
+
+	for Object_Dir use Project'Library_Dir & "/obj";
+
+
+	case OS is
 		when "Windows_NT" =>
 			for Library_Kind use "static";
 
@@ -36,8 +49,8 @@ project KOWlib is
 		when "Darwin" =>
 			for Library_Kind use "static";
 	end case;
-	for Library_Version use "libkowlib.so." & Version;
-	for Externally_Built use "true";
+	for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+	for Externally_Built use External( "KOWLIB_EXTERNALLY_BUILT", "false" );
 
 
 	package Compiler is
@@ -45,7 +58,7 @@ project KOWlib is
 	end Compiler;
 
 	package Linker is
-		case target is
+		case OS is
 			when "Windows_NT" =>
 			when others =>
 				for Default_Switches ("ada") use ("-ldl");

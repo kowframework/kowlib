@@ -38,9 +38,9 @@
 #
 # How it works:
 # 	make setup =>
-# 		copy all the source files to $PWD/output/src
-# 		copy all gpr files to $PWD/output/lib/gnat/
-# 		process all .gpr.in files into $PWD/output/lib/gnat/FILENAME.gpr
+# 		copy all the source files to $BUIL_DIR/src/$PROJECT
+# 		copy all gpr files to $BUILD_DIR/lib/gnat/
+# 		process all .gpr.in files into $BUILD_DIR/lib/gnat/FILENAME.gpr
 #
 
 VERSION=$(shell cat version)
@@ -52,6 +52,16 @@ endif
 
 ifndef ($(BUILD_DIR))
 	BUILD_DIR=work
+endif
+
+
+ifndef ($(GPRBUILD))
+	GPRBUILD=gprbuild
+endif
+
+
+ifndef ($(PROCESSORS))
+	PROCESSORS=2
 endif
 
 GPR_PATH=lib/gnat 
@@ -102,8 +112,8 @@ process_gpr:
 
 include_setup:
 	@echo "Preparing include dir..."
-	@mkdir -p $(BUILD_DIR)/src
-	@cp $(INCLUDE_FILES) $(BUILD_DIR)/src/
+	@mkdir -p $(BUILD_DIR)/src/$(PROJECT)
+	@cp $(INCLUDE_FILES) $(BUILD_DIR)/src/$(PROJECT)
 
 
 
@@ -111,14 +121,21 @@ include_setup:
 # BUILD #
 #########
 
-build: checksetup
-	$(MAKE) pre_build
+build: checksetup pre_build debugbuild
+	@echo BUILDING NORMAL LIBRARY 
 	@$(MAKE) dobuild LIBRARY_KIND=static
 	@$(MAKE) dobuild LIBRARY_KIND=relocatable
-	ifeq ($(ENABLE_DEBUG), yes)
-		@$(MAKE) dobuild LIBRARY_KIND=static DEBUG=yes
-		@$(MAKE) dobuild LIBRARY_KIND=relocatable DEBUG=yes
-	endif
+
+
+ifeq  ($(ENABLE_DEBUG), yes)
+debugbuild:
+	@echo BUILDING DEBUG LIBRARY
+	@$(MAKE) dobuild LIBRARY_KIND=static DEBUG=yes
+	@$(MAKE) dobuild LIBRARY_KIND=relocatable DEBUG=yes
+else
+debugbuild:
+	echo nonono
+endif
 
 
 checksetup:
@@ -126,7 +143,7 @@ checksetup:
 	@test -d $(BUILD_DIR) 
 
 dobuild:
-	gprbuild -P$(BUILD_DIR)/lib/gnat/$(PROJECT).gpr -p
+	$(GPRBUILD) -P$(BUILD_DIR)/lib/gnat/$(PROJECT).gpr -d -j$(PROCESSORS) --create-missing-dirs
 
 #########
 # CLEAN #

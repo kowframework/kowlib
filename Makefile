@@ -5,8 +5,7 @@
 PROJECT=kowlib
 INCLUDE_FILES=src/*
 
-DOCS_DIRS=manual
-
+ENABLE_DEBUG=yes
 
 export KOW_LIB_EXTERNALY_BUILT=false
 
