@@ -2,12 +2,13 @@
 #
 # @author Marcelo Coraça de Freitas <marcelo@kow.com.br> 
 
-PROJECT_FILES=kowlib.gpr
-GPR_FILES=kowlib.gpr
+PROJECT=kowlib
 INCLUDE_FILES=src/*
 
-
 DOCS_DIRS=manual
+
+
+export KOW_LIB_EXTERNALY_BUILT=false
 
 
 ifeq ($(OS), Windows_NT)
@@ -19,8 +20,11 @@ endif
 include Makefile.include
 
 
-pre_libs:
-pos_libs:
+pre_setup:
+extra_gnatprep_setup:
+pos_setup:
+pre_build:
+pos_build:
 
 extra_clean:
 

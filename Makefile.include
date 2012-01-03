@@ -1,72 +1,149 @@
+# The main GNU Makefile for KOW Framework projects.
+#
+# @author Marcelo C. de Freitas
+#
+# This should be included by your own Makefile with the following set:
+#
+# Variables:
+# 	PROJECT		=> name of the project, which should also be the name for the main gpr file (should be inside the gnat folder)
+# 	ENABLE_DEBUG	=> yes/no (if should be build as debug; non-debug libraries are always built as well)
+# 	OS		=> the Operating System - GNU/Linux, Darwing, FreeBSD or Windows_NT (if not set will compile as GNU/Linux which should work for most).
+# 	PROCESSORS	=> how many processors are available (default is 2)
+#
+# Targets:
+# 	extra_gnatprep_setup
+# 		-- called after creating the gnatprep.def file, so you can add your own variables
+# 	pre_setup
+# 		-- called before setup
+# 	pos_setup
+# 		-- called after setup
+# 	pre_build
+# 		-- called before building
+# 	pos_build
+# 		-- called after building
+# 	extra_clean
+# 		-- called by the clean target
+#
+#
+#
+# In every case both static and relocatable libraries are built.
+# Which library to be used by your own project can be chosen by:
+# 	LIBRARY_KIND=static/relocatable
+#
+# Also, when ENABLE_DEBUG=yes, you can use the debug libraries by
+# 	DEBUG=yes
+#
+#
+#
+#
+# How it works:
+# 	make setup =>
+# 		copy all the source files to $PWD/output/src
+# 		copy all gpr files to $PWD/output/lib/gnat/
+# 		process all .gpr.in files into $PWD/output/lib/gnat/FILENAME.gpr
+#
 
 VERSION=$(shell cat version)
 
 ifndef ($(PREFIX))
-	PREFIX=/usr/local
-endif
-
-ifndef ($(INCLUDE_PATH))
-	INCLUDE_PATH=$(PREFIX)/include/$(shell basename $(PWD))
-endif
-
-ifndef ($(LIB_PATH))
-	LIB_PATH=$(PREFIX)/lib
-endif
-
-ifndef ($(GPR_PATH))
-	GPR_PATH=$(LIB_PATH)/gnat 
+	PREFIX=$(shell basename `basename \`which gnatls\``)
 endif
 
 
-ifndef ($(GPR_INCLUDE_PATH))
-	GPR_INCLUDE_PATH=$(INCLUDE_PATH)
+ifndef ($(BUILD_DIR))
+	BUILD_DIR=work
 endif
 
-ifndef ($(GPR_LIB_PATH))
-	GPR_LIB_PATH=$(LIB_PATH)
-endif
+GPR_PATH=lib/gnat 
 
 
-all: libs
-	@make pos_libs
+all: 
+	@echo Usage:
+	@echo make setup OPTIONS_HERE
+	@echo $(MAKE) build
+	@echo make install
+	@echo
+	@echo Other useful targets: clean, uninstall
 
 
-libs: pre_libs
-	@for project_file in $(PROJECT_FILES); do\
-		echo "Making $$project_file"; \
-		gnatprep "-Dversion=\"$(VERSION)\"" $$project_file.in $$project_file; \
-		gnatmake -P $$project_file; \
+
+#########
+# SETUP #
+#########
+setup: pre_setup gnatprep_setup gpr_setup include_setup pos_setup
+	@echo "######################"
+	@echo "# Now run make build #"
+	@echo "######################"
+
+gnatprep_setup:
+	@echo "Preparing def file.."
+	@echo version:=\"$(VERSION)\" > gnatprep.def
+	@echo prefix:=\"$(PREFIX)\" >> gnatprep.def
+	@echo project:=\"$(PROJECT)\" >> gnatprep.def
+	@$(MAKE) extra_gnatprep_setup
+
+
+gpr_setup: gpr_pure_setup gpr_in_setup
+	@echo "Preparing GPR files"
+
+gpr_pure_setup:
+	@mkdir -p $(BUILD_DIR)/lib/gnat/
+	@-cp gnat/*.gpr $(BUILD_DIR)/lib/gnat/ 
+
+gpr_in_setup:
+	@-for gpr_file in gnat/*.gpr.in;do \
+		$(MAKE) process_gpr GPR_FILE=$$gpr_file BUID_DIR=$(BUILD_DIR);\
 	done
 
-clean: gprclean extra_clean
-	@for project_file in $(PROJECT_FILES); do\
-		echo cleaning $$project_file ;\
-		gnatclean -P $$project_file; \
-		rm -f $(project_file); \
-	done
-	@rm -f $(PROJECT_FILES)
-	@echo "All clean"
 
-docs:
-	@for docdir in $(DOCS_DIRS); do make -C $$docdir;done
+process_gpr:
+	@gnatprep $(GPR_FILE) $(BUILD_DIR)/lib/gnat/$(shell basename $(GPR_FILE) .in) gnatprep.def
 
 
 
+include_setup:
+	@echo "Preparing include dir..."
+	@mkdir -p $(BUILD_DIR)/src
+	@cp $(INCLUDE_FILES) $(BUILD_DIR)/src/
 
-gprfile:
-	@echo "Preparing GPR file.."
-	@echo version:=\"$(VERSION)\" > gpr/gnatprep.def
-	@echo prefix:=\"$(PREFIX)\" >> gpr/gnatprep.def
-	@echo lib_path:=\"$(GPR_LIB_PATH)\" >> gpr/gnatprep.def
-	@echo include_path:=\"$(GPR_INCLUDE_PATH)\" >> gpr/gnatprep.def
-	for gpr_file in $(GPR_FILES);do \
-		gnatprep gpr/$$gpr_file.in gpr/$$gpr_file gpr/gnatprep.def;\
-	done
 
-gprclean:
-	@rm -f gpr/*gpr
-	@rm -f gpr/*.def
 
+#########
+# BUILD #
+#########
+
+build: checksetup
+	$(MAKE) pre_build
+	@$(MAKE) dobuild LIBRARY_KIND=static
+	@$(MAKE) dobuild LIBRARY_KIND=relocatable
+	ifeq ($(ENABLE_DEBUG), yes)
+		@$(MAKE) dobuild LIBRARY_KIND=static DEBUG=yes
+		@$(MAKE) dobuild LIBRARY_KIND=relocatable DEBUG=yes
+	endif
+
+
+checksetup:
+	@test -d $(BUILD_DIR) || echo Please be sure you have run $(MAKE) setup
+	@test -d $(BUILD_DIR) 
+
+dobuild:
+	gprbuild -P$(BUILD_DIR)/lib/gnat/$(PROJECT).gpr -p
+
+#########
+# CLEAN #
+#########
+
+clean: extra_clean
+	@rm -rf $(BUILD_DIR) 
+	@rm -f gnatprep.def
+
+
+
+# TODO :: install, uninstall
+
+###########
+# INSTALL #
+###########
 
 install: includeinstall libinstall gprinstall 
 
