@@ -36,19 +36,14 @@ project KOWlib is
 			for Library_Dir use "../kowlib/" & Project'Library_Kind;
 	end case;
 
-	for Object_Dir use Project'Library_Dir & "/obj";
-
-
 	case OS is
 		when "Windows_NT" =>
-			for Library_Kind use "static";
-
-		when "GNU/Linux" =>
-			for Library_Kind use "dynamic";
-
-		when "Darwin" =>
-			for Library_Kind use "static";
+			for Object_Dir use Project'Library_Dir & "/obj";
+		when others =>
+			for Object_Dir use "/tmp/" & $project & "_build/objects/" & Project'Library_Kind;
 	end case;
+
+
 	for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 	for Externally_Built use External( "KOWLIB_EXTERNALLY_BUILT", "true" );
 
