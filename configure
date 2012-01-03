@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Main configuration file for KOW framework projects
+#
+# @author Marcelo C. de Freitas
+
+
+
+source scripts/configutil.sh
+
+###################
+# Default Options #
+###################
+
+
+enable_debug="false";
+enable_static="true";
+enable_relocatable="true";
+
+
+
+###########################
+# Command Line Parameters #
+###########################
+
+# Setup build environment
+for i in $@
+do
+	option=`echo $i | cut -d= -f1`
+	value=`echo $i | cut -d= -f2`
+
+	case $option in
+		--prefix ) 
+			prefix=$value;;
+		--enable-debug )
+			enable_debug="true";;
+		--disable-static )
+			enable_static="false";;
+		--disable-relocatable )
+			enable_relocatable="false";;
+	esac
+done
+
+
+
+
+
+check_in_path gprbuild
+
