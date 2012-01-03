@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# 
+# Local configuration file for KOW Lib
+
+
+
+if [[ "$OS" = "Windows_NT" ]]
+then
+	include_files="src/* src-windows/*"
+else
+	include_files="src/* src-posix/*"
+fi
+

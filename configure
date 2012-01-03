@@ -15,7 +15,16 @@ source scripts/configutil.sh
 enable_debug="false";
 enable_static="true";
 enable_relocatable="true";
+include_files=src/*
 
+prefix=$(dirname `which gnatls`)
+prefix=$(dirname $prefix)
+
+
+if [[ $OS -eq "" ]]
+then
+	OS="GNU/Linux"
+fi
 
 
 ###########################
@@ -37,12 +46,33 @@ do
 			enable_static="false";;
 		--disable-relocatable )
 			enable_relocatable="false";;
+		--os )
+			OS=$value;;
 	esac
 done
 
 
-
-
-
 check_in_path gprbuild
 
+init_configuration
+
+
+if [[ -x configure.local ]]
+then
+	source configure.local
+fi
+
+set_configuration prefix "$prefix"
+set_configuration enable_debug $enable_debug
+set_configuration enable_static $enable_static
+set_configuration enable_relocatable $enable_relocatable
+set_configuration OS "$OS"
+set_configuration include_files "$include_files"
+
+
+
+echo
+echo "################################################"
+echo "# This is the build environment you did setup: #"
+echo "################################################"
+cat_configuration
