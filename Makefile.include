@@ -95,7 +95,6 @@ gpr_in_setup:
 		$(MAKE) process_gpr GPR_FILE=$$gpr_file BUID_DIR=$(BUILD_DIR);\
 	done
 
-
 process_gpr:
 	@gnatprep $(GPR_FILE) $(BUILD_DIR)/lib/gnat/$(shell basename $(GPR_FILE) .in) gnatprep.def
 
