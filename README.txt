@@ -8,4 +8,7 @@ ment of cross-platform softwares in Ada.
 
    It's released by the GNAT Modified GPL License (see LICENSE.txt and GPL.txt).
 
-   To build simply run "make" and follow the instructions
+   To build, run the commands:
+   	./configure
+	./build
+	./install
