@@ -64,6 +64,7 @@ ifndef ($(PROCESSORS))
 	PROCESSORS=2
 endif
 
+
 GPR_PATH=lib/gnat 
 
 
@@ -113,7 +114,13 @@ process_gpr:
 include_setup:
 	@echo "Preparing include dir..."
 	@mkdir -p $(BUILD_DIR)/src/$(PROJECT)
-	@cp -u $(INCLUDE_FILES) $(BUILD_DIR)/src/$(PROJECT)
+	@for i in $(INCLUDE_FILES); do \
+	      newfile=$(BUILD_DIR)/src/$(PROJECT)/`basename $$i`; \
+	      	test -e $$newfile || cp $$i $$newfile; \
+	      	test $$i -nt $$newfile && cp $$i $$newfile || echo -n ;\
+	      done
+
+
 
 
 
