@@ -50,7 +50,7 @@ project KOWlib is
 			for Library_Kind use "static";
 	end case;
 	for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
-	for Externally_Built use External( "KOWLIB_EXTERNALLY_BUILT", "false" );
+	for Externally_Built use External( "KOWLIB_EXTERNALLY_BUILT", "true" );
 
 
 	package Compiler is

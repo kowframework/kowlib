@@ -1,13 +1,16 @@
 # Makefile for the KOW Generic Library Framework
 #
 # @author Marcelo Coraça de Freitas <marcelo@kow.com.br> 
+#
+#
+# Please, read Makefile.include for more information
 
 PROJECT=kowlib
 INCLUDE_FILES=src/*
 
-ENABLE_DEBUG=yes
+ENABLE_DEBUG=false
 
-export KOW_LIB_EXTERNALY_BUILT=false
+GPRBUILD_PARAMS=-XKOWLIB_EXTERNALLY_BUILT=false
 
 
 ifeq ($(OS), Windows_NT)

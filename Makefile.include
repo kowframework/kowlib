@@ -6,7 +6,7 @@
 #
 # Variables:
 # 	PROJECT		=> name of the project, which should also be the name for the main gpr file (should be inside the gnat folder)
-# 	ENABLE_DEBUG	=> yes/no (if should be build as debug; non-debug libraries are always built as well)
+# 	ENABLE_DEBUG	=> true/false (if should be build as debug; non-debug libraries are always built as well)
 # 	OS		=> the Operating System - GNU/Linux, Darwing, FreeBSD or Windows_NT (if not set will compile as GNU/Linux which should work for most).
 # 	PROCESSORS	=> how many processors are available (default is 2)
 #
@@ -30,8 +30,8 @@
 # Which library to be used by your own project can be chosen by:
 # 	LIBRARY_KIND=static/relocatable
 #
-# Also, when ENABLE_DEBUG=yes, you can use the debug libraries by
-# 	DEBUG=yes
+# Also, when ENABLE_DEBUG=true, you can use the debug libraries by
+# 	DEBUG=true
 #
 #
 #
@@ -123,18 +123,17 @@ include_setup:
 
 build: checksetup pre_build debugbuild
 	@echo BUILDING NORMAL LIBRARY 
-	@$(MAKE) dobuild LIBRARY_KIND=static
-	@$(MAKE) dobuild LIBRARY_KIND=relocatable
+	@$(MAKE) dobuild LIBRARY_KIND=static 
+	@$(MAKE) dobuild LIBRARY_KIND=relocatable 
 
 
-ifeq  ($(ENABLE_DEBUG), yes)
+ifeq  ($(ENABLE_DEBUG), true)
 debugbuild:
 	@echo BUILDING DEBUG LIBRARY
-	@$(MAKE) dobuild LIBRARY_KIND=static DEBUG=yes
-	@$(MAKE) dobuild LIBRARY_KIND=relocatable DEBUG=yes
+	@$(MAKE) dobuild LIBRARY_KIND=static DEBUG=true
+	@$(MAKE) dobuild LIBRARY_KIND=relocatable DEBUG=true
 else
 debugbuild:
-	echo nonono
 endif
 
 
@@ -143,7 +142,7 @@ checksetup:
 	@test -d $(BUILD_DIR) 
 
 dobuild:
-	$(GPRBUILD) -P$(BUILD_DIR)/lib/gnat/$(PROJECT).gpr -d -j$(PROCESSORS) --create-missing-dirs
+	$(GPRBUILD) -P$(BUILD_DIR)/lib/gnat/$(PROJECT).gpr -d -q -j$(PROCESSORS) --create-missing-dirs $(GPRBUILD_PARAMS)
 
 #########
 # CLEAN #
