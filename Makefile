@@ -10,9 +10,9 @@ all:
 	./scripts/build.sh
 
 install:
-	./install.sh
+	./scripts/install.sh
 
 uninstall:
-	./uninstall.sh
+	./scripts/uninstall.sh
 clean:
 	./scripts/clean.sh

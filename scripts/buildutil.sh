@@ -118,3 +118,49 @@ build_library(){
 	export LIBRARY_KIND=$kind
 	$GPRBUILD -P$work_path/lib/gnat/$project.gpr -d -q -j$processors --create-missing-dirs $gprbuild_params
 }
+
+
+#############
+# File list #
+#############
+
+gen_filelist(){
+	list="$PWD/files.list"
+	cd "$work_path" && find . > "$list"
+}
+
+cat_filelist(){
+	if [[ -f files.list ]]
+	then
+		echo "Please remember to build $project first" >&2;
+	fi;
+	cat files.list
+}
+
+
+# iterate over the list of files...
+# usage:
+# 	iterate_filelist thecommandtobexecuted
+iterate_filelist(){
+	cat_filelist | while read a; do $1 "$a";done
+}
+
+###########
+# Install #
+###########
+
+
+install_item(){
+	if [[ -d "$1" ]]
+	then
+		install_directory "$1";
+	else
+		install_file "$1";
+	fi
+}
+
+install_directory(){
+}
+
+
+

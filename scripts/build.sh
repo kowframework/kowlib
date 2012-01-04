@@ -33,3 +33,4 @@ echo "##############################";
 export DEBUG="false";
 build_libraries;
 
+gen_filelist;
