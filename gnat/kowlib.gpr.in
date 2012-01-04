@@ -69,16 +69,5 @@ project KOWlib is
 		end case;
 	end Compiler;
 
-
-	--------------------
-	-- Linker Package --
-	--------------------
-	package Linker is
-		case OS is
-			when "Windows_NT" =>
-			when others =>
-				for Linker_Options use ("-ldl");
-		end case;
-	end Linker;
 end KOWlib;
 
