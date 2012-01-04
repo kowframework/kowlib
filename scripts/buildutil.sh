@@ -132,9 +132,10 @@ gen_filelist(){
 cat_filelist(){
 	if [[ -f files.list ]]
 	then
+		cat files.list
+	else
 		echo "Please remember to build $project first" >&2;
 	fi;
-	cat files.list
 }
 
 
