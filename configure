@@ -16,6 +16,7 @@ enable_debug="false";
 enable_static="true";
 enable_relocatable="true";
 include_files=src/*
+work_path="work"
 
 prefix=$(dirname `which gnatls`)
 prefix=$(dirname $prefix)
@@ -39,7 +40,7 @@ do
 
 	case $option in
 		--prefix ) 
-			prefix=$value;;
+			prefix="$value";;
 		--enable-debug )
 			enable_debug="true";;
 		--disable-static )
@@ -47,20 +48,50 @@ do
 		--disable-relocatable )
 			enable_relocatable="false";;
 		--os )
-			OS=$value;;
+			OS="$value";;
+		--work-dir )
+			work_path="$value";;
 	esac
 done
 
 
-check_in_path gprbuild
+#########################
+# Initial configuration #
+#########################
 
+check_in_path gprbuild
+check_in_path gnatprep
 init_configuration
 
+###########################
+# Run local configuration #
+###########################
 
 if [[ -x configure.local ]]
 then
 	source configure.local
 fi
+
+
+#######################
+# Include Files Setup #
+#######################
+
+source_destination="$work_path/src/$project"
+mkdir -p $source_destination
+
+for i in $include_files
+do
+	cpu "$i" $source_destination
+	#"$work_path/src/$project"
+done
+
+
+
+
+#######################################
+# Store the usual configuration flags #
+#######################################
 
 set_configuration prefix "$prefix"
 set_configuration enable_debug $enable_debug

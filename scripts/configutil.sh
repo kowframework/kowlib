@@ -20,16 +20,19 @@ check_in_path(){
 # usage:
 #	cpu origin destination
 cpu(){
-	if [[ -f "$1" ]]
+	origin="$1"
+	fname=$(basename "$1")
+	destination="$2/$fname"
+	if [[ -f "$origin" ]]
 	then
-		if [[ "$1" -nt "$2" ]]
+		if [[ "$origin" -nt "$destination" ]]
 		then
-			cp "$1" "$2";
+			cp "$origin" "$destination"
 		else
-			echo "Not copying \"$1\""
+			echo "Skipping \"$origin\""
 		fi
 	else
-		echo "Can't copy (not a regular file): \"$1\""
+		echo "Can't copy (not a regular file): \"$origin\""
 		exit 1;
 	fi
 }
