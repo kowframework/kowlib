@@ -145,6 +145,11 @@ iterate_filelist(){
 	cat_filelist | while read a; do $1 "$a";done
 }
 
+
+reverse_iterate_filelist(){
+	cat_filelist | tac | while read a; do $1 "$a";done
+}
+
 ###########
 # Install #
 ###########
@@ -166,6 +171,32 @@ install_directory(){
 
 install_file(){
 	install "$work_path/$1" "$prefix/$1"
+}
+
+
+
+
+#############
+# Uninstall #
+#############
+
+
+uninstall_item(){
+	if [[ -d "$work_path"/"$1" ]]
+	then
+		uninstall_directory "$1";
+	else
+		uninstall_file "$1";
+	fi
+}
+
+uninstall_directory(){
+	rmdir "$prefix/$1" || echo skipping "$prefix/$1"
+}
+
+
+uninstall_file(){
+	rm "$prefix/$1"
 }
 
 
