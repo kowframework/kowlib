@@ -126,7 +126,7 @@ build_library(){
 
 gen_filelist(){
 	list="$PWD/files.list"
-	cd "$work_path" && find . > "$list"
+	cd "$work_path" && find * > "$list"
 }
 
 cat_filelist(){
@@ -151,7 +151,7 @@ iterate_filelist(){
 
 
 install_item(){
-	if [[ -d "$1" ]]
+	if [[ -d "$work_path"/"$1" ]]
 	then
 		install_directory "$1";
 	else
@@ -160,7 +160,12 @@ install_item(){
 }
 
 install_directory(){
+	install -d "$prefix/$1";
 }
 
+
+install_file(){
+	install "$work_path/$1" "$prefix/$1"
+}
 
 
