@@ -4,6 +4,9 @@
 
 
 
+project="kowlib"
+
+
 if [[ "$OS" = "Windows_NT" ]]
 then
 	include_files="src/* src-windows/*"

@@ -29,7 +29,7 @@ cpu(){
 		then
 			cp "$origin" "$destination"
 		else
-			echo "Skipping \"$origin\""
+			echo "Skipping \"$origin\"" >> configure.log
 		fi
 	else
 		echo "Can't copy (not a regular file): \"$origin\""
@@ -73,3 +73,18 @@ cat_configuration(){
 load_configuration(){
 	source .configuration
 }
+
+
+################################
+# Gnatprep def file management #
+################################
+# see the documentation for configuration files; basically the same thing
+
+init_gnatprep() {
+	echo -n "" > gnatprep.def
+}
+
+set_gnatprep(){
+	echo $1:=\"$2\" >> gnatprep.def
+}
+
