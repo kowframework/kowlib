@@ -5,7 +5,7 @@
 
 
 
-source scripts/configutil.sh
+source scripts/buildutil.sh
 
 ###################
 # Default Options #
