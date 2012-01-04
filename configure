@@ -22,6 +22,9 @@ prefix=$(dirname `which gnatls`)
 prefix=$(dirname $prefix)
 
 version=$(cat version)
+processors=2
+
+GPRBUILD=gprbuild
 
 
 if [[ $OS -eq "" ]]
@@ -53,6 +56,15 @@ do
 			OS="$value";;
 		--work-path )
 			work_path="$value";;
+
+		--gprbuild )
+			GPRBUILD="$value";;
+
+		--gprbuild-params )
+			gprbuild_params="$value";;
+
+		--processors )
+			processors=$value;;
 	esac
 done
 
@@ -141,7 +153,10 @@ set_configuration OS "$OS"
 set_configuration include_files "$include_files"
 set_configuration version "$version"
 set_configuration work_path "$work_path"
-
+set_configuration GPRBUILD "$GPRBUILD"
+set_configuration gprbuild_params "$gprbuild_params"
+set_configuration processors $processors
+set_configuration project "$project"
 
 
 echo

@@ -32,7 +32,7 @@ cpu(){
 			echo "Skipping \"$origin\"" >> configure.log
 		fi
 	else
-		echo "Can't copy (not a regular file): \"$origin\""
+		echo "Can't copy (not a regular file): \"$origin\"" >&2
 		exit 1;
 	fi
 }
@@ -71,7 +71,13 @@ cat_configuration(){
 # usage:
 #	load_configuration
 load_configuration(){
-	source .configuration
+	if [[ -f .configuration ]]
+	then
+		source .configuration
+	else
+		echo "Please run configure first" >&2;
+		exit 1;
+	fi
 }
 
 
@@ -88,3 +94,26 @@ set_gnatprep(){
 	echo $1:=\"$2\" >> gnatprep.def
 }
 
+
+############
+# Building #
+############
+
+
+build_libraries(){
+	if [[ "$enable_static" = "true" ]]
+	then
+		build_library static
+	fi
+
+	if [[ "$enable_relocatable" = "true" ]]
+	then
+		build_library relocatable
+	fi
+}
+
+build_library(){
+	kind=$1;
+	echo "Building $kind library";
+	echo $GPRBUILD -P$work_path/lib/gnat/$project.gpr -d -q -j$processors --create-missing-dirs $gprbuild_params
+}
