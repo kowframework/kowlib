@@ -55,7 +55,7 @@ init_configuration(){
 # usage:
 #	setconfiguration key value
 set_configuration() {
-	echo $1=\"$2\" >> .configuration
+	echo export $1=\"$2\" >> .configuration
 }
 
 
@@ -115,5 +115,6 @@ build_libraries(){
 build_library(){
 	kind=$1;
 	echo "Building $kind library";
-	echo $GPRBUILD -P$work_path/lib/gnat/$project.gpr -d -q -j$processors --create-missing-dirs $gprbuild_params
+	export LIBRARY_KIND=$kind
+	$GPRBUILD -P$work_path/lib/gnat/$project.gpr -d -q -j$processors --create-missing-dirs $gprbuild_params
 }

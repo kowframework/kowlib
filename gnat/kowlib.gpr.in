@@ -43,19 +43,13 @@ project KOWlib is
 	case Debug is
 		when "true" =>
 			for Library_Dir use "../kowlib-debug/" & Project'Library_Kind;
-			for Object_Dir use "/tmp/" & $project & "-debug_build/objects/" & Project'Library_Kind;
+			for Object_Dir use $object_path & "/debug/" & Project'Library_Kind;
 		when "false" =>
 			for Library_Dir use "../kowlib/" & Project'Library_Kind;
-			for Object_Dir use "/tmp/" & $project & "_build/objects/" & Project'Library_Kind;
+			for Object_Dir use $object_path & "/" & Project'Library_Kind;
 
 	end case;
 
-	-- Fix the objects dir in windows:
-	case OS is
-		when "Windows_NT" =>
-			for Object_Dir use Project'Library_Dir & "/obj";
-		when others =>
-	end case;
 
 
 	for Library_Version use "lib" & Project'Library_Name & ".so." & Version;

@@ -7,10 +7,12 @@
 
 
 all:
-	./build
+	./scripts/build.sh
 
 install:
-	./install
+	./install.sh
 
 uninstall:
-	./uninstall
+	./uninstall.sh
+clean:
+	./scripts/clean.sh
