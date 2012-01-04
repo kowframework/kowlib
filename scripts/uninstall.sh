@@ -15,3 +15,5 @@ load_configuration
 
 
 reverse_iterate_filelist uninstall_item
+
+rmdir $prefix

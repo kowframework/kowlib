@@ -147,8 +147,9 @@ iterate_filelist(){
 }
 
 
+# Reverse iterate in the sense of listing first files than directories..
 reverse_iterate_filelist(){
-	cat_filelist | tac | while read a; do $1 "$a";done
+	cat_filelist | sort -nr | while read a; do $1 "$a";done
 }
 
 ###########
