@@ -47,8 +47,6 @@ with System;			use System;
 
 package body KOW_Lib.Libraries is
 
-	pragma Linker_Options ("-ldl");
-
 
 	function Dlopen (	Lib_Name : Interfaces.C.Strings.Chars_Ptr;
 		 		Mode     : Interfaces.C.int) return System.Address;
