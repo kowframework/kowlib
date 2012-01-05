@@ -43,17 +43,16 @@ project KOWlib is
 	case Debug is
 		when "true" =>
 			for Library_Dir use "../" & Project'Library_Name & "-debug/" & Project'Library_Kind;
-			for Object_Dir use $object_path & "/debug/" & Project'Library_Kind;
 		when "false" =>
 			for Library_Dir use "../" & Project'Library_name & "/" & Project'Library_Kind;
-			for Object_Dir use $object_path & "/" & Project'Library_Kind;
-
 	end case;
 
 
+	for Object_Dir use Project'Library_Dir & "/objects/";
 
 	for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 	for Externally_Built use External( "KOWLIB_EXTERNALLY_BUILT", "true" );
+
 
 
 
