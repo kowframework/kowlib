@@ -69,14 +69,5 @@ project KOWlib is
 	end Compiler;
 
 
-	package Linker is
-		case OS is
-			when "Windows_NT" =>
-				null;
-			when others =>
-				for Default_Switches ("Ada") use ( "-ldl" );
-		end case;
-	end Linker;
-
 end KOWlib;
 
