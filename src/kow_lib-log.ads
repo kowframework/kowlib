@@ -72,7 +72,7 @@ package KOW_Lib.Log is
 	Error_Output	: Log_File_Type := new Ada.Text_IO.File_Type'( Ada.Text_IO.Standard_Error );
 
 
-	Default_Level: Log_Level := Level_Debug;
+	Default_Level: Log_Level := Level_Error;
 	-- the default is to disable all the logging.
 
 
