@@ -224,7 +224,7 @@ package KOW_Lib.Locales.Default_Locales is
 	es_ES : constant Locale_Type := (
 
 					Code			=> ( "es", "ES" ),
-					Label			=> "Español",
+					Label			=> new String'( "Español" ),
 
 					Thousands_Separator	=> '.',
 					Decimal_Separator	=> ',',
@@ -241,7 +241,7 @@ package KOW_Lib.Locales.Default_Locales is
 					Week_Days		=> (
 									Monday		=> new String'( "lunes" ),
 									Tuesday		=> new String'( "martes" ),
-									Wednsday	=> new String'( "miércoles" ),
+									Wednesday	=> new String'( "miércoles" ),
 									Thursday	=> new String'( "jueves" ),
 									Friday		=> new String'( "viernes" ),
 									Saturday	=> new String'( "sábado" ),
@@ -251,7 +251,7 @@ package KOW_Lib.Locales.Default_Locales is
 					Short_Week_Days		=> (
 									Monday		=> new String'( "lun" ),
 									Tuesday		=> new String'( "mar" ),
-									Wednsday	=> new String'( "mié" ),
+									Wednesday	=> new String'( "mié" ),
 									Thursday	=> new String'( "jue" ),
 									Friday		=> new String'( "vie" ),
 									Saturday	=> new String'( "sáb" ),
@@ -303,7 +303,7 @@ package KOW_Lib.Locales.Default_Locales is
 
 				Default_Date	=> new String'( "%d/%m/%Y" ),
 				Default_Time	=> new String'( "%H:%M" ),
-				Default_Datatime=> new String'( "%d/%m/%Y %H:%M" ),
+				Default_Datetime=> new String'( "%d/%m/%Y %H:%M" ),
 
 				Short_Date	=> new String'( "%d/%m/%Y" ),
 				Long_Date	=> new String'( "%A, %d de %B de %Y %H:%M" ),
@@ -370,7 +370,7 @@ package KOW_Lib.Locales.Default_Locales is
 
 				Default_Date	=> new String'( "%d/%m/%Y" ),
 				Default_Time	=> new String'( "%H:%M" ),
-				Default_Datatime=> new String'( "%d/%m/%Y %H:%M" ),
+				Default_Datetime=> new String'( "%d/%m/%Y %H:%M" ),
 
 				Short_Date	=> new String'( "%d/%m/%Y" ),
 				Long_Date	=> new String'( "%A, %d de %B de %Y %H:%M" ),

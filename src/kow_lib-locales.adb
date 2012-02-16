@@ -44,6 +44,7 @@
 with Ada.Containers;			use Ada.Containers;
 with Ada.Containers.Hashed_Maps;
 with Ada.Environment_Variables;
+with Ada.Strings.Hash;
 
 
 -------------------
@@ -56,17 +57,17 @@ package body KOW_Lib.Locales is
 
 
 	function From_String( Str : in String ) return Locale_Code_Type is
-		function Language return String is
+		function Language return ISO_Code_Type is
 		begin
-			return Str( Str'First .. Str'First + 1 );
+			return ISO_Code_Type( Str( Str'First .. Str'First + 1 ) );
 		end Language;
 
-		function Country return String is
+		function Country return ISO_Code_Type is
 		begin
 			if Str'Length = 2 then
 				return "  ";
 			elsif Str'Length = 5 then
-				return Str( Str'Last - 1 .. Str'Last );
+				return ISO_Code_Type( Str( Str'Last - 1 .. Str'Last ) );
 			else
 				raise INVALID_LOCALE_CODE with Str;
 			end if;
@@ -87,9 +88,9 @@ package body KOW_Lib.Locales is
 		-- convert from/to the ISO locale code format 
 	begin
 		if Locale_Code.Country /= "  " then
-			return Locale_Code.Language & '_' & Locale_Code.Country;
+			return String( Locale_Code.Language ) & '_' & String( Locale_Code.Country );
 		elsif Locale_Code.Language /= "  " then
-			return Locale_Code.Language;
+			return String( Locale_Code.Language );
 		else
 			return "ISO";
 		end if;
@@ -144,7 +145,7 @@ package body KOW_Lib.Locales is
 
 	function Hash( Key : in Locale_Code_Type ) return Hash_Type is
 	begin
-		return Ada.Strings.Hash( Key.Language & Key.Country );
+		return Ada.Strings.Hash( String( Key.Language ) & String( Key.Country ) );
 	end Hash;
 begin
 	Register( Default_Locales.ISO );
