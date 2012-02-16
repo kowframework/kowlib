@@ -38,6 +38,8 @@
 ------------------------------------------------------------------------------
 
 
+with Ada.Calendar;			use Ada.Calendar;
+with Ada.Calendar.Formatting;		use Ada.Calendar.Formatting;
 with Ada.Containers;			use Ada.Containers;
 with Ada.Containers.Hashed_Maps;
 
@@ -54,14 +56,14 @@ package KOW_Lib.Locales is
 	-- The Locale Code --
 	---------------------
 
-	type ISO_Code_Type is String( 1 .. 2 );
+	type ISO_Code_Type is new String( 1 .. 2 );
 	type Locale_Code_Type is record
 		Language	: ISO_Code_Type := ( others => ' ' );
 		Country		: ISO_Code_Type := ( others => ' ' );
 	end record;
 
 
-	function From_String( Str : in String ) retunr Locale_Code_Type;
+	function From_String( Str : in String ) return Locale_Code_Type;
 	function To_String( Locale_Code : in Locale_Code_Type ) return String;
 	-- convert from/to the ISO locale code format 
 

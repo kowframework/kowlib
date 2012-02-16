@@ -55,7 +55,7 @@ with KOW_Lib.Locales.Default_Locales;
 package body KOW_Lib.Locales is 
 
 
-	function From_String( Str : in String ) retunr Locale_Code_Type is
+	function From_String( Str : in String ) return Locale_Code_Type is
 		function Language return String is
 		begin
 			return Str( Str'First .. Str'First + 1 );

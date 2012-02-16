@@ -221,7 +221,7 @@ package KOW_Lib.Locales.Default_Locales is
 	-- Spanish --
 	-------------
 
-	es : constant Locale_Type := (
+	es_ES : constant Locale_Type := (
 
 					Code			=> ( "es", "ES" ),
 					Label			=> "Español",
