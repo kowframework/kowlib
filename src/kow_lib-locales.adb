@@ -29,357 +29,132 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Containers.Hashed_Maps;	use Ada.Containers; 
-with Ada.Calendar; 			use Ada.Calendar;
-with Ada.Calendar.Formatting;		use Ada.Calendar.Formatting;
-with Ada.Strings;  			use Ada.Strings;
-with Ada.Strings.Fixed;  
-with Ada.Characters.Handling;		use Ada.Characters.Handling;
-
-with KOW_Lib.String_Util;	
-with Ada.Text_IO;			use Ada.Text_IO;
-
-package body KOW_Lib.Locales is
-	
-
-	function Get_Locale_Envvar return String is
-	begin
-		return "LOCALE"; 
-	end Get_Locale_Envvar;
-	
-	function Get_Locale_Envvar_Value return String is
-		use Ada.Environment_Variables;
-	begin
-		if Exists( Get_Locale_Envvar ) then
-		 	return Value(Get_Locale_Envvar);
-		else
-			raise LOCALE_ENVVAR_INVALID with
-				"Locale Environment Variable """ &
-				Get_Locale_Envvar & """does not exist.";
-		end if;
-	end Get_Locale_Envvar_Value;
-	
-	function Get_Environment_Locale return Locale is
-	begin
-		return Get_Locale( Get_Locale_Envvar_Value ); 
-	end Get_Environment_Locale; 
-
-	
-	function Get_Locale( Code: String ) return Locale is
-		pragma Inline(Get_Locale);
-	begin
-		return Get_Locale(To_Unbounded_String(Code));
-	end Get_Locale;
-	
-	
-	function Get_Locale( Code: Locale_Code ) return Locale is
-	-- gets a code like:
-	-- 	ll_CC_LL
-	-- where
-	-- 	ll => language
-	-- 	CC => country code
-	-- 	LL => locale code inside country
-	--
-	-- Find in order:
-	-- 	ll_CC_LL
-	-- 	ll_CC
-	-- 	ll
-	-- 
-	-- raise exception LOCALE_NOT_SUPPORTED when not found results.
-
-	Tmp: Unbounded_String := Code;
-	
-	use Locale_Tables;
-
-	begin
-		while Find(Supported_Locales, Tmp) = No_Element 
-		loop
-			if (Length(Tmp) - 3) > 1 then
-				Tmp := Head(Tmp, (Length(Tmp)- 3));
-			else
-				raise LOCALE_NOT_SUPPORTED with To_String( Code );
-			end if;		
-		end loop;
-
-		return Locale_Tables.Element(Supported_Locales, Tmp);
-	end Get_Locale;
+------------------------------------------------------------------------------
+-- This is the KOW_Lib.Locales package                                      --
+--                                                                          --
+-- Provides functions to get patterns that describe dates or times and      --
+-- functions that return a formatted number, date or name according to      --
+-- a specific Locale                                                        --
+------------------------------------------------------------------------------
 
 
-	procedure Set_Default_Locale(L: in Locale ) is
-	begin
-		DEFAULT_LOCALE := L;
-	end Set_Default_Locale;
+--------------
+-- Ada 2005 --
+--------------
+with Ada.Containers;			use Ada.Containers;
+with Ada.Containers.Hashed_Maps;
+with Ada.Environment_Variables;
 
 
-	function Get_Default_Locale return Locale is
-	begin
-		return DEFAULT_LOCALE;
-	end Get_Default_Locale;
+-------------------
+-- KOW Framework --
+-------------------
+with KOW_Lib.Locales.Default_Locales;
 
 
-
-	function Image( L: in Locale; D: in Day_Name; short: in Boolean)
-		return String is
-	begin
-		if short = true then
-			return To_String(L.DAY_OF_WEEK_SHORT_NAMES(D));
-		else
-			return To_String(L.DAY_OF_WEEK_NAMES(D));
-		end if;
-	end Image;
-
-	
-	function Image( D: in Day_Name; short: in Boolean)
-		return String is
+package body KOW_Lib.Locales is 
 
 
-	begin
-		return Image(Get_Default_Locale, D, short);
-	end Image;
-
-	
-
-	function Image( L: in Locale; D: in Month_Number; short: in Boolean)
-		return String is
-	
-	begin
-		if short = true then
-		 	return To_String(L.MONTH_SHORT_NAMES(D));
-		else
-		 	return To_String(L.MONTH_NAMES(D));
-		end if;
-	end Image;
-
-	function Image( D: in Month_Number; short: in Boolean)
-		return String is
-	
-	begin
-		return Image(Get_Default_Locale, D, short);
-	end Image;
-	
-
-
-	function Get_Short_Date_Pattern(L: in Locale)
-		return String is
-	begin
-		return To_String(L.DEFAULT_SHORT_DATE);
-	end Get_Short_Date_Pattern;
-	
-	function Get_Long_Date_Pattern(L: in Locale) return
-		String is
-	begin
-		return To_String(L.DEFAULT_LONG_DATE);
-	end Get_Long_Date_Pattern;
-	
-	function Get_Short_Date_Pattern	return String is
-	begin
-		return To_String(Get_Default_Locale.DEFAULT_SHORT_DATE);
-	end Get_Short_Date_Pattern;
-
-	function Get_Long_Date_Pattern return String is
-	begin
-		return To_String(Get_Default_Locale.DEFAULT_LONG_DATE);
-	end Get_Long_Date_Pattern;
-
-
-	function Get_Default_Time_Pattern( L: in Locale )
-		return String is
-	begin
-		return To_String(L.DEFAULT_TIME);
-	end Get_Default_Time_Pattern;
-
-
-	function Get_Default_Date_Pattern( L: in Locale )
-		return String is
-	begin
-		return To_String(L.DEFAULT_DATE);
-	end Get_Default_Date_Pattern;
-	
-
-
-	
-	function Get_Formatted_Number(L: in Locale; n: in Long_Float)
-		return String is
-	begin
-		-- format with precision of 2 decimal places
-		return Get_Formatted_Number(L, n, 2);
-	end Get_Formatted_Number;
-	
-	function Get_Formatted_Number(	L: in Locale;
-					n: in Long_Float;
-					decimal_places : in Integer) return String is
-		-- format according to Locale L, inserting decimal and
-		-- thousand separators on n and with precision of 
-		-- decimal_places decimal places.
-
-		Integer_Value : Integer := Integer(Long_Float'Truncation(n));
-		
-		Decimal_Value : Integer := Integer(Long_Float'Truncation((n
-			- (Long_Float'Truncation(n))) * 10.0 ** decimal_places )); 
-
-		
-		function Trim (str : in String) return String is
-		begin	
-			return Ada.Strings.Fixed.Trim (str, Both);
-		end Trim;
-		
-		Integer_Part : String := Trim(Integer'Image(Integer_Value));
-		Decimal_Part : String := Trim(Integer'Image(Decimal_Value));		
-		
-		Separs 			: Integer;
-		Integer_Length 	: Integer;
-		Res_Length 		: Integer;
-	
-	
-	begin
-		Separs := Integer_Part'Length/3 -1;
-		if Integer_Part'Length rem 3 > 0 then
-			Separs := Separs + 1;
-		end if;
-
-		Integer_Length := Integer_Part'Length + Separs;
-		Res_Length := Integer_Length;
-		if decimal_places > 0 then
-			Res_Length := Res_Length + Decimal_Places + 1;
-			--Decimal_Part'Length + 1; 
-		end if;
-
-		declare
-			Result : String( 1 .. Res_Length );
-			Index : Integer := 1;
-			Separs_Idx : Integer := 0;
+	function From_String( Str : in String ) retunr Locale_Code_Type is
+		function Language return String is
 		begin
-	
-			-- inserting the thousands separators
-			while Index <= Integer_Length loop
-				if Index mod 4 = 0 then
-					Result(Integer_Length + 1 - Index) :=
-						L.THOUSANDS_SEPARATOR;
-					Separs_Idx := Separs_Idx + 1;
-				else
-					Result(Integer_Length + 1 - Index) :=
-						Integer_Part(
-						Integer_Part'Length + 1 -
-						Index + Separs_Idx);
-				end if;
-				
-				Index := Index + 1;
-			end loop;
-			
-			-- inserting the decimal separators
-			if decimal_places > 0 then
-				Result(Index) := L.DECIMAL_SEPARATOR;
-				Index := Index + 1;
-				
-				for k in Decimal_Part'Range loop
-					Result(Index) := Decimal_Part(k);	
-					Index := Index + 1;
-				end loop;
+			return Str( Str'First .. Str'First + 1 );
+		end Language;
 
-				while Index <= Result'Last loop
-					Result(Index) := '0';
-					Index := Index + 1;
-				end loop;
-			end if;
-	
-			return Result;
-		end;
-
-	end Get_Formatted_Number;
-
-
-
-	function Get_Formatted_Currency(L: in Locale; n: in Long_Float)
-		return String is
-	begin
-		return To_String(L.CURRENCY_PREFIX) & " " &
-			Get_Formatted_Number(L, n);
-	end Get_Formatted_Currency;
-
-
-	function Get_Formatted_Currency(L: in Locale; n: in Long_Float;
-		decimal_places : in Integer) return String is
-	begin
-		return To_String(L.CURRENCY_PREFIX) & " " &
-			Get_Formatted_Number(L, n, decimal_places);
-	end Get_Formatted_Currency;
-
-		
-
-	function Get_Formatted_Percentage(L: in Locale; n: in Long_Float)
-		return String is
-	begin
-		return Get_Formatted_Number(L, n * 100.0) & "%";
-	end Get_Formatted_Percentage;
-
-	
-	function Get_Formatted_Percentage(	L: in Locale;
-						n: in Long_Float;
-						decimal_places : in Integer) return String is
-	begin
-		return Get_Formatted_Number(L, n * 100.0, decimal_places) & "%";
-	end Get_Formatted_Percentage;
-
-	
-
-	function Get_Formated_Full_Name(	L: in Locale; 
-						First_Name: in String; 
-						Last_Name: in String := "" ) return String is
-		Temporary_Name: Unbounded_String;
-	begin
-		if Last_Name'Length = 0 then
-			-- There is no need to format if the last name is empty.
-			--
-			-- Then we expect the full name is stored in the first name field.
-			return First_Name;
-		end if;
-
-		Temporary_Name := 
-			KOW_Lib.String_Util.Str_Replace(	From	=> "%f",
-							To		=> First_Name,
-							Str		=> To_String( L.FULL_NAMES ));
-
-		Temporary_Name := 
-			KOW_Lib.String_Util.Str_Replace(	From	=> "%l",
-							To	=> Last_Name,
-							Str	=> To_String( Temporary_Name ) );
-
-		return To_String( Temporary_Name );
-	end Get_Formated_Full_Name;
-
-
-	procedure Add_Locale(L: Locale) is
-		code : Unbounded_String := L.CODE;
-
-		LL : Locale := L;
-	begin
-		-- add all possible code for a Locale. For a code ll_CC_LL,
-		-- ll, ll_CC and ll_CC_LL are added to Supported_Locales.
-		loop
-			if not Locale_Tables.Contains( Supported_Locales, code )  then
-				Locale_Tables.Insert( Supported_Locales, code, LL);
-			end if;
-			
-			if (Length(code) - 3) > 1 then
-				code := Head(code, (Length(code)- 3));
-				LL.Auto_Generalized := True;
+		function Country return String is
+		begin
+			if Str'Length = 2 then
+				return "  ";
+			elsif Str'Length = 5 then
+				return Str( Str'Last - 1 .. Str'Last );
 			else
-				return;
-			end if;		
-		end loop;
-
-	end Add_Locale;
-
-	procedure Add_All_Supported_Locales is
+				raise INVALID_LOCALE_CODE with Str;
+			end if;
+		end Country;
 	begin
-		Add_Locale(LOCALE_pt_BR);
-		Add_Locale(LOCALE_en_US);
-		Add_Locale(LOCALE_es_ES);
-		Add_Locale(LOCALE_fr_FR);
-		Add_Locale(LOCALE_jp_JP);
-		Add_Locale(LOCALE_ISO);
-	end Add_All_Supported_Locales;
-	
+		if Str = "ISO" then
+			return ISO_Locale_Code;
+		else
+			return Locale_Code_Type'(
+						Language	=> Language,
+						Country		=> Country
+					);
+		end if;
+	end From_String;
+
+
+	function To_String( Locale_Code : in Locale_Code_Type ) return String is
+		-- convert from/to the ISO locale code format 
+	begin
+		if Locale_Code.Country /= "  " then
+			return Locale_Code.Language & '_' & Locale_Code.Country;
+		elsif Locale_Code.Language /= "  " then
+			return Locale_Code.Language;
+		else
+			return "ISO";
+		end if;
+	end To_String;
+
+
+	function Get_Default_Locale_Code return Locale_Code_Type is
+		-- get the default locale code from the locale variable
+	begin
+		return From_String( Ada.Environment_Variables.Value( Locale_Variable ) );
+	end Get_Default_Locale_Code;
+
+	---------------------
+	-- The Locale Type --
+	---------------------
+
+
+	---------------------
+	-- Locale Registry --
+	---------------------
+
+	procedure Iterate(
+				Iterator	: not null access procedure( Locale : in Locale_Type )
+			) is
+		-- iterate over all supported locales
+
+		use Locale_Maps;
+		procedure Inner_Iterator( C : in Cursor ) is
+		begin
+			Iterator.all( Element( C ) );
+		end Inner_Iterator;
+	begin
+		Iterate( Supported_Locales, Inner_Iterator'Access );
+	end Iterate;
+
+
+	function Get_Locale(
+				Locale_Code	: in Locale_Code_Type := Get_Default_Locale_Code 
+			) return Locale_Type is
+		-- get the given locale
+	begin
+		return Locale_Maps.Element( Supported_Locales, Locale_Code );
+	end Get_Locale;
+
+	procedure Register( Locale : in Locale_Type ) is
+	begin
+		Locale_Maps.Include( Supported_Locales, Locale.Code, Locale );
+	end Register;
+
+
+--private
+
+	function Hash( Key : in Locale_Code_Type ) return Hash_Type is
+	begin
+		return Ada.Strings.Hash( Key.Language & Key.Country );
+	end Hash;
 begin
-	Add_All_Supported_Locales;
+	Register( Default_Locales.ISO );
+
+	Register( Default_Locales.en );
+	Register( Default_Locales.en_US );
+
+	Register( Default_Locales.es_ES );
+
+	Register( Default_Locales.pt );
+	Register( Default_Locales.pt_BR );
 end KOW_Lib.Locales;
+
