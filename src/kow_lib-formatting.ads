@@ -30,10 +30,9 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the KOW_Lib.Calendar package                                      --
+-- This is the KOW_Lib.Formatting package                                   --
 --                                                                          --
--- Provides functions to handle dates and time, especially to format        --
--- according to Locale and Formatter's Pattern.                             --
+-- Here is where all the locale formatting methods are implemented          --
 ------------------------------------------------------------------------------
 
 
@@ -52,56 +51,17 @@ with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 -------------------
 with KOW_Lib.Locales; 			use KOW_Lib.Locales;
 
-package KOW_Lib.Calendar is
-
-	-------------------------------
-	---------- TIMESTAMP ----------
-	-------------------------------
-	
-	type Timestamp is new Natural;
-
-	function Get(This: in Timestamp; Key: in Character)
-		return Unbounded_String;
-	-- Funcao que recebe uma chave e retorna o valor;
-	-- Essas chaves sao usadas na funcao Date tambem!
-	--
-	-- Chave    Retorno                 Exemplos
-
-	--                   Hora
-
-	-- a        am ou pm minisculo      am e pm
-	-- A        AM ou PM maiusculo      AM e PM
-
-	--                   Dia
-
-	-- d        Dia do mes com 0s       01 ate 31
-	-- D        Dia da Semana 3 letras  TODO (Ingles, portugues, etc)
-	-- F        Mes escrito             TODO (Ingles, portugues, etc)
-	-- M        Mes escrito, 3 letras   TODO (,....)
-	-- m        Numero do Mes, com 0s   01 ate 12
-	-- TODO continuar documentacao
-
-
-	function To_Timestamp( Hora: in Ada.Calendar.Time) return Timestamp;
-	-- Retorna o timestamp dado um Time;
-
-	function To_Time( Hora: in Timestamp) return Time;
-	-- Retorna o Time dado um Timestamp;
+package KOW_Lib.Formatting is
 
 
 	------------------------------
-	--------- FORMATTER ----------
+	-- Date and Time formatting --
 	------------------------------
-	
+
 	Pattern_Error : exception;
   	--  Exception raised for incorrect pattern
 
-	type Formatter is record
-		Pattern: Unbounded_String;
-	end record; 
-	--  This formatter will format a date or time according to Pattern.
-	--
-	--  This pattern is a string to describe date and time output format. The string is
+	--  The pattern is a string to describe date and time output format. The string is
 	--  a set of standard character and special tag that are replaced by the
 	--  corresponding values. It follows the GNU Date specification. Here are
 	--  the recognized directives :
@@ -137,44 +97,25 @@ package KOW_Lib.Calendar is
 	--          %x   locale's date representation (mm/dd/yy)
 	--          %y   last two digits of year (00..99)
 	--          %Y   year (1970...)
-		
-		
-	function Get_Formatter(Pattern : Unbounded_String) return Formatter;
-	-- returns a Formatter for a Unbounded_String Pattern.
-	
-	function Get_Formatter(Pattern : String) return Formatter;
-	-- returns a Formatter for a String Pattern.
-	
 
-	function Format(
-				L		: in Locale;
-				F		: in Formatter; 
-				date		: in Time;
-				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
-			) return String;
-	-- returns the date formatted according to Formatter's Pattern, Locale and time zone. 
 
 
 	function Format(
-				L		: in Locale;
-				Date		: in Time;
-				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+				Pattern		: in Locales.String_Access;
+				T		: in Time
 			) return String;
-	-- format the date using the default date formater for the given locale in the local time zone
-	
-	function Format(
-				Date		: in Time;
-				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
-			) return String;
-	-- format the date using the default date formater for the default locale in local time zone
+	-- format the time variable using the T's time offset and given pattern
+
 
 	function Format(
-				F		: in Formatter;
-				Date		: in Time;
-				Time_zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+				Pattern		: in String;
+				T		: in Time;
+				Time_Zone	: in Time_Zones.Time_Offset 
 			) return String;
-	--  Format the date using the ISO Locale at the give time zone
+	-- format the time variable using the given time offset and pattern
+
 	
-end KOW_Lib.Calendar;
+	
+end KOW_Lib.Formatting;
 
 
