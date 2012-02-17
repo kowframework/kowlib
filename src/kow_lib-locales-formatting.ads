@@ -30,7 +30,7 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the KOW_Lib.Formatting package                                   --
+-- This is the KOW_Lib.Locales.Formatting package                                   --
 --                                                                          --
 -- Here is where all the locale formatting methods are implemented          --
 ------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 -------------------
 with KOW_Lib.Locales; 			use KOW_Lib.Locales;
 
-package KOW_Lib.Formatting is
+package KOW_Lib.Locales.Formatting is
 
 
 	------------------------------
@@ -116,6 +116,6 @@ package KOW_Lib.Formatting is
 
 	
 	
-end KOW_Lib.Formatting;
+end KOW_Lib.Locales.Formatting;
 
 

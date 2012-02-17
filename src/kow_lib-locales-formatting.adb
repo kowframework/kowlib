@@ -43,7 +43,7 @@ with KOW_Lib.Locales;		use KOW_Lib.Locales;
 
 
 
-package body KOW_Lib.Calendar is
+package body KOW_Lib.Locales.Formatting is
 
 
 	function Format(
@@ -490,5 +490,5 @@ package body KOW_Lib.Calendar is
 
 
 
-end KOW_Lib.Calendar;
+end KOW_Lib.Locales.Formatting;
 
