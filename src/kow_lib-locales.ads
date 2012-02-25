@@ -82,6 +82,8 @@ package KOW_Lib.Locales is
 	--------------------
 
 	type String_Access is access String;
+	function To_String( Str : in String_Access ) return String;
+	-- gets the value (being "" when str is null)
 
 	subtype Separator_Type is Character;
 

@@ -57,16 +57,6 @@ package body KOW_Lib.Locales.Formatting is
 	-- Helper Functions --
 	----------------------
 
-	function To_String( Str : in String_Access ) return String is
-	begin
-		if Str = null then
-			return "";
-		else
-			return Str.all;
-		end if;
-	end To_String;
-
-
 
 	function Am_Pm (H : Natural) return String is
 	begin

@@ -55,7 +55,6 @@ with KOW_Lib.Locales.Default_Locales;
 
 package body KOW_Lib.Locales is 
 
-
 	function From_String( Str : in String ) return Locale_Code_Type is
 		function Language return ISO_Code_Type is
 		begin
@@ -102,6 +101,27 @@ package body KOW_Lib.Locales is
 	begin
 		return From_String( Ada.Environment_Variables.Value( Locale_Variable ) );
 	end Get_Default_Locale_Code;
+
+
+
+	--------------------
+	-- Auxiliar Types --
+	--------------------
+
+	function To_String( Str : in String_Access ) return String is
+	begin
+		if Str = null then
+			return "";
+		else
+			return Str.all;
+		end if;
+	end To_String;
+
+
+
+
+
+
 
 	---------------------
 	-- The Locale Type --
