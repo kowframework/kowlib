@@ -46,105 +46,28 @@ with KOW_Lib.Locales;		use KOW_Lib.Locales;
 package body KOW_Lib.Locales.Formatting is
 
 
-	function Format(
-				Pattern		: in Locales.String_Access;
-				T		: in Time
-			) return String is
-		-- format the time variable using the T's time offset and given pattern
+	type Padding_Type is (
+			No_Padding,	-- don't fill spaces
+			Padding_Zero,	-- fill with zeros
+			Padding_Space	-- fill with spaces
+		);
+
+
+	----------------------
+	-- Helper Functions --
+	----------------------
+
+	function To_String( Str : in String_Access ) return String is
 	begin
-		return Format( Pattern, T, Time_Zones.UTC_Time_Offset( T ) );
-	end Format;
-
-	function Format(
-				Pattern		: in String;
-				T		: in Time;
-				Time_Zone	: in Time_Zones.Time_Offset 
-			) return String is
-		-- format the time variable using the given time offset and pattern
+		if Str = null then
+			return "";
+		else
+			return Str.all;
+		end if;
+	end To_String;
 
 
 
-
-	
-	function Get(Hora : Time; Key: in Character) return Unbounded_String is 
-		-- Funcao que receba uma chave e retorna o valor;
-		Str : Unbounded_String;
-		function To_Unb(Num: Integer; Tamanho: Integer) return Unbounded_String is
-			-- Transforma numero em Unb String com tamanho especifico;
-	
-			Str	: Unbounded_String;
-			T 	: Integer := Tamanho;
-			N 	: Integer := Num;
-			
-		begin
-			while T >= 1 loop
-				Str := Str & To_Unbounded_String(N/T);
-				
-				Put("[  ");Put(N);Put(To_String(Str));Put_Line("]");
-				N := N mod T;
-				T := T/10;
-			end loop;
-			
-			return Str;
-		end To_Unb;
-		
-	begin
-		Put("Entrou um => ");
-		Put(Key);
-		New_Line;
-
-		case Key is
-		
-			when 'd' => 
-				Str := To_Unb(Integer(Ada.Calendar.Day(Hora)),10);
-				Put(Integer(Ada.Calendar.Day(Hora)));
-			when 'm' => 
-				Str := To_Unb(Integer(Ada.Calendar.Month(Hora)),10);
-			when 'y' =>
-				Str := To_Unb(Integer(Ada.Calendar.Year(Hora))
-					mod 100, 10);
-			when 'Y' => 
-				Str := To_Unb(Integer(Ada.Calendar.Year(Hora)), 1000);
-			
-			when others => Str := Str;
-		end case;
-
-		Put("Saiu um [");
-		Put(To_String(Str));
-		Put_Line("]");
-
-		return Str ;
-	end Get;
-
-
-	type Padding_Mode is (None, Zero, Space);
-
-
-
-	--------------------------------
-	-- BEGIN OF LOCAL SUBPROGRAMS --
-	--------------------------------
-
-	function Am_Pm (H : Natural) return String;
-	--  Return AM or PM depending on the hour H
-
-	function Hour_12 (H : Natural) return Positive;
-	--  Convert a 1-24h format to a 0-12 hour format
-
-	function Image (Str : String; Length : Natural := 0)
-		return String;
- 	--  Return Str capitalized and cut to length number of characters. If
-	--  length is set to 0 it does not cut it.
-
-	function Image (	N		: Natural;
-						Padding : Padding_Mode := Zero;
-						Length  : Natural := 0) return String;
-	
-	--  As above with N provided in Integer format
-
-	-----------
-	-- Am_Pm --
-	-----------
 	function Am_Pm (H : Natural) return String is
 	begin
 	 if H = 0 or else H > 12 then
@@ -154,9 +77,6 @@ package body KOW_Lib.Locales.Formatting is
 	 end if;
 	end Am_Pm;
 
-	-------------
-	-- Hour_12 --
-	-------------
 
 	function Hour_12 (H : Natural) return Positive is
 	begin
@@ -169,44 +89,41 @@ package body KOW_Lib.Locales.Formatting is
 		end if;
 	end Hour_12;
 
-	-----------
-	-- Image --
-	-----------
-	
-	function Image (	Str : String;
-						Length : Natural := 0) return String
-	is
-		Local : constant String := Str;
+	function Image (
+				Str	: String;
+				Length	: Natural := 0
+			) return String	is
 	begin
 		if Length = 0 then
-			return Local;
+			return Str;
 		else
-			return Local (1 .. Length);
+			return Str( Str'First .. Str'First + Length - 1 );
 		end if;
 	end Image;
 
-	-----------
-	-- Image --
-	-----------
 
 
 	------------------------------
-	-- END OF LOCAL SUBPROGRAMS --
+	-- Date and Time formatting --
 	------------------------------
 
 	function Format(
-				L		: in Locale;
-				F		: in Formatter; 
-				date		: in Time;
-				Time_Zone	: in Time_Zones.Time_Offset := Time_Zones.UTC_Time_Offset( Clock )
+				L		: in Locale_Type;
+				T		: in Time;
+				Pattern		: in String
 			) return String is
-		-- returns the date formatted according to Formatter's Pattern, Locale and time zone. 
+		-- format the time variable using the T's time offset and given pattern
+	begin
+		return Format( L, T, Pattern, Time_Zones.UTC_Time_Offset( T ) );
+	end Format;
 
-		Pattern : String := To_String(F.Pattern);
-		
-		Fill		: Boolean := True;
-		Fill_Char	: Character := '0';
-		Result		: Unbounded_String;
+	function Format(
+				L		: in Locale_Type;
+				T		: in Time;
+				Pattern		: in String;
+				Time_Zone	: in Time_Zones.Time_Offset 
+			) return String is
+		-- format the time variable using the given time offset and pattern
 
 		Year		: Year_Number;
 		Month		: Month_Number;
@@ -216,204 +133,121 @@ package body KOW_Lib.Locales.Formatting is
 		Second		: Second_Number;
 		Sub_Second	: Second_Duration;
 
-		P : Positive := Pattern'First;
 
 
-		function C return Character is
-		begin
-			return Pattern( P );
-		end C;
+		function Value_Of( Key : in String ) return String is
+			C	: constant Character := Key( Key'First );
 
-		procedure Next is
-		begin
-			P := P + 1;
-		end Next;
-
-
-
-		procedure Append_Value is
-			-- append the value corresponding to the current value of P
+			function Padding return Padding_Type is
+			begin
+				if Key'Length = 1 then
+					return Padding_Zero;
+				else
+					if Key( Key'Last ) = '_' then
+						return Padding_Spaces;
+					elsif Key( Key'Last ) = '-' then
+						return No_Padding;
+					elsif Key( Key'Last ) = '0' then
+						return Padding_Zero;
+					else
+						raise Pattern_Error with "Invalid modifier in key " & Key;
+					end if;
+				end if;
+			end Padding;
 		begin
 			case C is
-				--  Literal %
-				when '%' =>
-					Append( '%' );
-
 				--  A newline
 				when 'n' =>
-					Append( ASCII.LF );
+					return ( 1 => ASCII.LF );
 
 				--  A horizontal tab
 				when 't' =>
-					Append( ASCII.HT );
+					return (  1 => ASCII.HT );
 
 				--  Hour (00..23)
 				when 'H' =>
-					Append( Image( Hour, Fill_Char, 2 ) );
+					return Image( Hour, Padding, 2 );
 
 				--  Hour (01..12)
 				when 'I' =>
-					Append( Image( Hour_12( Date ), Fill, Fill_Char, 2 ) );
-					Result := Result & Image (Hour_12 (Hour), Padding, 2);
-
-				--  Hour ( 0..23)
-				when 'k' =>
-					Result := Result & Image (Hour, Space, 2);
-
-				--  Hour ( 1..12)
-				when 'l' =>
-					Result := Result & Image (Hour_12 (Hour), Space, 2);
+					return Image( Hour_12 (Hour), Padding, 2 );
 
 				--  Minute (00..59)
 				when 'M' =>
-					Result := Result & Image (Minute, Padding, 2);
+					return Image( Minute, Padding, 2 );
 
 				--  AM/PM
 				when 'p' =>
-					Result := Result & Am_Pm (Hour);
-
-				--  Time, 12-hour (hh:mm:ss [AP]M)
-				when 'r' =>
-					Result := Result &
-						Image (Hour_12 (Hour), Padding, Length => 2) & ':' &
-						Image (Minute, Padding, Length => 2) & ':' &
-						Image (Second, Padding, Length => 2) & ' ' &
-						Am_Pm (Hour);
+					return Am_Pm( Hour );
 
 				--	 Second (00..59)
 				when 'S' =>
-						Result := Result & Image (Second, Padding, Length => 2);
+					return Image( Second, Padding, Length => 2 );
 
-					--  Milliseconds (3 digits)
-					--  Microseconds (6 digits)
-					--  Nanoseconds  (9 digits)
-
-				when 'i' | 'e' | 'o' =>
-					declare
-						Sub_Sec : constant Long_Integer :=
-							Long_Integer (Sub_Second * 1_000_000_000);
-
-						Img1  : constant String := Sub_Sec'Img;
-						Img2  : constant String := "00000000" &
-							Img1 (Img1'First + 1 .. Img1'Last);
-						Nanos : constant String :=
-							 Img2 (Img2'Last - 8 .. Img2'Last);
-	
-					begin
-						case Pattern (P + 1) is
-							when 'i' =>
-								Result := Result &
-									Nanos (Nanos'First .. Nanos'First + 2);
-
-							when 'e' =>
-								Result := Result &
-									Nanos (Nanos'First .. Nanos'First + 5);
-
-							when 'o' =>
-								Result := Result & Nanos;
-
-							when others =>
-								null;
-						end case;
-					end;
-
-				--  Time, 24-hour (hh:mm:ss)
+				-- Locale's default time
 				when 'T' =>
-					Result := Result &
-					  Image (Hour, Padding, Length => 2) & ':' &
-					  Image (Minute, Padding, Length => 2) & ':' &
-					  Image (Second, Padding, Length => 2);
+					return Format( L, T, L.Default_Time.all, Time_Zone );
 
 
 				--  Locale's abbreviated weekday name (Sun..Sat)
 				when 'a' =>
-				declare
-					D: Day_Name :=
-						Ada.Calendar.Formatting.Day_Of_Week(Date);
-					S: String :=  KOW_lib.Locales.Image(L, D, true);
-				begin
-					Result := Result & Image (S);
-				end;
+					declare
+						D : constant Day_Name := Ada.Calendar.Formatting.Day_Of_Week(Date);
+					begin
+						return To_String( L.Short_Week_Days( D ) );
+					end;
 
 
 				--  Locale's full weekday name, variable length
 				--  (Sunday..Saturday)
 				when 'A' =>
 					declare
-						D: Day_Name := 
-							Ada.Calendar.Formatting.Day_Of_Week(Date);
-						S: String :=  KOW_lib.Locales.Image(L, D, false);
-	
+						D : constant Day_Name := Ada.Calendar.Formatting.Day_Of_Week(Date);
 					begin
-						Result := Result & Image (S);
+						return To_String( L.Week_Days( D ) );
 					end;
 
 
 				--  Locale's abbreviated month name (Jan..Dec)
-				when 'b' | 'h' =>
-					Result := Result &
-					  Image (Image(L, Month, true));
+				when 'b'  =>
+					return To_String( L.Short_Months( Month ) );
 
 
 				--  Locale's full month name, variable length
 				--  (January..December)
 				when 'B' =>
-					Result := Result &
-					  Image (Image(L, Month, false));
+					  return To_String( L.Months( Month ) );
 
 
 				--  Locale's date and time (Sat Nov 04 12:02:33 EST 1989)
 				when 'c' =>
-					declare
-						Zero_Formatter : Formatter := 
-							Get_Formatter("%a %b %d %T %Y");
-						Space_Formatter : Formatter :=
-							Get_Formatter("%a %b %_d %_T %Y");
-						None_Formatter : Formatter :=
-							Get_Formatter("%a %b %-d %-T %Y");
-					begin
-						case Padding is
-							when Zero => Result := Result &
-								Format(L, Zero_Formatter, Date);
-							when Space => Result := Result &
-								Format(L, Space_Formatter, Date);
-							when None => Result := Result &
-								Format(L, None_Formatter, Date);
-							end case;
-					end;
+					return Format( L, T, L.Default_Datetime.all, Time_Zone );
 
-
-				--	Day of month (01..31)
+				-- Day of month (01..31)
 				when 'd' =>
-					Result := Result & Image (Day, Padding, 2);
+					return Image( Day, Padding, 2 );
 
 
 				--  Date (mm/dd/yy)
-				when 'D' | 'x' =>
-					Result := Result &
-						Image (Month, Padding, 2) & '/' &
-						Image (Day, Padding, 2) & '/' &
-						Image (Year, Padding, 2);
-
+				when 'D'  =>
+					return Format( L, T, L.Default_Date.all, Time_Zone );
 
 				--  Month (01..12)
 				when 'm' =>
-					Result := Result & Image (Month, Padding, 2);
+					return Image( Month, Padding, 2 );
 
 
 				--  Day of week (0..6) with 0 corresponding to Sunday
 				when 'w' =>
 					declare
 						DOW : Natural range 0 .. 6;
-
 					begin
-						if Day_Of_Week (Date) = Sunday then
+						if Day_Of_Week( Date ) = Sunday then
 							DOW := 0;
 						else
-							DOW := Day_Name'Pos (Day_Of_Week (Date));
+							DOW := Day_Name'Pos( Day_Of_Week( Date ) );
 						end if;
-
-						Result := Result & Image (DOW, Length => 1);
+						return Image (DOW, No_Padding, Length => 1);
 					end;
 
 				-- Year (70...)	
@@ -421,74 +255,167 @@ package body KOW_Lib.Locales.Formatting is
 					declare
 						Y : constant Natural := Year - (Year / 100) * 100;
 					begin
-						Result := Result & Image (Y, Padding, 2);
+						return Image( Y, Padding, 2 );
 					end;
 
 				--	Year (1970...)
 				when 'Y' =>
-					Result := Result & Image (Year, None, 4);
+					return Image( Year, Padding, 4 );
 
 				when others =>
-					raise Pattern_Error;
+					raise Pattern_Error with "Unknown Time Key " & Key;
 			end case;
-		end Append_Value;
+		end Value_Of;
 
 
-		begin
-			Ada.Calendar.Formatting.Split(
-					Date		=> Date,
-					Year		=> Year,
-					Month		=> Month,
-					Day		=> Day,
-					Hour		=> Hour,
-					Minute		=> Minute,
-					Second		=> Second,
-					Sub_Second	=> Sub_Second,
-					Time_Zone	=> Time_Zone
-				);
+		function Inner_Format is new Generic_Format( Value_Of => Value_Of );
+	begin
+		Ada.Calendar.Formatting.Split(
+				Date		=> Date,
+				Year		=> Year,
+				Month		=> Month,
+				Day		=> Day,
+				Hour		=> Hour,
+				Minute		=> Minute,
+				Second		=> Second,
+				Sub_Second	=> Sub_Second,
+				Time_Zone	=> Time_Zone
+			);
 
-		loop
-			--  A directive has the following format "%[-_]."
-			if Pattern( P ) = '%' then
-
-
-				if P = Pattern'Last then
-					-- the pattern shouldn't end with %
-					raise Pattern_Error;
-				end if;
-
-				--  Check for GNU extension to change the padding
-
-				if Pattern (P + 1) = '-' then
-					Fill = False;
-					P := P + 1;
-				elsif Pattern (P + 1) = '_' then
-					Fill := True;
-					Fill_Charr = ' ';
-					P := P + 1;
-				else
-					Fill := True;
-					Fill_Char := '0';
-				end if;
-
-				Next;
-				Append_Value( P );
-				Next;
-			else
-				Result := Result & Pattern (P);
-				Next;
-			end if;
-
-			exit when P > Pattern'Last;
-
-		end loop;
-
-		return To_String (Result);
+		return Inner_Format( Pattern );
 	end Format;
 
 
 
+	---------------------
+	-- Name Formatting --
+	---------------------
+
+	function Full_Name(
+				L		: in Locale_Type;
+				First_Name	: in String;
+				Last_Name	: in String
+			) return String is
+		-- format the given name
 
 
+		function Value_of( Key : in String ) return String is
+		begin
+			case Key( Key'Last ) is
+				when 'f' =>
+					return First_Name;
+				when 'l' =>
+					return Last_Name;
+				when others =>
+					raise Pattern_Error with "Invalid key for name formatting " & Key;
+			end case;
+		end Value_of;
+
+		function Inner_Format is new Generic_Format( Value_of );
+	begin
+		return Inner_Format( To_String( L.Person_Name_Img ) );
+	end Full_Name;
+
+
+	-------------------------------
+	-- Generic Formatting Engine --
+	-------------------------------
+
+
+	function Generic_Format( Pattern : in String ) return String is
+		-- looks for instances of %SOMEKEY, and call Value_Of for those values.
+		-- Then replace it in the resulting string.
+		--
+		--
+		-- The current implementation relies on Unbounded_String internally
+	
+
+		Buffer	: Unbounded_String;
+		i	: Positive := Pattern'First;
+
+
+		function In_Range return Boolean is
+		begin
+			return i in Pattern'Range;
+		end In_Range;
+
+		function C return Character is
+		begin
+			return Pattern( i );
+		end C;
+
+		procedure Next is
+		begin
+			i := i + 1;
+		end Next;
+
+		procedure Previous is
+		begin
+			i := i - 1;
+		end Previous;
+
+		procedure Append_Value is
+			function Get_Key return String is
+				Key_Buffer : Unbounded_String;
+
+				First : Boolean := True;
+
+				function Is_Key_Char return Boolean is
+					function Is_Modifier return Boolean is
+					begin
+						return C in ( '0', '-', '_' );
+					end Is_Modifier;
+
+					function Is_Key return Boolean is
+					begin
+						return C in 'a' .. 'z' or else C in 'A' .. 'Z';
+					end Is_Key;
+				begin
+					if First then
+						First := False;
+						return Is_Modifier or else Is_Key;
+					else
+						return Length( Key_Buffer < 2 ) and then Is_Key;
+					end if;
+				end Is_Key_Char;
+			begin
+				loop
+					exit when not In_Range or else not Is_Key_Char;
+					Append( Key_Buffer, C );
+					Next;
+				end loop;
+
+				if In_Range then
+					-- because it will move forward again later on
+					Previous;
+				end if;
+
+				return To_String( Key_Buffer );
+			end Get_Key;
+		begin
+			Next;
+			if In_Range then
+				if C = '%' then
+					Append( Buffer, '%' );
+				else
+					Append( Buffer, Value_Of( Get_Key ) );
+				end if;
+			end if;
+		end Append_Value;
+
+	begin
+
+		loop
+			exit when not In_Range;
+			if C = '%' then
+				Append_Value;
+			else
+				Append( Buffer, C );
+			end if;
+			Next;
+		end loop;
+
+		return To_String( Buffer );
+	end Generic_Format;
 end KOW_Lib.Locales.Formatting;
 
