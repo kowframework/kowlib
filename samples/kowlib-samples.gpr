@@ -9,7 +9,7 @@
 
 
 
-with "../kowlib.gpr";
+with "kowlib.gpr";
 
 
 project KOWlib.Samples is
@@ -22,7 +22,7 @@ project KOWlib.Samples is
    -- TESTES:
    for Exec_Dir use "bin";
    for Main use (
-			"calendar_test",
+			"locales_test",
 	   		"fs_tests",
 			"log_test",
 			"regular_expressions_test",
@@ -35,8 +35,6 @@ project KOWlib.Samples is
    package Compiler is
       for Default_Switches ("ada") use ("-O2", "-gnat05");
    end Compiler;
-
-   package Linker renames KOWLib.Linker;
 
 
 end KOWlib.Samples;

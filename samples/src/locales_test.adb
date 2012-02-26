@@ -29,80 +29,26 @@
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- This is the Calendar_Test                                                --
+-- This is the Locales_Test                                                 --
 --                                                                          --
--- Example on how to use KOW_Lib.Calendar                                    --
+-- Example on how to use KOW_Lib.Locales                                    --
 ------------------------------------------------------------------------------
 
-with KOW_Lib.Calendar;		use KOW_Lib.Calendar;
 with KOW_Lib.Locales;		use KOW_Lib.Locales;
 
-with Ada.Float_Text_IO;		use Ada.Float_Text_IO;
-with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
-
-with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-with Ada.Calendar;		use Ada.Calendar;
 with Ada.Text_IO;		use Ada.Text_IO;
-with Ada.Environment_Variables;	use Ada.Environment_Variables;
 
-procedure Calendar_Test is 
+procedure Locales_Test is 
 	
-	procedure Test_Locale(L : in Locale) is
-		n : Long_Float := 52144.3344;
-		F: Formatter;
+	procedure Test_Locale( L : in Locale_Type ) is
 	begin
-		F := Get_Formatter(Get_Long_Date_Pattern(L));
-		Put_Line(Format(L , F, Get_Date));
-	
-		F := Get_Formatter(Get_Short_Date_Pattern(L));
-		Put_Line(Format(L, F, Get_Date));
-		F := Get_Formatter(Get_Default_Time_Pattern(L));
-		Put_Line(Format(L, F, Get_Date));
-		F := Get_Formatter(Get_Default_Date_Pattern(L));
-		Put_Line(Format(L, F, Get_Date));
-
-		Put_Line(Get_Formatted_Currency(L, n, 0));
-		Put_Line(Get_Formatted_Currency(L, n, 3));
-		Put_Line(Get_Formatted_Currency(L, n));
-		Put_Line(Get_Formatted_Percentage(L, n));
-		Put_Line(Get_Formatted_Percentage(L, n, 0));
-		Put_Line(Get_Formatted_Percentage(L, n, 3));
-	--	F := Get_Formatter("%H %I %k %l %M %p %r %S %T");
-	--	Put_Line(Format(L, F, Get_Date));
-
-	--	F := Get_Formatter("%a %A %b %B %c %d %D %h %m %w %x %y %Y");
-	--	Put_Line(Format(L, F, Get_Date));
+		New_Line( 2 );
+		Put_Line( "Running tests for Locale :: " & To_String( L.Label ) );
+		New_Line( 2 );
 	end Test_Locale;
-	
-	
-	Src : Unbounded_String := 
-		To_Unbounded_String("Oi trocar will por ${will}");
-	T : Time := Clock;
-	Hora : Timestamp := To_Timestamp(T);
-	
-	
-	use Locale_Tables;
-	
-	L : Locale := Get_Environment_Locale;
-	Fim : Unbounded_String;
-	position: Cursor := Locale_Tables.First(Supported_Locales);
 begin
-	 Test_Locale(L);
-      	 while Has_Element(position) loop
-       		 L :=  Element(position);
-      		 Test_Locale(L);
- 
-		 Put_Line( Get_Formated_Full_name( L, "John", "Doe" ));
- 
-     		 position := Next(position);
- 
-		 Ada.Text_IO.New_Line( 2 );
-	 end loop;
-	
-	Ada.Text_IO.Put_Line("");
-	Ada.Text_IO.Put_Line("Texto 1 ....");
-	Ada.Text_IO.Put_Line(To_String(Src));
-end Calendar_Test;
+	KOW_Lib.Locales.Iterate( Test_Locale'Access );
+end Locales_Test;
 
 
 
