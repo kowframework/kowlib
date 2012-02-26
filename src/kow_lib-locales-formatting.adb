@@ -30,16 +30,18 @@
 ------------------------------------------------------------------------------
 
 
+--------------
+-- Ada 2005 --
+--------------
 with Ada.Calendar;		use Ada.Calendar; 
 with Ada.Calendar.Formatting;	use Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones; 	use Ada.Calendar.Time_Zones;
-
+with Ada.Characters.Handling;	use Ada.Characters.Handling;
+with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
 with Ada.Text_IO;		use Ada.Text_IO;
-with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
-with Ada.Characters.Handling;	use Ada.Characters.Handling;
-
-with KOW_Lib.Locales;		use KOW_Lib.Locales;
 
 
 
@@ -80,14 +82,33 @@ package body KOW_Lib.Locales.Formatting is
 	end Hour_12;
 
 	function Image (
-				Str	: String;
-				Length	: Natural := 0
+				Value	: in Integer;
+				Padding	: in Padding_Type;
+				Length	: in Natural := 0
 			) return String	is
+
+		
+		function C return Character is
+		begin
+			case Padding is
+				when No_Padding =>
+					return ' ';
+
+				when Padding_Zero =>
+					return '0';
+
+				when Padding_Space =>
+					return ' ';
+			end case;
+		end C;
+
+		Str : String( 1 .. Length ) := ( others => C );
 	begin
-		if Length = 0 then
-			return Str;
+		if Padding = No_Padding then
+			return Ada.Strings.Fixed.Trim( Integer'Image( Value ), Ada.Strings.Both );
 		else
-			return Str( Str'First .. Str'First + Length - 1 );
+			Ada.Integer_Text_IO.Put( To => Str, Item => Value, Base => 10 );
+			return Str;
 		end if;
 	end Image;
 
@@ -134,7 +155,7 @@ package body KOW_Lib.Locales.Formatting is
 					return Padding_Zero;
 				else
 					if Key( Key'Last ) = '_' then
-						return Padding_Spaces;
+						return Padding_Space;
 					elsif Key( Key'Last ) = '-' then
 						return No_Padding;
 					elsif Key( Key'Last ) = '0' then
@@ -182,7 +203,7 @@ package body KOW_Lib.Locales.Formatting is
 				--  Locale's abbreviated weekday name (Sun..Sat)
 				when 'a' =>
 					declare
-						D : constant Day_Name := Ada.Calendar.Formatting.Day_Of_Week(Date);
+						D : constant Day_Name := Ada.Calendar.Formatting.Day_Of_Week( T );
 					begin
 						return To_String( L.Short_Week_Days( D ) );
 					end;
@@ -192,7 +213,7 @@ package body KOW_Lib.Locales.Formatting is
 				--  (Sunday..Saturday)
 				when 'A' =>
 					declare
-						D : constant Day_Name := Ada.Calendar.Formatting.Day_Of_Week(Date);
+						D : constant Day_Name := Ada.Calendar.Formatting.Day_Of_Week( T );
 					begin
 						return To_String( L.Week_Days( D ) );
 					end;
@@ -232,10 +253,10 @@ package body KOW_Lib.Locales.Formatting is
 					declare
 						DOW : Natural range 0 .. 6;
 					begin
-						if Day_Of_Week( Date ) = Sunday then
+						if Day_Of_Week( T ) = Sunday then
 							DOW := 0;
 						else
-							DOW := Day_Name'Pos( Day_Of_Week( Date ) );
+							DOW := Day_Name'Pos( Day_Of_Week( T ) );
 						end if;
 						return Image (DOW, No_Padding, Length => 1);
 					end;
@@ -261,7 +282,7 @@ package body KOW_Lib.Locales.Formatting is
 		function Inner_Format is new Generic_Format( Value_Of => Value_Of );
 	begin
 		Ada.Calendar.Formatting.Split(
-				Date		=> Date,
+				Date		=> T,
 				Year		=> Year,
 				Month		=> Month,
 				Day		=> Day,
@@ -353,7 +374,7 @@ package body KOW_Lib.Locales.Formatting is
 				function Is_Key_Char return Boolean is
 					function Is_Modifier return Boolean is
 					begin
-						return C in ( '0', '-', '_' );
+						return C = '0' or else C = '-' or else C = '_';
 					end Is_Modifier;
 
 					function Is_Key return Boolean is
@@ -365,7 +386,7 @@ package body KOW_Lib.Locales.Formatting is
 						First := False;
 						return Is_Modifier or else Is_Key;
 					else
-						return Length( Key_Buffer < 2 ) and then Is_Key;
+						return Length( Key_Buffer ) <= 2 and then Is_Key;
 					end if;
 				end Is_Key_Char;
 			begin

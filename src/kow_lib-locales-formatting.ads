@@ -47,11 +47,6 @@ with Ada.Strings.Unbounded; 		use Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Unbounded;	use Ada.Strings.Wide_Unbounded;
 
 
--------------------
--- KOW Framework --
--------------------
-with KOW_Lib.Locales; 			use KOW_Lib.Locales;
-
 package KOW_Lib.Locales.Formatting is
 
 
