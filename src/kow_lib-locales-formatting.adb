@@ -102,13 +102,12 @@ package body KOW_Lib.Locales.Formatting is
 			end case;
 		end C;
 
-		Str : String( 1 .. Length ) := ( others => C );
+		Str : String := Ada.Strings.Fixed.Trim( Integer'Image( Value ), Ada.Strings.Both );
 	begin
-		if Padding = No_Padding then
-			return Ada.Strings.Fixed.Trim( Integer'Image( Value ), Ada.Strings.Both );
-		else
-			Ada.Integer_Text_IO.Put( To => Str, Item => Value, Base => 10 );
+		if Padding = No_Padding or else Length = 0 then
 			return Str;
+		else
+			return ( 1 .. Length - Str'Length => C ) & Str;
 		end if;
 	end Image;
 
@@ -147,18 +146,18 @@ package body KOW_Lib.Locales.Formatting is
 
 
 		function Value_Of( Key : in String ) return String is
-			C	: constant Character := Key( Key'First );
+			C	: constant Character := Key( Key'Last );
 
 			function Padding return Padding_Type is
 			begin
 				if Key'Length = 1 then
 					return Padding_Zero;
 				else
-					if Key( Key'Last ) = '_' then
+					if Key( Key'First ) = '_' then
 						return Padding_Space;
-					elsif Key( Key'Last ) = '-' then
+					elsif Key( Key'First ) = '-' then
 						return No_Padding;
-					elsif Key( Key'Last ) = '0' then
+					elsif Key( Key'First ) = '0' then
 						return Padding_Zero;
 					else
 						raise Pattern_Error with "Invalid modifier in key " & Key;
@@ -274,7 +273,7 @@ package body KOW_Lib.Locales.Formatting is
 					return Image( Year, Padding, 4 );
 
 				when others =>
-					raise Pattern_Error with "Unknown Time Key " & Key;
+					raise Pattern_Error with "Unknown Time Key " & Key & "(the problem was " & C & ')';
 			end case;
 		end Value_Of;
 

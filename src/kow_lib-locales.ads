@@ -172,7 +172,7 @@ package KOW_Lib.Locales is
 
 					Short_Date		=> new String'("%Y/%m/%d"),
 			
-					Long_Date		=> new String'("%Y-%m-%d, %H:%M:%S"),
+					Long_Date		=> new String'("%Y-%m-%d"),
 			
 				
 					Week_Days		=> ( others => null ),
@@ -200,7 +200,7 @@ package KOW_Lib.Locales is
 					Default_Datetime	=> new String'( "%m/%d/%Y %H:%M %p" ),
 
 					Short_Date		=> new String'( "%m/%d/%Y" ),
-					Long_Date		=> new String'("%A, %B %d , %Y at %H:%M %p"),
+					Long_Date		=> new String'("%A, %B %d, %Y at %H:%M %p"),
 
 
 					Week_Days		=> (
@@ -271,7 +271,7 @@ package KOW_Lib.Locales is
 					Default_Datetime	=> new String'( "%m/%d/%Y %H:%M %p" ),
 
 					Short_Date		=> new String'( "%m/%d/%Y" ),
-					Long_Date		=> new String'("%A, %B %d , %Y at %H:%M %p"),
+					Long_Date		=> new String'("%A, %B %d, %Y at %H:%M %p"),
 
 
 					Week_Days		=> (

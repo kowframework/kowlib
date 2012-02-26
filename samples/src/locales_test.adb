@@ -1,12 +1,12 @@
 ------------------------------------------------------------------------------
 --                                                                          --
---                          Ada Works :: Library                            --
+--                        KOW Framework :: Library                          --
 --                                                                          --
---                                Ada Works                                 --
+--                              KOW Framework                               --
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---               Copyright (C) 2007-2009, Ada Works Project                 --
+--             Copyright (C) 2007-2009, KOW Framework Project               --
 --                                                                          --
 --                                                                          --
 -- KOW_Lib is free library;  you can redistribute it  and/or modify it under --
@@ -34,16 +34,51 @@
 -- Example on how to use KOW_Lib.Locales                                    --
 ------------------------------------------------------------------------------
 
-with KOW_Lib.Locales;		use KOW_Lib.Locales;
 
-with Ada.Text_IO;		use Ada.Text_IO;
+--------------
+-- Ada 2005 --
+--------------
+with Ada.Calendar;			use Ada.Calendar;
+with Ada.Text_IO;			use Ada.Text_IO;
+
+-------------------
+-- KOW Framework --
+-------------------
+with KOW_Lib.Locales;			use KOW_Lib.Locales;
+with KOW_Lib.Locales.Formatting;
 
 procedure Locales_Test is 
 	
 	procedure Test_Locale( L : in Locale_Type ) is
+		procedure PT( Pattern : in String ) is
+		begin
+			Put_Line(
+				Formatting.Format( 
+							L	=> L,
+							T	=> Clock,
+							Pattern	=> Pattern
+						      )
+					);
+		end PT;
+
+		procedure PT( Pattern : in String_Access ) is
+		begin
+			PT( To_String( Pattern ) );
+		end PT;
+
+		procedure PTL( Pattern : in String ) is
+		begin
+			PT( "%" & Pattern & " => " & Pattern );
+		end PTL;
+
 	begin
 		New_Line( 2 );
 		Put_Line( "Running tests for Locale :: " & To_String( L.Label ) );
+		PT( L.Default_Datetime );
+		PT( L.Long_Date );
+		PTL( "%_m" );
+		PTL( "%-m" );
+		PTL( "%0m" );
 		New_Line( 2 );
 	end Test_Locale;
 begin
