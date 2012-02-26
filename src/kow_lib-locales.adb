@@ -47,12 +47,6 @@ with Ada.Environment_Variables;
 with Ada.Strings.Hash;
 
 
--------------------
--- KOW Framework --
--------------------
-with KOW_Lib.Locales.Default_Locales;
-
-
 package body KOW_Lib.Locales is 
 
 	function From_String( Str : in String ) return Locale_Code_Type is
