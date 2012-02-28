@@ -146,6 +146,16 @@ package KOW_Lib.Locales.Formatting is
 	-- Format the number acording to the given locale, using
 	-- Dec decimal digits.
 
+
+	-------------------------
+	-- Currency Formatting --
+	-------------------------
+
+	function Money_To_String(
+				L	: in Locale_Type;
+				Value	: in Long_Float
+			) return String;
+	-- format money
 	
 	-------------------------------
 	-- Generic Formatting Engine --

@@ -431,6 +431,18 @@ package body KOW_Lib.Locales.Formatting is
 
 
 
+	-------------------------
+	-- Currency Formatting --
+	-------------------------
+
+	function Money_To_String(
+				L	: in Locale_Type;
+				Value	: in Long_Float
+			) return String is
+		-- format money
+	begin
+		return To_String( L.Currency ) & To_String( L, Value, 2 );
+	end Money_To_String;
 
 
 

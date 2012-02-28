@@ -83,6 +83,7 @@ procedure Locales_Test is
 		New_Line;
 
 		Put_Line( Formatting.To_String( L, 1234567.89, 5 ) );
+		Put_Line( Formatting.Money_To_String( L, 1234567.89 ) );
 
 		New_Line( 2 );
 	end Test_Locale;
