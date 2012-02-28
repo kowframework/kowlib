@@ -79,6 +79,11 @@ procedure Locales_Test is
 		PTL( "%_m" );
 		PTL( "%-m" );
 		PTL( "%0m" );
+
+		New_Line;
+
+		Put_Line( Formatting.To_String( L, 1234567.89, 5 ) );
+
 		New_Line( 2 );
 	end Test_Locale;
 begin

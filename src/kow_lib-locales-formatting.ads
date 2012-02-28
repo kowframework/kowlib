@@ -133,6 +133,19 @@ package KOW_Lib.Locales.Formatting is
 			) return String;
 	-- format the given name
 	
+
+	-----------------------
+	-- Number Formatting --
+	-----------------------
+
+	function To_String(
+				L	: in Locale_Type;
+				F	: in Long_Float;
+				Dec	: in Natural := 2
+			) return String;
+	-- Format the number acording to the given locale, using
+	-- Dec decimal digits.
+
 	
 	-------------------------------
 	-- Generic Formatting Engine --

@@ -33,15 +33,18 @@
 --------------
 -- Ada 2005 --
 --------------
-with Ada.Calendar;		use Ada.Calendar; 
-with Ada.Calendar.Formatting;	use Ada.Calendar.Formatting;
-with Ada.Calendar.Time_Zones; 	use Ada.Calendar.Time_Zones;
-with Ada.Characters.Handling;	use Ada.Characters.Handling;
-with Ada.Integer_Text_IO;	use Ada.Integer_Text_IO;
+with Ada.Calendar;				use Ada.Calendar; 
+with Ada.Calendar.Formatting;			use Ada.Calendar.Formatting;
+with Ada.Calendar.Time_Zones; 			use Ada.Calendar.Time_Zones;
+with Ada.Characters.Handling;			use Ada.Characters.Handling;
+with Ada.Text_IO;
+with Ada.Integer_Text_IO;			use Ada.Integer_Text_IO;
+with Ada.Numerics.Generic_Elementary_Functions;	
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;	use Ada.Strings.Unbounded;
-with Ada.Text_IO;		use Ada.Text_IO;
+with Ada.Strings.Unbounded;			use Ada.Strings.Unbounded;
+with Ada.Text_IO;				use Ada.Text_IO;
+
 
 
 
@@ -325,6 +328,110 @@ package body KOW_Lib.Locales.Formatting is
 	begin
 		return Inner_Format( To_String( L.Person_Name_Img ) );
 	end Full_Name;
+
+
+
+
+	-----------------------
+	-- Number Formatting --
+	-----------------------
+
+	function To_String(
+				L	: in Locale_Type;
+				F	: in Long_Float;
+				Dec	: in Natural := 2
+			) return String is
+		package LF_IO is new Ada.Text_IO.Float_IO( Long_Float );
+		package LF_EF is new Ada.Numerics.Generic_Elementary_Functions( Long_Float );
+		use LF_IO;
+		use LF_EF;
+
+
+		function PF return Long_Float is
+		begin
+			if F < 0.0 then
+				return -1.0 * F;
+			else
+				return F;
+			end if;
+		end PF;
+
+
+		function nlog( Base : Long_Float ) return Natural is
+			I : Integer := Integer( Log( PF, Base ) );
+		begin
+			if i < 0 then
+				return 0;
+			else
+				return Natural( i );
+			end if;
+		end nlog;
+		
+		Exp	: Natural := nlog( 10.0 );
+		Local	: constant Long_Float := PF;
+
+		function Left_Hand_Digits return Positive is
+			L : constant Natural := nlog( 1000.0 );
+		begin
+			return Positive( 1 + Exp + L );
+		end Left_Hand_Digits;
+
+		Res : String( 1 .. Left_Hand_Digits + 1 + Dec );
+
+
+
+		function Get_Img return String is
+			use Ada.Strings;
+			TMP : String( Res'Range );
+		begin
+			Put(
+					To	=> Tmp,
+					Item	=> Local,
+					Aft	=> Dec,
+					Exp	=> 0
+				);
+			return Fixed.Trim( TMP, Left );
+		end Get_Img;
+
+
+
+		Image	: constant String := Get_Img;
+
+		Image_D	: Positive := Image'First;
+		procedure Compute( D : Positive ) is
+			Inv_D : Positive := Res'Last - D + Res'First;
+		begin
+			if Inv_D -1 = Dec then
+				Res( D ) := L.Decimal_Separator;
+				Image_D := Image_D + 1;
+			elsif Inv_D > Dec and then ( Inv_D - Dec - 1 ) mod 4 = 0 then
+				Res( D ) := L.Thousands_Separator;
+			else
+				Res( D ) := Image( Image_D );
+				Image_D := Image_D + 1;
+			end if;
+		end Compute;
+
+
+		function Signal return String is
+		begin
+			if F < 0.0 then
+				return "-";
+			else
+				return "";
+			end if;
+		end Signal;
+	begin
+		for D in Res'Range loop
+			Compute( D );
+		end loop;
+
+		return Signal & Res;
+	end To_String;
+
+
+
+
 
 
 	-------------------------------
