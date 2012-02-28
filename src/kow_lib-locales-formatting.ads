@@ -156,6 +156,9 @@ package KOW_Lib.Locales.Formatting is
 				Value	: in Long_Float
 			) return String;
 	-- format money
+	-- TODO :: fix up negative formatting, more details follow:
+	-- Some locales format like -$10,000.00. Others like $-10,000.00 and others like $10,000.00-.
+	-- This should be easy to implement using the generic format function.
 	
 	-------------------------------
 	-- Generic Formatting Engine --
