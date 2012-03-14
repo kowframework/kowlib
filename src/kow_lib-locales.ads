@@ -77,6 +77,10 @@ package KOW_Lib.Locales is
 	function Get_Default_Locale_Code return Locale_Code_Type;
 	-- get the default locale code from the locale variable
 
+	function Hash( Locale_Code : in Locale_Code_Type ) return Ada.Containers.Hash_Type;
+	-- a faster hash function for Locale_Codes
+
+
 	--------------------
 	-- Auxiliar Types --
 	--------------------
@@ -550,7 +554,6 @@ package KOW_Lib.Locales is
 
 private
 
-	function Hash( Key : in Locale_Code_Type ) return Hash_Type;
 	package Locale_Maps is new Ada.Containers.Hashed_Maps(
 						Key_Type	=> Locale_Code_Type,
 						Element_Type	=> Locale_Type,

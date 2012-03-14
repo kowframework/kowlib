@@ -97,6 +97,21 @@ package body KOW_Lib.Locales is
 	end Get_Default_Locale_Code;
 
 
+	function Hash( Locale_Code : in Locale_Code_Type ) return Ada.Containers.Hash_Type is
+		-- a faster hash function for Locale_Codes
+		function Compute( Element : in ISO_Code_Type ) return Hash_Type is
+			pragma Inline( Compute );
+		begin
+			return Hash_Type( Character'Pos( Element( ISO_Code_Type'First ) ) + Character'Pos( Element( ISO_Code_Type'Last ) ) );
+		end Compute;
+	begin
+		if Locale_Code.Country = "  " then
+			return Compute( Locale_Code.Language ) * 10;
+		else
+			return Compute( Locale_Code.Language ) * 10 + Compute( Locale_Code.Country );
+		end if;
+	end Hash;
+
 
 	--------------------
 	-- Auxiliar Types --
@@ -155,12 +170,6 @@ package body KOW_Lib.Locales is
 	end Register;
 
 
---private
-
-	function Hash( Key : in Locale_Code_Type ) return Hash_Type is
-	begin
-		return Ada.Strings.Hash( String( Key.Language ) & String( Key.Country ) );
-	end Hash;
 begin
 	Register( Default_Locales.ISO );
 
