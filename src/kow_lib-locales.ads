@@ -57,9 +57,14 @@ package KOW_Lib.Locales is
 	---------------------
 
 	type ISO_Code_Type is new String( 1 .. 2 );
+
+
+	No_Language : constant ISO_Code_Type := ( others => ' ' );
+	No_Country  : constant ISO_Code_Type := ( others => ' ' );
+
 	type Locale_Code_Type is record
-		Language	: ISO_Code_Type := ( others => ' ' );
-		Country		: ISO_Code_Type := ( others => ' ' );
+		Language	: ISO_Code_Type := No_Language;
+		Country		: ISO_Code_Type := No_Country;
 	end record;
 
 
@@ -193,7 +198,7 @@ package KOW_Lib.Locales is
 		-- English --
 		-------------
 		en : constant Locale_Type := (
-					Code			=> ( "en", "  " ),
+					Code			=> ( "en", No_Country ),
 					Label			=> new String'( "English" ),
 					Thousands_Separator	=> ',',
 					Decimal_Separator	=> '.',
@@ -417,7 +422,7 @@ package KOW_Lib.Locales is
 
 
 		pt : constant Locale_Type := (
-					Code		=> ( "pt", "  " ),
+					Code		=> ( "pt", No_Country ),
 					Label		=> new String'( "Português" ),
 
 					Default_Date	=> new String'( "%d/%m/%Y" ),

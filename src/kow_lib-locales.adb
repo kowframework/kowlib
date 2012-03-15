@@ -58,7 +58,7 @@ package body KOW_Lib.Locales is
 		function Country return ISO_Code_Type is
 		begin
 			if Str'Length = 2 then
-				return "  ";
+				return No_Country;
 			elsif Str'Length = 5 then
 				return ISO_Code_Type( Str( Str'Last - 1 .. Str'Last ) );
 			else
@@ -80,9 +80,9 @@ package body KOW_Lib.Locales is
 	function To_String( Locale_Code : in Locale_Code_Type ) return String is
 		-- convert from/to the ISO locale code format 
 	begin
-		if Locale_Code.Country /= "  " then
+		if Locale_Code.Country /= No_Country then
 			return String( Locale_Code.Language ) & '_' & String( Locale_Code.Country );
-		elsif Locale_Code.Language /= "  " then
+		elsif Locale_Code.Language /= No_Language then
 			return String( Locale_Code.Language );
 		else
 			return "ISO";
@@ -105,7 +105,7 @@ package body KOW_Lib.Locales is
 			return Hash_Type( Character'Pos( Element( ISO_Code_Type'First ) ) + Character'Pos( Element( ISO_Code_Type'Last ) ) );
 		end Compute;
 	begin
-		if Locale_Code.Country = "  " then
+		if Locale_Code.Country = No_Country then
 			return Compute( Locale_Code.Language ) * 10;
 		else
 			return Compute( Locale_Code.Language ) * 10 + Compute( Locale_Code.Country );
