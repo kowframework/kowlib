@@ -53,6 +53,9 @@ package body KOW_Lib.Locales is
 		function Language return ISO_Code_Type is
 		begin
 			return ISO_Code_Type( Str( Str'First .. Str'First + 1 ) );
+		exception
+			when CONSTRAINT_ERROR =>
+				raise CONSTRAINT_ERROR with '"' & Str & """ is not a valid locale code";
 		end Language;
 
 		function Country return ISO_Code_Type is
