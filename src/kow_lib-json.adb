@@ -314,24 +314,6 @@ package body KOW_Lib.Json is
 
 
 
-	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String ) ) is
-		procedure It( C : Json_Data_Maps.Cursor ) is
-		begin
-			Iterator.all( To_String( Json_Data_Maps.Key( C ) ) );
-		end It;
-	begin
-		Json_Data_Maps.Iterate( Object.Data, It'Access );
-	end Iterate;
-
-	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in Unbounded_String ) ) is
-		procedure It( C : Json_Data_Maps.Cursor ) is
-		begin
-			Iterator.all( Json_Data_Maps.Key( C ) );
-		end It;
-	begin
-		Json_Data_Maps.Iterate( Object.Data, It'Access );
-	end Iterate;
-
 	procedure Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String; Value : in Json_Data_Type ) ) is
 		procedure It( C : Json_Data_maps.Cursor ) is
 		begin
@@ -349,6 +331,25 @@ package body KOW_Lib.Json is
 	begin
 		Json_Data_Maps.Iterate( Object.Data, It'Access );
 	end Iterate;
+
+
+	procedure Reverse_Iterate( Object : in Object_Type; Iterator : access procedure( Key : in Unbounded_String; Value : in Json_Data_Type ) ) is
+		procedure It( C : Json_Data_Maps.Cursor ) is
+		begin
+			Iterator.all( Json_Data_Maps.Key( C ), Json_Data_Maps.Element( C ) );
+		end It;
+	begin
+		Json_Data_Maps.Reverse_Iterate( Object.Data, It'Access );
+	end Reverse_Iterate;
+
+	procedure Reverse_Iterate( Object : in Object_Type; Iterator : access procedure( Key : in String; Value : in Json_Data_Type ) ) is
+		procedure It( C : Json_Data_Maps.Cursor ) is
+		begin
+			Iterator.all( To_String( Json_Data_Maps.Key( C ) ), Json_Data_Maps.Element( C ) );
+		end It;
+	begin
+		Json_Data_Maps.Reverse_Iterate( Object.Data, It'Access );
+	end Reverse_Iterate;
 
 
 	function From_Json( Str : in String ) return Object_Type is
@@ -651,16 +652,6 @@ package body KOW_Lib.Json is
 
 
 
-	procedure Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural ) ) is
-		procedure It( C : in Json_Data_Vectors.Cursor ) is
-		begin
-			Iterator.all( Json_Data_Vectors.To_Index( C ) );
-		end It;
-	begin
-		Json_Data_Vectors.Iterate( A.Data, It'Access );
-	end Iterate;
-
-
 	procedure Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural; Value : in Json_Data_Type ) ) is
 		procedure It( C : in Json_Data_Vectors.Cursor ) is
 		begin
@@ -669,6 +660,17 @@ package body KOW_Lib.Json is
 	begin
 		Json_Data_Vectors.Iterate( A.Data, It'Access );
 	end Iterate;
+
+
+
+	procedure Reverse_Iterate( A : in Array_Type; Iterator : access procedure( Index : in Natural; Value : in Json_Data_Type ) ) is
+		procedure It( C : in Json_Data_Vectors.Cursor ) is
+		begin
+			Iterator.All( Json_Data_Vectors.To_Index( C ), Json_Data_Vectors.Element( C ) );
+		end It;
+	begin
+		Json_Data_Vectors.Reverse_Iterate( A.Data, It'Access );
+	end Reverse_Iterate;
 
 	function From_Json( Str : in String ) return Array_Type is
 		Char_index : positive := 1;
