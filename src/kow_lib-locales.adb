@@ -140,6 +140,11 @@ package body KOW_Lib.Locales is
 	---------------------
 
 
+	function Get_Default_Locale return Locale_Type is
+	begin
+		return Get_Locale( Get_Default_Locale_Code );
+	end Get_Default_Locale;
+
 	---------------------
 	-- Locale Registry --
 	---------------------

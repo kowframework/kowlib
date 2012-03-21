@@ -82,6 +82,7 @@ package KOW_Lib.Locales is
 	function Get_Default_Locale_Code return Locale_Code_Type;
 	-- get the default locale code from the locale variable
 
+
 	function Hash( Locale_Code : in Locale_Code_Type ) return Ada.Containers.Hash_Type;
 	-- a faster hash function for Locale_Codes
 
@@ -135,6 +136,10 @@ package KOW_Lib.Locales is
 
 		Person_Name_Img	: String_Access;
 	end record;
+
+
+
+	function Get_Default_Locale return Locale_Type;
 
 
 	---------------------
