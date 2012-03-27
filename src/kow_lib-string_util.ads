@@ -136,6 +136,14 @@ package KOW_Lib.String_Util is
 
 	procedure Copy( To : in out String; From : in String );
 	-- copy the values from a string to another leaving the remaining chars of the To string ' '
+
+
+	generic
+		with function value_of( Key : in String ) return String;
+	function Expand( Value : in String ) return String;
+	-- replaces ocurrences of ${thekey} to value of value_of(key)
+
+
 private
 
 	function Find_Occurances(	Find, Context : in String;
