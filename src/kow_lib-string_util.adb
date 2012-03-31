@@ -491,8 +491,7 @@ package body KOW_Lib.String_Util is
 		From : Natural := Fixed.Index( Value, "${", Forward );
 		To   : Natural;
 	begin
-		while From /= 0 loop
-
+		while From in Value'Range loop
 			if From = Value'First or else Value( From - 1 ) /= '$' then
 				To := Fixed.Index( Value, "}", From, Forward );
 				if To = 0 or else From + 2 > To - 1 then
