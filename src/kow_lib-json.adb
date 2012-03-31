@@ -196,7 +196,11 @@ package body KOW_Lib.Json is
 
 	procedure Set( Object : in out Object_Type; Key : in Unbounded_String; Value : in Json_Data_Type ) is
 	begin
-		Json_Data_Maps.Include( Object.Data, Key, Value );
+		if Json_Data_maps.Contains( Object.Data, Key ) then
+			Json_Data_Maps.Replace( Object.Data, Key, Value );
+		else
+			Json_Data_Maps.Insert( Object.Data, Key, Value );
+		end if;
 	end Set;
 
 	procedure Set( Object : in out Object_Type; Key : in String; Value : in Integer ) is
@@ -249,7 +253,7 @@ package body KOW_Lib.Json is
 		return Json_Data_Maps.Element( Object.Data, Key );
 	exception
 		when CONSTRAINT_ERROR =>
-			raise CONSTRAINT_ERROR with "there is no property called " & To_String( Key ) & " in this object";
+			raise CONSTRAINT_ERROR with "there is no property called '" & To_String( Key ) & "' in this object";
 	end Get;
 
 	function Get( Object : in Object_Type; Key : in String ) return integer is
