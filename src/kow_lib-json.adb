@@ -806,7 +806,7 @@ package body KOW_Lib.Json is
 
 	function From_Json( Str : in String ) return Json_Data_Type is
 		Data		: Json_Data_Type;
-		Char_Index	: Positive := 1;
+		Char_Index	: Positive := Str'First;
 	begin
 		From_Json(
 				Str		=> Str,
