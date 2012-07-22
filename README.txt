@@ -10,5 +10,8 @@ ment of cross-platform softwares in Ada.
 
    To build, run the commands:
    	./configure
-	./build
-	./install
+	make && sudo make install
+
+
+   It will be installed in the GNAT path by default.
+
